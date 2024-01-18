@@ -1,0 +1,7 @@
+.DS_Store
+
+# Temp files
+*~
+
+# Build files
+draft/draft-ietf-bfd-optimizing-authentication-*
