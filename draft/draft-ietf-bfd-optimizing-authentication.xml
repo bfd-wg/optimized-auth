@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
 <?rfc toc="yes"?>
 <?rfc tocompact="yes"?>
 <?rfc tocdepth="3"?>
@@ -10,8 +9,13 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-bfd-optimizing-authentication-13"
-     ipr="trust200902" updates="5880">
+<rfc
+    category="std"
+    docName="draft-ietf-bfd-optimizing-authentication-latest"
+    ipr="trust200902"
+    updates="5880"
+    submissionType="IETF"
+    consensus="true">
   <front>
     <title abbrev="BFD Authentication Optimization">Optimizing BFD
     Authentication</title>
@@ -19,100 +23,68 @@
     <author fullname="Mahesh Jethanandani" initials="M."
             surname="Jethanandani">
       <organization>Kloud Services</organization>
-
       <address>
         <postal>
           <street/>
-
           <city/>
-
           <region/>
-
           <code/>
-
           <country>USA</country>
         </postal>
-
         <phone/>
-
         <facsimile/>
-
         <email>mjethanandani@gmail.com</email>
-
         <uri/>
       </address>
     </author>
 
     <author fullname="Ashesh Mishra" initials="A" surname="Mishra">
       <organization>SES Networks</organization>
-
       <address>
         <postal>
           <street/>
-
           <city/>
-
           <region/>
-
           <code/>
-
           <country/>
         </postal>
-
         <phone/>
-
         <email>mishra.ashesh@gmail.com</email>
       </address>
     </author>
 
     <author fullname="Ankur Saxena" initials="A" surname="Saxena">
       <organization>Ciena Corporation</organization>
-
       <address>
         <postal>
           <street>3939 N 1st Street</street>
-
           <city>San Jose</city>
-
           <region>CA</region>
-
           <code>95134</code>
-
           <country>USA</country>
         </postal>
-
         <phone/>
-
         <facsimile/>
-
         <email>ankurpsaxena@gmail.com</email>
-
         <uri/>
       </address>
     </author>
 
     <author fullname="Manav Bhatia " initials="M." surname="Bhatia ">
       <organization>Nokia</organization>
-
       <address>
         <postal>
           <street/>
-
           <city>Bangalore</city>
-
           <code/>
-
           <country>India</country>
         </postal>
-
         <email>manav.bhatia@nokia.com</email>
       </address>
     </author>
 
-    <date day="1" month="August" year="2021"/>
-
+    <date/>
     <keyword>BFD</keyword>
-
     <keyword>authentication</keyword>
 
     <abstract>
@@ -189,22 +161,17 @@
 
         <texttable style="full">
           <ttcol>Term</ttcol>
-
           <ttcol>Meaning</ttcol>
-
           <c>significant change</c>
-
-          <c>State change, a demand model change (to D bit) or a poll sequence
-          change (P or F bit).</c>
-
+          <c>
+	    State change, a demand mode change (to D bit) or a poll
+	    sequence change (P or F bit).
+	  </c>
           <c/>
-
           <c/>
-
           <c>configured interval</c>
-
-          <c>Interval at which BFD control packets are authenticated in the UP
-          state.</c>
+          <c>Interval at which BFD control packets are retried for
+          authentication.</c>
         </texttable>
       </section>
     </section>
@@ -230,28 +197,40 @@
       decides not to authenticate a significant change packet, then the BFD
       session will fail to come up.</t>
 
-      <t>This proposal outlines which BFD control packets need to be
-      authenticated (carry the A-bit), and which packets can be transmitted or
-      received without authentication enabled. A BFD control packet that fails
-      authentication is discarded, or a BFD control packet that was supposed
-      to be authenticated, but was not, e.g. a significant change packet, is
-      discarded. However, there is no change to the state machine for BFD, as
-      the decision of a significant change is still decided by how many valid
-      consecutive packets were received, authenticated or otherwise.</t>
+      <t>
+	This proposal outlines which BFD control packets need to be
+	authenticated (bfd.AuthType set with a non-zero value), and
+	which packets can be transmitted or received with bfd.AuthType
+	set to NULL even as Authentication Present (A-bit) is set. A
+	BFD control packet that fails authentication is discarded, or
+	a BFD control packet that was supposed to be authenticated,
+	but was not, e.g. a significant change packet, is
+	discarded. However, there is no change to the state machine
+	for BFD, as the decision of a significant change is still
+	decided by how many valid consecutive packets were received,
+	authenticated or otherwise.
+      </t>
 
-      <t>The following table summarizes when the A bit should be set. The
-      table should be read with the column indicating the BFD state the
-      receiver is currently in, and the row indicating the BFD state the
-      receiver might transition to based on the BFD control packet received.
-      The interesection of the two indicates whether the received BFD control
-      packet should have the A bit set (Auth), no authentication is needed
-      (NULL), most packets are NULL AUTH (Select) or the state transition is
-      not applicable. The BFD state refers to the states in BFD state machine
-      described in Section 6.2 of <xref target="RFC5880">BFD</xref>.</t>
+      <t>
+	The following table summarizes when the bfd.AuthType should be
+	set with a non-zero value even as Authentication Present
+	(A-bit) is set. The table should be read with the column
+	indicating the BFD state the receiver is currently in, and the
+	row indicating the BFD state the receiver might transition to
+	based on the BFD control packet received.  The interesection
+	of the two indicates whether the received BFD control packet
+	should have the bfd.AuthType is set to a non-zero value, no
+	authentication is needed (NULL), most packets are NULL AUTH
+	(Select) or the state transition is not applicable. The BFD
+	state refers to the states in BFD state machine described in
+	Section 6.2 of <xref target="RFC5880">BFD</xref>.
+      </t>
 
-      <t><figure align="center" title="Optimized Authentication Map">
-          <artwork><![CDATA[       Read   : On state change from <column> to <row>
-       Auth   : Authenticate BFD control packet
+      <t>
+	<figure align="center" title="Optimized Authentication Map">
+          <artwork><![CDATA[       
+       Read   : On state change from <column> to <row>
+       Auth   : Authenticate BFD control packet. Use non-zero value.
        NULL   : No Authentication. Use NULL AUTH Type.
        n/a    : Invalid state transition.
        Select : Most packets NULL AUTH. Selective (periodic) 
@@ -265,24 +244,26 @@
       +--------+--------+--------+--------+
       | UP     |  Auth  |  Auth  | Select |
       +--------+--------+--------+--------+
-]]></artwork>
-        </figure></t>
+      ]]></artwork>
+      </figure></t>
 
       <t>If P or F bit changes value, the BFD control packet MUST be
       authenticated. If the D bit changes value, the BFD control packet MUST
       be authenticated.</t>
 
-      <t>All packets already carry the sequence number. The NULL AUTH packets
-      MUST contain the Type specified in Section 3. This enables a
-      monotonically increasing sequence number to be carried in each packet,
-      and prevents man-in-the-middle from capturing and replaying the same
-      packet again. Since all packets still carry a sequence number, the logic
-      for sequence number maintenance remains unchanged from <xref
-      target="RFC5880">BFD </xref>. If at a later time, a different scheme is
-      adopted for changing sequence number, e.g. <xref
-      target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD Sequence
-      Numbers</xref>, this method can use the updated scheme without any
-      impact.</t>
+      <t>
+	All packets already carry the sequence number. The NULL AUTH
+	packets MUST contain the Type specified in Section 3. This
+	enables a monotonically increasing sequence number to be
+	carried in each packet, and prevents person-in-the-middle from
+	capturing and replaying the same packet again. Since all
+	packets still carry a sequence number, the logic for sequence
+	number maintenance remains unchanged from <xref
+	target="RFC5880">BFD </xref>. If at a later time, a different
+	scheme is adopted for changing sequence number, e.g. <xref
+	target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD
+	Sequence Numbers</xref>, this method can use the updated
+	scheme without any impact.</t>
 
       <t>Most packets transmitted on a BFD session are BFD UP packets.
       Authenticating a small subset of these packets, for example, a detect
