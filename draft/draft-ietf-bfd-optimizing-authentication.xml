@@ -112,13 +112,15 @@
       algorithms, the computational overhead, will make the task of
       authenticating every packet even more difficult to achieve.</t>
 
-      <t>This document proposes that only BFD control packets that signal a
-      state change, a demand mode change (to D bit) or a poll sequence change
-      (P or F bit change) in a BFD control packet be categorized as a
-      significant change. This document also proposes that all BFD control
-      packets which signal a significant change MUST be authenticated if the
-      session's bfd.AuthType is non-zero. Other BFD control packets MAY be
-      transmitted and received without the A bit set.</t>
+      <t>
+	This document proposes that only BFD control packets that
+	signal a state change, a demand mode change (to D bit) or a
+	poll sequence change (P or F bit change) in a BFD control
+	packet be categorized as a significant change. This document
+	also proposes that all BFD control packets which signal a
+	significant change MUST be authenticated. Other BFD control
+	packets MAY be transmitted and received without the A bit
+	set.</t>
 
       <t>Most packets that are transmitted and received have no state change
       associated with them. Limiting authentication to packets that affect a
