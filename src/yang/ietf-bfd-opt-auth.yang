@@ -95,10 +95,17 @@ module ietf-bfd-opt-auth {
       "RFC XXXX, Optimizing BFD Authentication.";
   }
 
+  feature optimized-auth {
+    description
+      "When enabled, this implementation supports optimized
+       authentication as described in this document.";
+  }
+
   augment "/rt:routing/rt:control-plane-protocols/" +
           "rt:control-plane-protocol/bfd:bfd/bfd-ip-sh:ip-sh/" +
           "bfd-ip-sh:sessions/bfd-ip-sh:session" {
     leaf optimized-auth {
+      if-feature optimized-auth;
       type boolean;
       default false;
       description
@@ -107,6 +114,7 @@ module ietf-bfd-opt-auth {
     }
 
     leaf strong-auth-interval {
+      when "../optimized-auth = 'true'";
       type uint32;
       units "microseconds";
       default "3000000";
