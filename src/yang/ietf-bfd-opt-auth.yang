@@ -117,11 +117,15 @@ module ietf-bfd-opt-auth {
       when "../optimized-auth = 'true'";
       type uint32;
       units "microseconds";
-      default "3000000";
+      default "60000000";
       description
 	"Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
-         attack.";
+         attack. Default is 1 minute.
+
+         This value should have jitter applied to it to avoid
+         self-synchronization during expensive authentication
+         operations.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD
