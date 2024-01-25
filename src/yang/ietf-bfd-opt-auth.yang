@@ -51,6 +51,13 @@ module ietf-bfd-opt-auth {
        Forwarding Detection.";
   }
 
+  import iana-bfd-types {
+    prefix iana-bfd-types;
+    reference
+      "RFC 9314: YANG Data Model for Bidirectional Forwarding
+		 Detection.";
+  }
+
   organization
     "IETF BFD Working Group";
 
@@ -101,9 +108,10 @@ module ietf-bfd-opt-auth {
        authentication as described in this document.";
   }
 
-  augment "/rt:routing/rt:control-plane-protocols/" +
-          "rt:control-plane-protocol/bfd:bfd/bfd-ip-sh:ip-sh/" +
-          "bfd-ip-sh:sessions/bfd-ip-sh:session" {
+  augment "/rt:routing/rt:control-plane-protocols" +
+          "/rt:control-plane-protocol/bfd:bfd/bfd-ip-sh:ip-sh" +
+          "/bfd-ip-sh:sessions/bfd-ip-sh:session" +
+          "/bfd-ip-sh:authentication" {
     leaf optimized-auth {
       if-feature optimized-auth;
       type boolean;
@@ -111,6 +119,16 @@ module ietf-bfd-opt-auth {
       description
         "If set to true, BFD Single Hope Sessions will be
          enabled for optimized authentication.";
+    }
+
+    leaf up-auth-type {
+      type iana-bfd-types:auth-type;
+      must "../optimized-auth = 'true'";
+      description
+        "The authentication type that should be used once the
+         connection transitions to UP state. In case
+         of optimized auth, the choices are NULL Auth,
+         or Meticulous Keyed ISAAC.";
     }
 
     leaf strong-auth-interval {

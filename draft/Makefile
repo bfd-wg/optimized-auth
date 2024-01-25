@@ -47,7 +47,6 @@ ifeq (org,$(draft_type))
 endif
 	-rm -f ../bin/*\@*-tree.txt*
 	-rm -f ../bin/*\@*.yang
-	-rm -f ../src/yang/*\@*.yang
 
 $(next).xml: $(draft).xml ../src/yang/ietf-bfd-opt-auth.yang
 	-mkdir -p ../bin

@@ -9,7 +9,9 @@
 </interfaces>
 <routing
     xmlns="urn:ietf:params:xml:ns:yang:ietf-routing"
-    xmlns:bfd-types="urn:ietf:params:xml:ns:yang:ietf-bfd-types">
+    xmlns:bfd-types="urn:ietf:params:xml:ns:yang:ietf-bfd-types"
+    xmlns:iana-bfd-types="urn:ietf:params:xml:ns:yang:iana-bfd-types"
+    xmlns:opt-auth="urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth">
   <control-plane-protocols>
     <control-plane-protocol>
       <type>bfd-types:bfdv1</type>
@@ -24,10 +26,10 @@
               <required-min-rx-interval>
                 10000
               </required-min-rx-interval>
-	      <optimized-auth
-		  xmlns="urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth">true</optimized-auth>
-	      <strong-auth-interval
-		  xmlns="urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth">30000</strong-auth-interval>
+	      <authentication>
+		<opt-auth:optimized-auth>true</opt-auth:optimized-auth>
+		<opt-auth:strong-auth-interval>30000</opt-auth:strong-auth-interval>
+	      </authentication>
             </session>
           </sessions>
         </ip-sh>
