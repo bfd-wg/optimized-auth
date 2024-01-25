@@ -131,6 +131,14 @@ module ietf-bfd-opt-auth {
          or Meticulous Keyed ISAAC.";
     }
 
+    leaf strong-auth {
+      type iana-bfd-types:auth-type;
+      description
+        "The authentication type to used otherwise. Should be
+         one of the meticulous auth types (minus Simple Password)
+         if BFD Stability needs to be supported.";
+    }
+
     leaf strong-auth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
