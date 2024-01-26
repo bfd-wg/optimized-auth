@@ -3,12 +3,6 @@ module ietf-bfd-opt-auth {
   namespace "urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth";
   prefix "bfdoa";
 
-  import ietf-yang-types {
-    prefix "yang";
-    reference
-      "RFC 6991: Common YANG Data Types";
-  }
-  
   import ietf-routing {
     prefix "rt";
     reference
@@ -51,11 +45,10 @@ module ietf-bfd-opt-auth {
        Forwarding Detection.";
   }
 
-  import iana-bfd-types {
-    prefix iana-bfd-types;
+  import ietf-key-chain {
+    prefix key-chain;
     reference
-      "RFC 9314: YANG Data Model for Bidirectional Forwarding
-		 Detection.";
+      "RFC 8177: YANG Key Chain.";
   }
 
   organization
@@ -108,6 +101,29 @@ module ietf-bfd-opt-auth {
        authentication as described in this document.";
   }
 
+  identity no-auth {
+    base key-chain:crypto-algorithm;
+    description
+      "No authentication will be used.";
+  }
+
+  identity null {
+    base key-chain:crypto-algorithm;
+    description
+      "BFD Null type defined in this draft.";
+    reference
+      "RFC XXXX: Optmizing BFD Authentication.";
+  }
+
+  identity meticulous-keyed-isaac {
+    base key-chain:crypto-algorithm;
+    description
+      "BFD ISAAC Keyed Meticulous.";
+    reference
+      "I-D.ietf-bfd-secure-sequence-numbers: Securing BFD Sequence
+                                             Numbers.";
+  }
+
   augment "/rt:routing/rt:control-plane-protocols" +
           "/rt:control-plane-protocol/bfd:bfd/bfd-ip-sh:ip-sh" +
           "/bfd-ip-sh:sessions/bfd-ip-sh:session" +
@@ -117,20 +133,11 @@ module ietf-bfd-opt-auth {
       type boolean;
       default false;
       description
-        "If set to true, BFD Single Hope Sessions will be
+        "If set to true, BFD Single Hop Sessions will be
          enabled for optimized authentication.";
     }
 
-    leaf strong-auth {
-      type iana-bfd-types:auth-type;
-      description
-        "The authentication type to be used in the case strong
-         authentications is desired. Should be one of the meticulous
-         auth types (minus Simple Password) if BFD Stability needs
-         to be supported.";
-    }
-
-    leaf strong-auth-interval {
+    leaf reauth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
       units "microseconds";
@@ -146,13 +153,14 @@ module ietf-bfd-opt-auth {
     }
 
     leaf up-auth-type {
-      type iana-bfd-types:auth-type;
-      must "../optimized-auth = 'true'";
+      type key-chain:key-chain-ref;
+      must "(../optimized-auth = 'true') and " +
+           "(../bfd-ip-sh:meticulous = 'true')";
       description
         "The authentication type that should be used once the
          connection transitions to UP state. In case
-         of optimized auth, the choices are NULL Auth,
-         or Meticulous Keyed ISAAC.";
+         of optimized auth, the choices are Reserved (or no
+         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD
@@ -162,60 +170,129 @@ module ietf-bfd-opt-auth {
   augment "/rt:routing/rt:control-plane-protocols/" +
           "rt:control-plane-protocol/bfd:bfd/bfd-ip-mh:ip-mh/" +
           "bfd-ip-mh:session-groups/bfd-ip-mh:session-group/" +
-          "bfd-ip-mh:sessions/bfd-ip-mh:session-statistics" {
-    leaf lost-packet-count {
-      type yang:counter32;
+          "bfd-ip-mh:authentication" {
+    leaf optimized-auth {
+      if-feature optimized-auth;
+      type boolean;
+      default false;
       description
-        "Number of BFD packets that were lost without bringing the
-         session down.";
+        "If set to true, BFD Multi Hop Sessions will be
+         enabled for optimized authentication.";
+    }
+
+    leaf reauth-interval {
+      when "../optimized-auth = 'true'";
+      type uint32;
+      units "microseconds";
+      default "60000000";
+      description
+	"Interval of time after which a strong authentication
+         should be enabled to prevent a Person-In-The-Middle
+         attack. Default is 1 minute.
+
+         This value should have jitter applied to it to avoid
+         self-synchronization during expensive authentication
+         operations.";
+    }
+
+    leaf up-auth-type {
+      type key-chain:key-chain-ref;
+      must "(../optimized-auth = 'true') and " +
+           "(../bfd-ip-mh:meticulous = 'true')";
+      description
+        "The authentication type that should be used once the
+         connection transitions to UP state. In case
+         of optimized auth, the choices are Reserved (or no
+         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD
-       stability.";
+       optimized authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
           "rt:control-plane-protocol/bfd:bfd/bfd-lag:lag/" +
-          "bfd-lag:sessions/bfd-lag:session/bfd-lag:member-links/" +
-          "bfd-lag:micro-bfd-ipv4/bfd-lag:session-statistics" {
-    leaf lost-packet-count {
-      type yang:counter32;
+          "bfd-lag:sessions/bfd-lag:session/" +
+          "bfd-lag:authentication" {
+    leaf optimized-auth {
+      if-feature optimized-auth;
+      type boolean;
+      default false;
       description
-        "Number of BFD packets that were lost without bringing the
-         session down.";
+        "If set to true, BFD LAG Sessions will be
+         enabled for optimized authentication.";
     }
-    description
-      "Augment the 'bfd' container to add attributes related to BFD
-       stability.";
-  }
 
-  augment "/rt:routing/rt:control-plane-protocols/" +
-          "rt:control-plane-protocol/bfd:bfd/bfd-lag:lag/" +
-          "bfd-lag:sessions/bfd-lag:session/bfd-lag:member-links/" +
-          "bfd-lag:micro-bfd-ipv6/bfd-lag:session-statistics" {
-    leaf lost-packet-count {
-      type yang:counter32;
+    leaf reauth-interval {
+      when "../optimized-auth = 'true'";
+      type uint32;
+      units "microseconds";
+      default "60000000";
       description
-        "Number of BFD packets that were lost without bringing the
-         session down.";
+	"Interval of time after which a strong authentication
+         should be enabled to prevent a Person-In-The-Middle
+         attack. Default is 1 minute.
+
+         This value should have jitter applied to it to avoid
+         self-synchronization during expensive authentication
+         operations.";
+    }
+
+    leaf up-auth-type {
+      type key-chain:key-chain-ref;
+      must "(../optimized-auth = 'true') and " +
+           "(../bfd-lag:meticulous = 'true')";
+      description
+        "The authentication type that should be used once the
+         connection transitions to UP state. In case
+         of optimized auth, the choices are Reserved (or no
+         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD
-       stability.";
+       optimized authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
           "rt:control-plane-protocol/bfd:bfd/bfd-mpls:mpls/" +
           "bfd-mpls:session-groups/bfd-mpls:session-group/" +
-          "bfd-mpls:sessions/bfd-mpls:session-statistics" {
-    leaf lost-packet-count {
-      type yang:counter32;
+          "bfd-mpls:authentication" {
+    leaf optimized-auth {
+      if-feature optimized-auth;
+      type boolean;
+      default false;
       description
-        "Number of BFD packets that were lost without bringing the
-         session down.";
+        "If set to true, BFD MPLS Sessions will be
+         enabled for optimized authentication.";
+    }
+
+    leaf reauth-interval {
+      when "../optimized-auth = 'true'";
+      type uint32;
+      units "microseconds";
+      default "60000000";
+      description
+	"Interval of time after which a strong authentication
+         should be enabled to prevent a Person-In-The-Middle
+         attack. Default is 1 minute.
+
+         This value should have jitter applied to it to avoid
+         self-synchronization during expensive authentication
+         operations.";
+    }
+
+    leaf up-auth-type {
+      type key-chain:key-chain-ref;
+      must "(../optimized-auth = 'true') and " +
+           "(../bfd-mpls:meticulous = 'true')";
+      description
+        "The authentication type that should be used once the
+         connection transitions to UP state. In case
+         of optimized auth, the choices are Reserved (or no
+         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD
-       stability.";
+       optimized authentication.";
   }
 }

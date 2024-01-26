@@ -10,3 +10,4 @@ sed_nc_yang_file() {
 }
 
 sed_nc_yang_file yang     ../bin      ietf-bfd-opt-auth
+sed_nc_yang_file yang     ../bin      iana-bfd-types
