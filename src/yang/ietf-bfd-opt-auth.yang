@@ -121,22 +121,13 @@ module ietf-bfd-opt-auth {
          enabled for optimized authentication.";
     }
 
-    leaf up-auth-type {
-      type iana-bfd-types:auth-type;
-      must "../optimized-auth = 'true'";
-      description
-        "The authentication type that should be used once the
-         connection transitions to UP state. In case
-         of optimized auth, the choices are NULL Auth,
-         or Meticulous Keyed ISAAC.";
-    }
-
     leaf strong-auth {
       type iana-bfd-types:auth-type;
       description
-        "The authentication type to used otherwise. Should be
-         one of the meticulous auth types (minus Simple Password)
-         if BFD Stability needs to be supported.";
+        "The authentication type to be used in the case strong
+         authentications is desired. Should be one of the meticulous
+         auth types (minus Simple Password) if BFD Stability needs
+         to be supported.";
     }
 
     leaf strong-auth-interval {
@@ -152,6 +143,16 @@ module ietf-bfd-opt-auth {
          This value should have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
+    }
+
+    leaf up-auth-type {
+      type iana-bfd-types:auth-type;
+      must "../optimized-auth = 'true'";
+      description
+        "The authentication type that should be used once the
+         connection transitions to UP state. In case
+         of optimized auth, the choices are NULL Auth,
+         or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD

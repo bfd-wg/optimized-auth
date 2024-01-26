@@ -129,7 +129,7 @@
       that signal a significant change are generally transmitted at a slower
       interval of 1s, leaving enough time to compute the hash.</t>
 
-      <t>To detect a Man In the Middle (MITM) attack, it is also proposed that
+      <t>To detect a Person In the Middle (PITM) attack, it is also proposed that
       a BFD control packet without a significant change be authenticated
       occasionally. The interval of the BFD control packets without a
       significant change can be configured depending on the detect multiplier
@@ -172,8 +172,10 @@
           <c/>
           <c/>
           <c>configured interval</c>
-          <c>Interval at which BFD control packets are retried for
-          authentication.</c>
+          <c>
+	    Interval at which BFD control packets are retried with a
+	    stronger authentication.
+	  </c>
         </texttable>
       </section>
     </section>
@@ -201,31 +203,30 @@
 
       <t>
 	This proposal outlines which BFD control packets need to be
-	authenticated (bfd.AuthType set with a non-zero value), and
-	which packets can be transmitted or received with bfd.AuthType
-	set to NULL even as Authentication Present (A-bit) is set. A
-	BFD control packet that fails authentication is discarded, or
-	a BFD control packet that was supposed to be authenticated,
-	but was not, e.g. a significant change packet, is
-	discarded. However, there is no change to the state machine
-	for BFD, as the decision of a significant change is still
-	decided by how many valid consecutive packets were received,
-	authenticated or otherwise.
+	authenticated, and which packets can be transmitted or
+	received with bfd.AuthType set to NULL even as Authentication
+	Present (A-bit) is set. A BFD control packet that fails
+	authentication is discarded, or a BFD control packet that was
+	supposed to be authenticated, but was not, e.g. a significant
+	change packet, is discarded. However, there is no change to
+	the state machine for BFD, as the decision of a significant
+	change is still decided by how many valid consecutive packets
+	were received, authenticated or otherwise.
       </t>
 
       <t>
 	The following table summarizes when the bfd.AuthType should be
-	set with a non-zero value even as Authentication Present
-	(A-bit) is set. The table should be read with the column
-	indicating the BFD state the receiver is currently in, and the
-	row indicating the BFD state the receiver might transition to
-	based on the BFD control packet received.  The interesection
-	of the two indicates whether the received BFD control packet
-	should have the bfd.AuthType is set to a non-zero value, no
-	authentication is needed (NULL), most packets are NULL AUTH
-	(Select) or the state transition is not applicable. The BFD
-	state refers to the states in BFD state machine described in
-	Section 6.2 of <xref target="RFC5880">BFD</xref>.
+	set with a Auth or a NULL authentication type value when
+	Authentication Present (A-bit) is set. The table should be
+	read with the column indicating the BFD state the receiver is
+	currently in, and the row indicating the BFD state the
+	receiver might transition to based on the BFD control packet
+	received.  The interesection of the two indicates whether the
+	received BFD control packet should have the bfd.AuthType set
+	to either Auth, or NULL.  Most packets are NULL AUTH (Select)
+	or the state transition is not applicable. The BFD state
+	refers to the states in BFD state machine described in Section
+	6.2 of <xref target="RFC5880">BFD</xref>.
       </t>
 
       <t>
@@ -262,7 +263,7 @@
 	packets still carry a sequence number, the logic for sequence
 	number maintenance remains unchanged from <xref
 	target="RFC5880">BFD </xref>. If at a later time, a different
-	scheme is adopted for changing sequence number, e.g. <xref
+	scheme is adopted for changing sequence number, e.g., <xref
 	target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD
 	Sequence Numbers</xref>, this method can use the updated
 	scheme without any impact.</t>
