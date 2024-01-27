@@ -143,7 +143,7 @@ module ietf-bfd-opt-auth {
       units "microseconds";
       default "60000000";
       description
-	"Interval of time after which a strong authentication
+        "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
 
@@ -186,7 +186,7 @@ module ietf-bfd-opt-auth {
       units "microseconds";
       default "60000000";
       description
-	"Interval of time after which a strong authentication
+        "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
 
@@ -229,7 +229,7 @@ module ietf-bfd-opt-auth {
       units "microseconds";
       default "60000000";
       description
-	"Interval of time after which a strong authentication
+        "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
 
@@ -272,7 +272,7 @@ module ietf-bfd-opt-auth {
       units "microseconds";
       default "60000000";
       description
-	"Interval of time after which a strong authentication
+        "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
 

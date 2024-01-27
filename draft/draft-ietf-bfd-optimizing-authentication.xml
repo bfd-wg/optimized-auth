@@ -266,30 +266,33 @@
 	scheme is adopted for changing sequence number, e.g., <xref
 	target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD
 	Sequence Numbers</xref>, this method can use the updated
-	scheme without any impact.</t>
+	scheme without any impact.
+      </t>
 
-      <t>Most packets transmitted on a BFD session are BFD UP packets.
-      Authenticating a small subset of these packets, for example, a detect
-      multiplier number of packets per configured interval, significantly
-      reduces the computational demand for the system while maintaining
-      security of the session across the configured interval. A minimum of
-      Detect Multiplier packets MUST be transmitted per configured interval.
-      This ensures that the BFD session should see at least one authenticated
-      packet during that interval.</t>
+      <t>
+	Most packets transmitted on a BFD session are BFD UP packets.
+	Authenticating a small subset of these packets, for example
+	every one minute, significantly reduces the computational
+	demand for the system while maintaining security of the
+	session across the configured interval.
+      </t>
     </section>
 
     <section title="NULL Auth Type">
-      <t>This section describes a new Authentication Type as: <figure
+      <t>This section describes a new Authentication Type as:
+      <figure
           align="center" title="NULL Auth Type">
-          <artwork><![CDATA[       0                   1                   2                   3
+        <artwork><![CDATA[       0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |   Auth Type   |   Auth Len    |  Auth Key ID  |   Reserved    |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                        Sequence Number                        |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-]]></artwork>
-        </figure> where:</t>
+      ]]></artwork>
+      </figure>
+      where:
+      </t>
 
       <t>Auth Type: The Authentication Type, which in this case is TBD (NULL,
       to be assigned by IANA)</t>
@@ -308,13 +311,75 @@
       <xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD Sequence
       Numbers </xref>.</t>
 
-      <t>The NULL Auth Type must be used for all packets that are not
-      authenticated. This protects against replay-attacks by allowing the
-      session to maintain an incrementing sequence number for all packets
-      (authenticated and un-authenticated).</t>
+      <t>
+	Once the session has reached UP state, the session can choose
+	the Auth Type to be one of Reserved, i.e., no authentication
+	will be performed, NULL, i.e. an occasional authentication
+	will be performed using one of the strong authentication
+	methods, or Meticulous Keyed ISAAC authentication as described
+	in <xref
+	target="I-D.ietf-bfd-secure-sequence-numbers">Securing BFD
+	Sequence Numbers</xref>.  The use of NULL or Meticulous Keyed
+	ISAAC authentication methods protects against replay-attacks
+	by allowing the session to maintain an incrementing sequence
+	number for all packets (authenticated and un-authenticated).
+      </t>
 
-      <t>In the future, if a new scheme is adopted for changing the sequence
-      number, this method can adopt the new scheme without any impact.</t>
+      <t>
+	In the future, if a new scheme is adopted for changing the
+	sequence number monotonically, this method can adopt the new
+	scheme without any impact.
+      </t>
+    </section>
+
+    <section anchor="opt-auth-yang-model" title="Optimizing Authentication YANG Model">
+      <section anchor="data-model-overview" title="Data Model Overview">
+	<t>
+	  This YANG model augments the "ietf-bfd" module to add
+	  configuration relevant to the management of the feature
+	  defined in this document. In particular, it adds crypto
+	  algorithms that are described in this model, and in <xref
+	  target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD
+	  Sequence Numbers</xref>. It adds a feature statement to
+	  enable optimized authentication. Finally, it adds a flag to
+	  enable optimized authentication, an interval value that
+	  specifies how often the BFD session should be
+	  reauthenticated once it is in UP state, and the key chain
+	  that should be used in UP state.
+	</t>
+      </section>
+      <section anchor="tree-diagram" title="Tree Diagram">
+	<t>
+	  The tree diagram for the YANG modules defined in this
+	  document use annotations defined in <xref
+	  target="RFC8340">YANG Tree Diagrams.</xref>.
+	</t>
+	<t>
+	  <figure>
+            <artwork><![CDATA[
+	    INSERT_TEXT_FROM_FILE(../bin/ietf-bfd-opt-auth@YYYY-MM-DD-tree.txt,69)
+	    ]]></artwork>
+          </figure>
+	</t>
+      </section>
+      <section anchor="the-yang-model" title="The YANG Model">
+	<t>
+	  This YANG module imports <xref target="RFC8177">YANG Key
+	  Chain </xref>, <xref target="RFC8349">A YANG Data Model for
+	  Routing Management (NMDA version)</xref>, and <xref
+	  target="RFC9314">YANG Data Model for Bidirectional Forwading
+	  Detection (BFD)</xref>.
+	</t>
+	<t>
+	  <figure>
+            <artwork><![CDATA[
+	    <CODE BEGINS> file "ietf-bfd-stability@YYYY-MM-DD.yang"
+	    INSERT_TEXT_FROM_FILE(../bin/ietf-bfd-opt-auth@YYYY-MM-DD.yang,69)
+	    <CODE ENDS>
+	    ]]></artwork>
+          </figure>
+	</t>
+      </section>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -344,11 +409,12 @@
   <back>
     <references title="Normative References">
       <?rfc include="reference.RFC.2119.xml"?>
-
       <?rfc include='reference.RFC.5880.xml'?>
-
       <?rfc include='reference.RFC.8174.xml'?>
-
+      <?rfc include='reference.RFC.8177.xml'?>
+      <?rfc include='reference.RFC.8340.xml'?>
+      <?rfc include='reference.RFC.8349.xml'?>
+      <?rfc include='reference.RFC.9314.xml'?>
       <?rfc include='reference.I-D.ietf-bfd-secure-sequence-numbers.xml'?>
     </references>
 
