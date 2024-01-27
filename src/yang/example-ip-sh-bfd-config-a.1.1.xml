@@ -19,7 +19,7 @@
       <crypto-algorithm xmlns:opt-auth=
       "urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth">opt-auth:meticulous-keyed-isaac</crypto-algorithm>
       <key-string>
-	<keystring>testvector</keystring>
+        <keystring>testvector</keystring>
       </key-string>
     </key>
   </key-chain>
@@ -51,12 +51,12 @@
               <required-min-rx-interval>
                 10000
               </required-min-rx-interval>
-	      <authentication>
-		<meticulous>true</meticulous>
-		<opt-auth:optimized-auth>true</opt-auth:optimized-auth>
-		<opt-auth:reauth-interval>30000</opt-auth:reauth-interval>
-		<opt-auth:up-auth-type>bfd-auth-config</opt-auth:up-auth-type>
-	      </authentication>
+              <authentication>
+                <meticulous>true</meticulous>
+                <opt-auth:optimized-auth>true</opt-auth:optimized-auth>
+                <opt-auth:reauth-interval>30000</opt-auth:reauth-interval>
+                <opt-auth:up-auth-type>bfd-auth-config</opt-auth:up-auth-type>
+              </authentication>
             </session>
           </sessions>
         </ip-sh>

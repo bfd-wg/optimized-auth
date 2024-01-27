@@ -57,7 +57,7 @@ done
 rm ../bin/*-sub-tree.txt.tmp
 
 # Validate Optimized auth BFD examples
-for i in yang/example-bfd-config-a.1.*.xml
+for i in yang/example-*-bfd-config-a.1.*.xml
 do
     name=$(echo $i | cut -f 1-3 -d '.')
     echo "Validating $name.xml"
