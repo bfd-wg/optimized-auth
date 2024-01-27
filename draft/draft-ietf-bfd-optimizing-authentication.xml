@@ -373,7 +373,7 @@
 	<t>
 	  <figure>
             <artwork><![CDATA[
-	    <CODE BEGINS> file "ietf-bfd-stability@YYYY-MM-DD.yang"
+	    <CODE BEGINS> file "ietf-bfd-opt-auth@YYYY-MM-DD.yang"
 	    INSERT_TEXT_FROM_FILE(../bin/ietf-bfd-opt-auth@YYYY-MM-DD.yang,69)
 	    <CODE ENDS>
 	    ]]></artwork>
@@ -414,6 +414,7 @@
       <?rfc include='reference.RFC.8177.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
       <?rfc include='reference.RFC.8349.xml'?>
+      <?rfc include='reference.RFC.9127.xml'?>
       <?rfc include='reference.RFC.9314.xml'?>
       <?rfc include='reference.I-D.ietf-bfd-secure-sequence-numbers.xml'?>
     </references>
@@ -553,6 +554,28 @@
 
       <?rfc include='reference.RFC.6194.xml'?>
     </references>
+    <section anchor="iana-module" title="Updated BFD IANA Module">
+      <t>
+	This section carries the updated IANA BFD Module,
+	iana-bfd-types.yang module, first defined in <xref
+	target="RFC9127">YANG Data Model for Bidirectional Forward
+	Detection (BFD)</xref>. The updated module carries two new
+	authentication type enum definitions, 'null' of value 6, and
+	'meticulous-keyed-isaac' of value 7. This module should
+	replace the version that currently exists in the IANA
+	registry.
+      </t>
+	<t>
+          <figure>
+            <artwork><![CDATA[
+	    <CODE BEGINS> file "iana-bfd-types@YYYY-MM-DD.yang"
+            INSERT_TEXT_FROM_FILE(../bin/iana-bfd-types@YYYY-MM-DD.yang,68)
+	    <CODE ENDS>
+            ]]>
+            </artwork>
+          </figure>
+	</t>
+    </section>
     <section anchor="examples" title="Examples">
       <t>
 	This section tries to show some examples in how the model can

@@ -156,14 +156,14 @@ module iana-bfd-types {
           "Meticulous Keyed SHA1.";
       }
       enum null {
-	value 6;
-	description
-	  "NULL Auth.";
+        value 6;
+        description
+          "NULL Auth.";
       }
       enum meticulous-keyed-isaac {
-	value 7;
-	description
-	  "Meticulous Keyed ISAAC.";
+        value 7;
+        description
+          "Meticulous Keyed ISAAC.";
       }
     }
     description
