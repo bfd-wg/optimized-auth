@@ -39,7 +39,7 @@
     </author>
 
     <author fullname="Ashesh Mishra" initials="A" surname="Mishra">
-      <organization>SES Networks</organization>
+      <organization>Aalyria Technologies</organization>
       <address>
         <postal>
           <street/>
@@ -49,7 +49,7 @@
           <country/>
         </postal>
         <phone/>
-        <email>mishra.ashesh@gmail.com</email>
+        <email>ashesh@aalyria.com</email>
       </address>
     </author>
 
@@ -71,15 +71,15 @@
     </author>
 
     <author fullname="Manav Bhatia " initials="M." surname="Bhatia ">
-      <organization>Nokia</organization>
+      <organization>Google</organization>
       <address>
-        <postal>
-          <street/>
+        <postal> Bagmane Tech Park</postal> 
+          <street/>Doddanekkundi</street>
           <city>Bangalore</city>
-          <code/>
+          <code/>560048</code>
           <country>India</country>
         </postal>
-        <email>manav.bhatia@nokia.com</email>
+        <email>mnvbhatia@google.com</email>
       </address>
     </author>
 
