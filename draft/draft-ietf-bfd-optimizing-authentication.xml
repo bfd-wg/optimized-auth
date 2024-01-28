@@ -149,6 +149,24 @@
         when, they appear in all capitals, as shown here.</t>
       </section>
 
+      <section anchor="note-to-rfc-editor" title="Note to RFC Editor">
+        <t>
+	  This document uses several placeholder values throughout the
+	  document. Please replace them as follows and remove this
+	  note before publication.
+	</t>
+
+        <t>
+	  RFC XXXX, where XXXX is the number assigned to this document
+	  at the time of publication.
+	</t>
+
+        <t>
+	  YYYY-MM-DD with the actual date of the publication of this
+	  document.
+	</t>
+      </section>
+
       <section title="Terminology">
         <t>The following terms used in this document have been defined in
         <xref target="RFC5880">BFD</xref>.</t>
@@ -387,10 +405,6 @@
       <t>
 	This documents requests one new authentication type, one URI,
 	one YANG model, and an update to an existing IANA YANG model.
-      </t>
-      <t>
-	Note to RFC Editor: this section may be removed on publication
-	as an RFC.
       </t>
       <section anchor="auth-type" title="Auth Type">
 	<t>
