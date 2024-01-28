@@ -221,7 +221,7 @@
 	read with the column indicating the BFD state the receiver is
 	currently in, and the row indicating the BFD state the
 	receiver might transition to based on the BFD control packet
-	received.  The interesection of the two indicates whether the
+	received.  The intersection of the two indicates whether the
 	received BFD control packet should have the bfd.AuthType set
 	to either Auth, or NULL.  Most packets are NULL AUTH (Select)
 	or the state transition is not applicable. The BFD state
@@ -278,7 +278,7 @@
       </t>
     </section>
 
-    <section title="NULL Auth Type">
+    <section anchor="null-auth-type" title="NULL Auth Type">
       <t>This section describes a new Authentication Type as:
       <figure
           align="center" title="NULL Auth Type">
@@ -335,7 +335,8 @@
     <section anchor="opt-auth-yang-model" title="Optimizing Authentication YANG Model">
       <section anchor="data-model-overview" title="Data Model Overview">
 	<t>
-	  This YANG model augments the "ietf-bfd" module to add
+	  The <xref target="RFC7950">YANG 1.1</xref> model defined in
+	  this document augments the "ietf-bfd" module to add
 	  configuration relevant to the management of the feature
 	  defined in this document. In particular, it adds crypto
 	  algorithms that are described in this model, and in <xref
@@ -344,7 +345,7 @@
 	  enable optimized authentication. Finally, it adds a flag to
 	  enable optimized authentication, an interval value that
 	  specifies how often the BFD session should be
-	  reauthenticated once it is in UP state, and the key chain
+	  re-authenticated once it is in UP state, and the key chain
 	  that should be used in UP state.
 	</t>
       </section>
@@ -383,12 +384,69 @@
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This document requests an update to the registry titled "BFD
-      Authentication Types". IANA is requested to assign a new BFD Auth Type
-      for "NULL" (see Section 3).</t>
-
-      <t>Note to RFC Editor: this section may be removed on publication as an
-      RFC.</t>
+      <t>
+	This documents requests one new authentication type, one URI,
+	one YANG model, and an update to an existing IANA YANG model.
+      </t>
+      <t>
+	Note to RFC Editor: this section may be removed on publication
+	as an RFC.
+      </t>
+      <section anchor="auth-type" title="Auth Type">
+	<t>
+	  This document requests an update to the registry titled "BFD
+	  Authentication Types". IANA is requested to assign a new BFD
+	  AuthType for <xref target="null-auth-type">NULL Auth
+	  Type</xref>.
+	</t>
+      </section>
+      <section anchor="ietf-xml-registry" title="IETF XML Registry">
+	<t>
+	  This document registers one URIs in the "ns" subregistry of
+	  the "IETF XML" registry <xref target="RFC3688"/>. Following
+	  the format in <xref target="RFC3688"/>, the following
+	  registration is requested:
+	</t>
+        <t>
+	  <figure>
+            <artwork>
+	      <![CDATA[
+URI: urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth
+Registrant Contact: The IESG
+XML: N/A, the requested URI is an XML namespace.
+	      ]]>
+	    </artwork>
+          </figure>
+	</t>
+      </section>
+      <section anchor="yang-module-names" title="The YANG Module Names Registry">
+        <t>
+	  This document registers one YANG modules in the "YANG Module
+	  Names" registry <xref target="RFC6020"/>. Following the
+	  format in <xref target="RFC6020"/>, the following
+	  registrations are requested:
+	</t>
+        <t>
+	  <figure>
+	    <artwork>
+	      <![CDATA[
+name:         ietf-bfd-opt-auth
+namespace:    urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth
+prefix:       bfdoa
+reference:    RFC XXXX
+	      ]]>
+	    </artwork>
+          </figure>
+	</t>
+      </section>
+      <section anchor="updated-iana-module" title="Updated IANA Module">
+	<t>
+	  This document also requests an update to an existing IANA
+	  YANG module described in <xref
+	  target="updated-bfd-iana-module">Updated BFD IANA
+	  Module</xref>
+	</t>
+      </section>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -409,7 +467,10 @@
   <back>
     <references title="Normative References">
       <?rfc include="reference.RFC.2119.xml"?>
+      <?rfc include='reference.RFC.3688.xml'?>
       <?rfc include='reference.RFC.5880.xml'?>
+      <?rfc include='reference.RFC.6020.xml'?>
+      <?rfc include='reference.RFC.7950.xml'?>
       <?rfc include='reference.RFC.8174.xml'?>
       <?rfc include='reference.RFC.8177.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
@@ -554,7 +615,7 @@
 
       <?rfc include='reference.RFC.6194.xml'?>
     </references>
-    <section anchor="iana-module" title="Updated BFD IANA Module">
+    <section anchor="updated-bfd-iana-module" title="Updated BFD IANA Module">
       <t>
 	This section carries the updated IANA BFD Module,
 	iana-bfd-types.yang module, first defined in <xref
