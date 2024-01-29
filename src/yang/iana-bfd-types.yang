@@ -40,7 +40,7 @@ module iana-bfd-types {
 
   revision YYYY-MM-DD {
     description
-      "Add NULL and Meticulous ISAAC authentiation type.";
+      "Add OPT and Meticulous ISAAC authentiation type.";
     reference
       "I-D.ietf-bfd-optimized-auth: Optimizing BFD Authentication.";
   }
@@ -155,10 +155,10 @@ module iana-bfd-types {
         description
           "Meticulous Keyed SHA1.";
       }
-      enum null {
+      enum opt {
         value 6;
         description
-          "NULL Auth.";
+          "OPT Auth.";
       }
       enum meticulous-keyed-isaac {
         value 7;

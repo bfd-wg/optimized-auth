@@ -107,10 +107,10 @@ module ietf-bfd-opt-auth {
       "No authentication will be used.";
   }
 
-  identity null {
+  identity opt {
     base key-chain:crypto-algorithm;
     description
-      "BFD Null type defined in this draft.";
+      "BFD Opt type defined in this draft.";
     reference
       "RFC XXXX: Optmizing BFD Authentication.";
   }
@@ -160,7 +160,7 @@ module ietf-bfd-opt-auth {
         "The authentication type that should be used once the
          connection transitions to UP state. In case
          of optimized auth, the choices are Reserved (or no
-         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
+         authentication), OPT Auth, or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD
@@ -203,7 +203,7 @@ module ietf-bfd-opt-auth {
         "The authentication type that should be used once the
          connection transitions to UP state. In case
          of optimized auth, the choices are Reserved (or no
-         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
+         authentication), OPT Auth, or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD
@@ -246,7 +246,7 @@ module ietf-bfd-opt-auth {
         "The authentication type that should be used once the
          connection transitions to UP state. In case
          of optimized auth, the choices are Reserved (or no
-         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
+         authentication), OPT Auth, or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD
@@ -289,7 +289,7 @@ module ietf-bfd-opt-auth {
         "The authentication type that should be used once the
          connection transitions to UP state. In case
          of optimized auth, the choices are Reserved (or no
-         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
+         authentication), OPT Auth, or Meticulous Keyed ISAAC.";
     }
     description
       "Augment the 'bfd' container to add attributes related to BFD

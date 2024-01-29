@@ -247,7 +247,7 @@
        Auth   : Authenticate BFD control packet. Use non-zero value.
        OPT    : Any or no authentication, as configured.
        n/a    : Invalid state transition.
-       Select : Most packets NULL AUTH. Selective (periodic) 
+       Select : Most packets OPT AUTH. Selective (periodic)
                 packets authenticated.
       +--------+--------+--------+--------+
       |        | DOWN   | INIT   | UP     |
@@ -275,7 +275,7 @@
       </t>
 
       <t>
-	The NULL Authentication type is defined in Section 3.  This
+	The OPT Authentication type is defined in Section 3.  This
 	authentication type does not provide any authentication of
 	BFD Control Up packets, but does carry a meticulously increasing
 	sequence number compatible with this specification.
@@ -299,10 +299,10 @@
       </t>
     </section>
 
-    <section anchor="null-auth-type" title="NULL Auth Type">
+    <section anchor="opt-auth-type" title="OPT Auth Type">
       <t>This section describes a new Authentication Type as:
       <figure
-          align="center" title="NULL Auth Type">
+          align="center" title="OPT Auth Type">
         <artwork><![CDATA[       0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -315,10 +315,10 @@
       where:
       </t>
 
-      <t>Auth Type: The Authentication Type, which in this case is TBD (NULL,
+      <t>Auth Type: The Authentication Type, which in this case is TBD (OPT,
       to be assigned by IANA)</t>
 
-      <t>Auth Len: The length of the NULL Auth Type, in bytes; i.e. 8 bytes</t>
+      <t>Auth Len: The length of the OPT Auth Type, in bytes; i.e. 8 bytes</t>
 
       <t>Auth Key ID: The authentication key ID in use for this packet. Must
       be set to zero.</t>
@@ -336,7 +336,7 @@
 
 	<ul>
 	  <li>No authentication. (I.e., Authentication Present bit is zero.)</li>
-	  <li>NULL Authentication type as defined in this document.</li>
+	  <li>OPT Authentication type as defined in this document.</li>
 	  <li>Meticulous Keyed ISAAC authentication as described in 
 	    <xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure
 	    BFD Sequence Numbers</xref>.</li>
@@ -344,7 +344,7 @@
       </t>
 
       <t>
-	The use of NULL or Meticulous Keyed
+	The use of OPT or Meticulous Keyed
 	ISAAC authentication methods protects against replay attacks
 	by allowing the session to maintain an incrementing sequence
 	number for all packets.
@@ -411,7 +411,7 @@
 	<t>
 	  This document requests an update to the registry titled "BFD
 	  Authentication Types". IANA is requested to assign a new BFD
-	  AuthType for <xref target="null-auth-type">NULL Auth
+	  AuthType for <xref target="opt-auth-type">OPT Auth
 	  Type</xref>.
 	</t>
       </section>
@@ -476,6 +476,15 @@ reference:    RFC XXXX
       of using sequence number defined in <xref
       target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD Sequence
       Numbers</xref> further enhances the security of BFD sessions.</t>
+    </section>
+
+    <section title="Contributors" anchor="contributors">
+      <t>
+	The authors of this document would like to acknowledge Jeff
+	Haas as a contributor to this document. Jeff played a role not
+	only as a shepherd but also actively contributed to the
+	improvement of the document.
+      </t>
     </section>
   </middle>
 
@@ -636,7 +645,7 @@ reference:    RFC XXXX
 	iana-bfd-types.yang module, first defined in <xref
 	target="RFC9127">YANG Data Model for Bidirectional Forward
 	Detection (BFD)</xref>. The updated module carries two new
-	authentication type enum definitions, 'null' of value 6, and
+	authentication type enum definitions, 'opt' of value 6, and
 	'meticulous-keyed-isaac' of value 7. This module should
 	replace the version that currently exists in the IANA
 	registry.
