@@ -107,10 +107,10 @@ module ietf-bfd-opt-auth {
       "No authentication will be used.";
   }
 
-  identity opt {
+  identity null {
     base key-chain:crypto-algorithm;
     description
-      "BFD Opt type defined in this draft.";
+      "BFD Null type defined in this draft.";
     reference
       "RFC XXXX: Optmizing BFD Authentication.";
   }
