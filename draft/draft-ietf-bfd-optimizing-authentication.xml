@@ -331,12 +331,14 @@
       target="RFC5880">BFD</xref>.</t>
 
       <t>
-	Once the session has reached the Up state, the session can choose
-	the Auth Type to be one of:
+	Once the session has reached the Up state, the session can
+	choose the Auth Type to be one of:
 
 	<ul>
-	  <li>No authentication. (I.e., Authentication Present bit is zero.)</li>
-	  <li>NULL Authentication type as defined in this document.</li>
+	  <li>No authentication. (I.e., Authentication Present bit is
+	  zero.)</li>
+	  <li>Optimized authentication as defined in this
+	  document.</li>
 	  <li>Meticulous Keyed ISAAC authentication as described in 
 	    <xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure
 	    BFD Sequence Numbers</xref>.</li>
