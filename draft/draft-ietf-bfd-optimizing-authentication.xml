@@ -129,15 +129,23 @@
 
       <t>
 	To detect a Person In the Middle (PITM) attack,
-	implementations have two options. They can choose to use
-	Meticulous Keyed ISAAC as defined in <xref
-	target="I-D.ietf-bfd-secure-sequence-numbers">Securing BFD
-	Sequence Numbers</xref> or test periodic strong authentication
-	using a Poll sequence. To do the latter, a Poll sequence
-	SHOULD be initiated by the sender. If a Fin is not received
-	within the Detect Interval, the session has been
-	compromised. The interval for initiating a Poll sequence can
-	be configured depending on the capability of the system.
+	implementations have two options. They can choose to use:
+	<ul>
+	  <li>
+	    Meticulous Keyed ISAAC as defined in <xref
+	    target="I-D.ietf-bfd-secure-sequence-numbers">Securing BFD
+	    Sequence Numbers</xref>.
+	  </li>
+	  <li>
+	    Test periodic strong authentication using a Poll
+	    sequence. To perform a strong authentication, a Poll
+	    sequence SHOULD be initiated by the sender. If a Fin is
+	    not received within the Detect Interval, the session has
+	    been compromised. The interval for initiating a Poll
+	    sequence can be configured depending on the capability of
+	    the system.
+	  </li>
+	</ul>
       </t>
 
       <t>The rest of this document is structured as follows: Section 2 talks
