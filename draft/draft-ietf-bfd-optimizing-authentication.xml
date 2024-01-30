@@ -95,7 +95,7 @@
   </front>
 
   <middle>
-    <section title="Introduction">
+    <section anchor="introduction" title="Introduction">
       <t>Authenticating every <xref target="RFC5880">BFD</xref> control packet
       with <xref target="RFC1321">MD5
       Message-Digest Algorithm </xref>, or Secure Hash Algorithm (SHA-1)
@@ -127,11 +127,18 @@
       BFD session's state allows more sessions to be supported with this
       optimized method of authentication.</t>
 
-      <t>To detect a Person In the Middle (PITM) attack, it is also proposed that
-      a BFD control packet without a significant change be authenticated
-      occasionally. The interval of the BFD control packets without a
-      significant change can be configured depending on the capability
-      of the system.</t>
+      <t>
+	To detect a Person In the Middle (PITM) attack,
+	implementations have two options. They can choose to use
+	Meticulous Keyed ISAAC as defined in <xref
+	target="I-D.ietf-bfd-secure-sequence-numbers">Securing BFD
+	Sequence Numbers</xref> or test periodic strong authentication
+	using a Poll sequence. To do the latter, a Poll sequence
+	SHOULD be initiated by the sender. If a Fin is not received
+	within the Detect Interval, the session has been
+	compromised. The interval for initiating a Poll sequence can
+	be configured depending on the capability of the system.
+      </t>
 
       <t>The rest of this document is structured as follows: Section 2 talks
       about the changes to authentication mode as described in <xref
@@ -292,10 +299,12 @@
 
       <t>
 	Most packets transmitted on a BFD session are BFD Up packets.
-	Authenticating a small subset of these packets, for example
-	every one minute, significantly reduces the computational
-	demand for the system while maintaining security of the
-	session across the configured interval.
+	Authenticating a small subset of these packets with a Poll
+	sequence as described in <xref
+	target="introduction">Introduction</xref>, for example every
+	one minute, significantly reduces the computational demand for
+	the system while maintaining security of the session across
+	the configured interval.
       </t>
     </section>
 
