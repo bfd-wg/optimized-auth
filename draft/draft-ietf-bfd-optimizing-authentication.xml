@@ -113,14 +113,17 @@
       authenticating every packet even more difficult to achieve.</t>
 
       <t>
-	This document proposes that only BFD control packets that
-	signal a state change, a demand mode change (to D bit) or a
-	poll sequence change (P or F bit change) in a BFD control
-	packet be categorized as a significant change. This document
-	also proposes that all BFD control packets which signal a
-	significant change MUST be authenticated. Other BFD control
-	packets MAY be transmitted and received with either no
-	authentication, or less expensive authentication.</t>
+	This document proposes that BFD control packets that signal a
+	state change, a demand mode change (to D bit), a poll sequence
+	change (P or F bit change) be categorized as a significant
+	change. Control packets that do not require a poll sequence,
+	such as bfd.RequiredMinRxInterval or
+	bfd.RequiredMinTxInterval, are also considered as a
+	significant change. In other words, the contents of an Up
+	packet MUST NOT change aside from the authentication section
+	without stronger authentication to take advantage of the
+	method described in this document.
+      </t>
 
       <t>In the Up state, most packets that are transmitted and received have no state change
       associated with them. Limiting authentication to packets that affect a
@@ -128,24 +131,65 @@
       optimized method of authentication.</t>
 
       <t>
-	To detect a Person In the Middle (PITM) attack,
-	implementations have two options. They can choose to use:
+	Once the session has reached the Up state, the session can
+	choose the Auth Type to be one of:
+
 	<ul>
 	  <li>
-	    Meticulous Keyed ISAAC as defined in <xref
-	    target="I-D.ietf-bfd-secure-sequence-numbers">Securing BFD
-	    Sequence Numbers</xref>.
+	    No authentication, i.e., Authentication Present (A-bit) is
+	    zero. Having no authentication provides computational
+	    relief to the system. However, a malicious user can
+	    blindlly inject traffic that will be accepted by the BFD
+	    session.
 	  </li>
+	  <li>
+	    <xref target="null-auth-type">NULL Auth Type</xref> as
+	    defined in this document. This type prevents blind
+	    injection, but is vulnerable to active attacks, where the
+	    attacker is aware of the sequence number, and potentially
+	    becomes the PITM. However, periodic check with stronger
+	    authentication can thrawt that attack as describe below.
+	  </li>
+	  <li>
+	    Meticulous Keyed ISAAC authentication as described in
+	    <xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure
+	    BFD Sequence Numbers</xref>. This authentication type
+	    prevents the attack when the Up packets do not change,
+	    because only the paired devices know the shared secret,
+	    key, and sequence number to select the ISAAC result.
+	  </li>
+	</ul>
+      </t>
+
+      <t>
+	To detect a Person In the Middle (PITM) attack when the
+	session is in Up state, implementations have two options. They
+	can choose to use:
+	<ul>
 	  <li>
 	    Test periodic strong authentication using a Poll
 	    sequence. To perform a strong authentication, a Poll
 	    sequence SHOULD be initiated by the sender. If a Fin is
 	    not received within the Detect Interval, the session has
-	    been compromised. The interval for initiating a Poll
-	    sequence can be configured depending on the capability of
-	    the system.
+	    been compromised, and should be brought down. The interval
+	    for initiating a Poll sequence can be configured depending
+	    on the capability of the system.
+	  </li>
+	  <li>
+	    Meticulous Keyed ISAAC as defined in <xref
+	    target="I-D.ietf-bfd-secure-sequence-numbers">Securing BFD
+	    Sequence Numbers</xref>.
 	  </li>
 	</ul>
+      </t>
+
+      <t>
+	Most packets transmitted on a BFD session are BFD Up packets.
+	Authenticating a small subset of these packets with a Poll
+	sequence as described above, for example every one minute,
+	significantly reduces the computational demand for the system
+	while maintaining security of the session across the
+	configured interval.
       </t>
 
       <t>The rest of this document is structured as follows: Section 2 talks
@@ -197,7 +241,10 @@
           <c>significant change</c>
           <c>
 	    State change, a demand mode change (to D bit) or a poll
-	    sequence change (P or F bit).
+	    sequence change (P or F bit). Control packets that do not
+	    require a poll sequence, such as bfd.RequiredMinRxInterval
+	    bfd.RequiredMinTxInterval, or bfd.DetectMult are also
+	    considered as a significant change.
 	  </c>
           <c>configured interval</c>
           <c>
@@ -231,8 +278,8 @@
       session will fail to come up.</t>
 
       <t>
-	This proposal outlines which BFD control packets are required to be
-	authenticated. A BFD control packet that fails
+	The proposal outlines which BFD control packets are required
+	to be authenticated. A BFD control packet that fails
 	authentication is discarded, or a BFD control packet that was
 	supposed to be authenticated, but was not; e.g. a significant
 	change packet, is discarded. However, there is no change to
@@ -242,14 +289,14 @@
       </t>
 
       <t>
-	The following table summarizes when the bfd.AuthType should be
+	The following table summarizes when the Auth Type should be
 	set with a Auth or a OPT authentication type.  The table
 	should be read with the column indicating the BFD state the
 	receiver is currently in, and the row indicating the BFD state
 	the receiver might transition to based on the BFD control
 	packet received.  The intersection of the two indicates
 	whether the received BFD control packet should have the
-	bfd.AuthType set to either Auth, or OPT.  The BFD state
+	Auth Type set to either Auth, or OPT.  The BFD state
 	refers to the states in BFD state machine described in Section
 	6.2 of <xref target="RFC5880">BFD</xref>.
       </t>
@@ -259,10 +306,10 @@
           <artwork>
 	    <![CDATA[
        Read   : On state change from <column> to <row>
-       Auth   : Authenticate BFD control packet. Use non-zero value.
+       Auth   : Strongly authenticated BFD control packet
        OPT    : Any or no authentication, as configured.
        n/a    : Invalid state transition.
-       Select : Most packets NULL AUTH. Selective (periodic) 
+       Select : Most packets OPT AUTH. Selective (periodic) 
                 packets authenticated.
       +--------+--------+--------+--------+
       |        | DOWN   | INIT   | UP     |
@@ -278,42 +325,39 @@
 	</figure>
       </t>
 
-      <t>If P or F bit changes value, the BFD control packet MUST be
-      authenticated. If the D bit changes value, the BFD control packet MUST
-      be authenticated.</t>
-
       <t>
-	Implementations supporting this feature will send BFD packets
-	with authentications that always carry a meticulously increasing
-	sequence number.  This meticulously increasing sequence number
-	prevents replay attacks.
+	In other words, the contents of an Up packet MUST NOT change
+	aside from the authentication section without stronger
+	authentication.
       </t>
 
       <t>
-	The NULL Authentication type is defined in Section 3.  This
-	authentication type does not provide any authentication of
-	BFD Control Up packets, but does carry a meticulously increasing
-	sequence number compatible with this specification.
+	Implementations supporting this feature can send BFD packets
+	with or without authentication that carries a meticulously
+	increasing sequence number.  This meticulously increasing
+	sequence number prevents replay attacks, and it supports <xref
+	target="I-D.ietf-bfd-stability">BFD Stability</xref>.
+      </t>
+
+      <t>
+	The NULL Authentication type is defined in <xref
+	target="null-auth-type">NULL Autentication
+	Type</xref>.  This authentication type does not provide any
+	authentication of the BFD Control Up packets, but does carry a
+	meticulously increasing sequence number compatible with this
+	specification.
       </t>
 
       <t>
 	<xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD
-	Sequence Numbers</xref> defines an authentication mechanism that
-	does not provide any authentication of the BFD Control packets,
-	carries a meticulously increasing sequence number, and provides
-	for a stronger mechanism to prevent active attacks against these
-	procedures for Up packets not requiring strong authentication.
+	Sequence Numbers</xref> defines an authentication mechanism
+	that does not provide any authentication of the BFD Control
+	packets, carries a meticulously increasing sequence number,
+	but provides for a stronger mechanism to prevent active
+	attacks against these procedures for Up packets without
+	requiring strong authentication.
       </t>
 
-      <t>
-	Most packets transmitted on a BFD session are BFD Up packets.
-	Authenticating a small subset of these packets with a Poll
-	sequence as described in <xref
-	target="introduction">Introduction</xref>, for example every
-	one minute, significantly reduces the computational demand for
-	the system while maintaining security of the session across
-	the configured interval.
-      </t>
     </section>
 
     <section anchor="null-auth-type" title="NULL Auth Type">
@@ -332,8 +376,10 @@
       where:
       </t>
 
-      <t>Auth Type: The Authentication Type, which in this case is TBD (NULL,
-      to be assigned by IANA)</t>
+      <t>
+	Auth Type: The Authentication Type, which in this case is TBD
+	(NULL, to be assigned by IANA, with a suggested value of 6).
+      </t>
 
       <t>Auth Len: The length of the NULL Auth Type, in bytes; i.e. 8 bytes</t>
 
@@ -346,26 +392,6 @@
       <t>Sequence Number: The sequence number for this packet.  Implementations
       will use sequence numbers (bfd.XmitAuthSeq) as defined in <xref
       target="RFC5880">BFD</xref>.</t>
-
-      <t>
-	Once the session has reached the Up state, the session can choose
-	the Auth Type to be one of:
-
-	<ul>
-	  <li>No authentication. (I.e., Authentication Present bit is zero.)</li>
-	  <li>NULL Authentication type as defined in this document.</li>
-	  <li>Meticulous Keyed ISAAC authentication as described in 
-	    <xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure
-	    BFD Sequence Numbers</xref>.</li>
-	</ul>
-      </t>
-
-      <t>
-	The use of NULL or Meticulous Keyed
-	ISAAC authentication methods protects against replay attacks
-	by allowing the session to maintain an incrementing sequence
-	number for all packets.
-      </t>
     </section>
 
     <section anchor="opt-auth-yang-model" title="Optimizing Authentication YANG Model">
@@ -421,15 +447,27 @@
 
     <section anchor="IANA" title="IANA Considerations">
       <t>
-	This documents requests one new authentication type, one URI,
+	This documents requests two new authentication types, one URI,
 	one YANG model, and an update to an existing IANA YANG model.
       </t>
       <section anchor="auth-type" title="Auth Type">
 	<t>
 	  This document requests an update to the registry titled "BFD
-	  Authentication Types". IANA is requested to assign a new BFD
-	  AuthType for <xref target="null-auth-type">NULL Auth
-	  Type</xref>.
+	  Authentication Types". IANA is requested to assign two new
+	  BFD AuthType:
+	  <ul>
+	    <li>
+	      <xref target="null-auth-type">NULL Auth Type</xref>,
+	      with a suggested value of 6.
+	    </li>
+	    <li>
+	      <xref target="I-D.ietf-bfd-secure-sequence-numbers"
+	      sectionFormat="parens"
+	      section="meticulous-keyed-isaac-authentication">Meticulous
+	      Keyed ISAAC Authentication</xref>, with a suggested
+	      value of 7.
+	    </li>
+	  </ul>
 	</t>
       </section>
       <section anchor="ietf-xml-registry" title="IETF XML Registry">
@@ -587,6 +625,7 @@ reference:    RFC XXXX
       <?rfc include='reference.RFC.9127.xml'?>
       <?rfc include='reference.RFC.9314.xml'?>
       <?rfc include='reference.I-D.ietf-bfd-secure-sequence-numbers.xml'?>
+      <?rfc include='reference.I-D.ietf-bfd-stability.xml'?>
     </references>
 
     <references title="Informative References">
@@ -730,10 +769,10 @@ reference:    RFC XXXX
 	iana-bfd-types.yang module, first defined in <xref
 	target="RFC9127">YANG Data Model for Bidirectional Forward
 	Detection (BFD)</xref>. The updated module carries two new
-	authentication type enum definitions, 'null' of value 6, and
-	'meticulous-keyed-isaac' of value 7. This module should
-	replace the version that currently exists in the IANA
-	registry.
+	authentication type enum definitions, 'null' with a suggested
+	value of 6, and 'meticulous-keyed-isaac' with a suggested
+	value of 7. This module should replace the version that
+	currently exists in the IANA registry.
       </t>
 	<t>
           <figure>
