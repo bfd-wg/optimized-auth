@@ -139,7 +139,7 @@
 	    No authentication, i.e., Authentication Present (A-bit) is
 	    zero. Having no authentication provides computational
 	    relief to the system. However, a malicious user can
-	    blindlly inject traffic that will be accepted by the BFD
+	    blindly inject traffic that will be accepted by the BFD
 	    session.
 	  </li>
 	  <li>
@@ -148,7 +148,7 @@
 	    injection, but is vulnerable to active attacks, where the
 	    attacker is aware of the sequence number, and potentially
 	    becomes the PITM. However, periodic check with stronger
-	    authentication can thrawt that attack as describe below.
+	    authentication can thwart that attack as describe below.
 	  </li>
 	  <li>
 	    Meticulous Keyed ISAAC authentication as described in
@@ -341,7 +341,7 @@
 
       <t>
 	The NULL Authentication type is defined in <xref
-	target="null-auth-type">NULL Autentication
+	target="null-auth-type">NULL Authentication
 	Type</xref>.  This authentication type does not provide any
 	authentication of the BFD Control Up packets, but does carry a
 	meticulously increasing sequence number compatible with this

@@ -112,7 +112,7 @@ module ietf-bfd-opt-auth {
     description
       "BFD Null type defined in this draft.";
     reference
-      "RFC XXXX: Optmizing BFD Authentication.";
+      "RFC XXXX: Optimizing BFD Authentication.";
   }
 
   identity meticulous-keyed-isaac {
