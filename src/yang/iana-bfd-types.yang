@@ -40,7 +40,7 @@ module iana-bfd-types {
 
   revision YYYY-MM-DD {
     description
-      "Add NULL and Meticulous ISAAC authentiation type.";
+      "Add NULL and Meticulous ISAAC authentication type.";
     reference
       "I-D.ietf-bfd-optimized-auth: Optimizing BFD Authentication.";
   }

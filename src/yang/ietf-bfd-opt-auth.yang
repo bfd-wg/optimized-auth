@@ -56,7 +56,7 @@ module ietf-bfd-opt-auth {
 
   contact
     "WG Web:   <http://tools.ietf.org/wg/bfd>
-     WG List:  <bfd@ietf.org>
+     WG List:  <rtg-bfd@ietf.org>
 
      Authors: Mahesh Jethanandani (mjethanandani@gmail.com)
               Ashesh Mishra (mishra.ashesh@gmail.com)
@@ -92,7 +92,7 @@ module ietf-bfd-opt-auth {
     description
       "Initial Version.";
     reference
-      "RFC XXXX, Optimizing BFD Authentication.";
+      "RFC XXXX: Optimizing BFD Authentication.";
   }
 
   feature optimized-auth {
@@ -112,7 +112,7 @@ module ietf-bfd-opt-auth {
     description
       "BFD Null type defined in this draft.";
     reference
-      "RFC XXXX: Optmizing BFD Authentication.";
+      "RFC XXXX: Optimizing BFD Authentication.";
   }
 
   identity meticulous-keyed-isaac {
@@ -147,7 +147,7 @@ module ietf-bfd-opt-auth {
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
 
-         This value should have jitter applied to it to avoid
+         This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
@@ -158,7 +158,7 @@ module ietf-bfd-opt-auth {
            "(../bfd-ip-sh:meticulous = 'true')";
       description
         "The authentication type that should be used once the
-         connection transitions to UP state. In case
+         connection transitions to Up state. In case
          of optimized auth, the choices are Reserved (or no
          authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
@@ -190,7 +190,7 @@ module ietf-bfd-opt-auth {
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
 
-         This value should have jitter applied to it to avoid
+         This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
@@ -201,7 +201,7 @@ module ietf-bfd-opt-auth {
            "(../bfd-ip-mh:meticulous = 'true')";
       description
         "The authentication type that should be used once the
-         connection transitions to UP state. In case
+         connection transitions to Up state. In case
          of optimized auth, the choices are Reserved (or no
          authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
@@ -233,7 +233,7 @@ module ietf-bfd-opt-auth {
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
 
-         This value should have jitter applied to it to avoid
+         This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
@@ -244,7 +244,7 @@ module ietf-bfd-opt-auth {
            "(../bfd-lag:meticulous = 'true')";
       description
         "The authentication type that should be used once the
-         connection transitions to UP state. In case
+         connection transitions to Up state. In case
          of optimized auth, the choices are Reserved (or no
          authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
@@ -276,7 +276,7 @@ module ietf-bfd-opt-auth {
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
 
-         This value should have jitter applied to it to avoid
+         This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
@@ -287,7 +287,7 @@ module ietf-bfd-opt-auth {
            "(../bfd-mpls:meticulous = 'true')";
       description
         "The authentication type that should be used once the
-         connection transitions to UP state. In case
+         connection transitions to Up state. In case
          of optimized auth, the choices are Reserved (or no
          authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
