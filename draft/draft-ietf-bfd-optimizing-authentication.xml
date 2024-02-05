@@ -148,7 +148,7 @@
 	    injection, but is vulnerable to active attacks, where the
 	    attacker is aware of the sequence number, and potentially
 	    becomes the PITM. However, periodic check with stronger
-	    authentication can thwart that attack as describe below.
+	    authentication can thwart that attack as described below.
 	  </li>
 	  <li>
 	    Meticulous Keyed ISAAC authentication as described in
