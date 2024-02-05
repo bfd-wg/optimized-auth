@@ -82,6 +82,22 @@
         <email>mnvbhatia@google.com</email>
       </address>
     </author>
+    <author fullname="Jeffrey Haas" initials="J." surname="Haas">
+      <organization>Juniper Networks</organization>
+      <address>
+        <postal>
+          <street/>
+          <city/>
+          <region/>
+          <code/>
+          <country/>
+        </postal>
+        <phone/>
+        <facsimile/>
+        <email>jhaas@pfrc.org</email>
+        <uri/>
+      </address>
+    </author>
 
     <date/>
     <keyword>BFD</keyword>
@@ -628,10 +644,8 @@ reference:    RFC XXXX
 
     <section title="Contributors" anchor="contributors">
       <t>
-	The authors of this document would like to acknowledge Jeff
-	Haas as a contributor to this document. Jeff played a role not
-	only as a shepherd but also actively contributed to the
-	improvement of the document.
+	The authors of this document would like to acknowledge Reshad
+	Rehman as a contributor to this document.
       </t>
     </section>
   </middle>
