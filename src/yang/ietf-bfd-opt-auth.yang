@@ -187,12 +187,16 @@ module ietf-bfd-opt-auth {
     leaf reauth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication, e.g.,
+         when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
@@ -230,12 +234,16 @@ module ietf-bfd-opt-auth {
     leaf reauth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication, e.g.,
+         when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
@@ -273,12 +281,16 @@ module ietf-bfd-opt-auth {
     leaf reauth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication, e.g.,
+         when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
