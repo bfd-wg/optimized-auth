@@ -148,7 +148,7 @@ module ietf-bfd-opt-auth {
          attack. Default is 1 minute.
 
          A value of zero means that we do not do periodic
-         re-authorization using strong authentication, e.g.,
+         re-authorization using strong authentication; e.g.,
          when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
@@ -195,7 +195,7 @@ module ietf-bfd-opt-auth {
          attack. Default is 1 minute.
 
          A value of zero means that we do not do periodic
-         re-authorization using strong authentication, e.g.,
+         re-authorization using strong authentication; e.g.,
          when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
@@ -242,7 +242,7 @@ module ietf-bfd-opt-auth {
          attack. Default is 1 minute.
 
          A value of zero means that we do not do periodic
-         re-authorization using strong authentication, e.g.,
+         re-authorization using strong authentication; e.g.,
          when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
@@ -289,7 +289,7 @@ module ietf-bfd-opt-auth {
          attack. Default is 1 minute.
 
          A value of zero means that we do not do periodic
-         re-authorization using strong authentication, e.g.,
+         re-authorization using strong authentication; e.g.,
          when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
