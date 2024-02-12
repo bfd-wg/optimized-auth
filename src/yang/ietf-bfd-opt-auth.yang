@@ -107,10 +107,10 @@ module ietf-bfd-opt-auth {
       "No authentication will be used.";
   }
 
-  identity null {
+  identity null-auth {
     base key-chain:crypto-algorithm;
     description
-      "BFD Null type defined in this draft.";
+      "BFD Null Auth type defined in this draft.";
     reference
       "RFC XXXX: Optimizing BFD Authentication.";
   }
@@ -118,7 +118,7 @@ module ietf-bfd-opt-auth {
   identity meticulous-keyed-isaac {
     base key-chain:crypto-algorithm;
     description
-      "BFD ISAAC Keyed Meticulous.";
+      "BFD ISAAC Keyed Meticulous Auth.";
     reference
       "I-D.ietf-bfd-secure-sequence-numbers: Securing BFD Sequence
                                              Numbers.";
@@ -140,19 +140,23 @@ module ietf-bfd-opt-auth {
     leaf reauth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication; e.g.,
+         when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
 
-    leaf up-auth-type {
+    leaf up-auth-key-chain {
       type key-chain:key-chain-ref;
       must "(../optimized-auth = 'true') and " +
            "(../bfd-ip-sh:meticulous = 'true')";
@@ -163,8 +167,8 @@ module ietf-bfd-opt-auth {
          authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
     description
-      "Augment the 'bfd' container to add attributes related to BFD
-       optimized authentication.";
+      "Augment the 'authentication' container in BFD module to
+       add attributes related to BFD optimized authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
@@ -183,12 +187,16 @@ module ietf-bfd-opt-auth {
     leaf reauth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication; e.g.,
+         when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
@@ -206,8 +214,8 @@ module ietf-bfd-opt-auth {
          authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
     description
-      "Augment the 'bfd' container to add attributes related to BFD
-       optimized authentication.";
+      "Augment the 'authentication' container in BFD module to
+       add attributes related to BFD optimized authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
@@ -226,12 +234,16 @@ module ietf-bfd-opt-auth {
     leaf reauth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication; e.g.,
+         when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
@@ -249,8 +261,8 @@ module ietf-bfd-opt-auth {
          authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
     description
-      "Augment the 'bfd' container to add attributes related to BFD
-       optimized authentication.";
+      "Augment the 'authentication' container in BFD module to
+       add attributes related to BFD optimized authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
@@ -269,12 +281,16 @@ module ietf-bfd-opt-auth {
     leaf reauth-interval {
       when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
          should be enabled to prevent a Person-In-The-Middle
          attack. Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication; e.g.,
+         when 'up-auth-type' is 'meticulous-keyed-isaac'.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
@@ -292,7 +308,7 @@ module ietf-bfd-opt-auth {
          authentication), NULL Auth, or Meticulous Keyed ISAAC.";
     }
     description
-      "Augment the 'bfd' container to add attributes related to BFD
-       optimized authentication.";
+      "Augment the 'authentication' container in BFD module to
+       add attributes related to BFD optimized authentication.";
   }
 }

@@ -54,8 +54,8 @@
               <authentication>
                 <meticulous>true</meticulous>
                 <opt-auth:optimized-auth>true</opt-auth:optimized-auth>
-                <opt-auth:reauth-interval>30000</opt-auth:reauth-interval>
-                <opt-auth:up-auth-type>bfd-auth-config</opt-auth:up-auth-type>
+                <opt-auth:reauth-interval>30</opt-auth:reauth-interval>
+                <opt-auth:up-auth-key-chain>bfd-auth-config</opt-auth:up-auth-key-chain>
               </authentication>
             </session>
           </sessions>
