@@ -111,8 +111,8 @@ module iana-bfd-types {
         reference
           "RFC 5880: Bidirectional Forwarding Detection (BFD)
            RFC 6428: Proactive Connectivity Verification, Continuity
-           Check, and Remote Defect Indication for the MPLS Transport
-           Profile";
+           Check, and Remote Defect Indication for the MPLS
+           Transport Profile";
       }
     }
     description
