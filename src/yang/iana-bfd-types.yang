@@ -160,10 +160,19 @@ module iana-bfd-types {
         description
           "NULL Auth.";
       }
-      enum meticulous-keyed-isaac {
+      enum optimized-md5-meticulous-keyed-isaac {
         value 7;
         description
-          "Meticulous Keyed ISAAC.";
+          "BFD Optimized Authentication using Meticulous Keyed MD5 as
+           the strong authentication and Meticulous Keyed ISAAC as the
+           'optimized' authentication.";
+      }
+      enum optimized-sha1-meticulous-keyed-isaac {
+        value 8;
+        description
+          "BFD Optimized Authentication using Meticulous Keyed SHA-1
+           as the strong authentication and Meticulous Keyed ISAAC as
+           the 'optimized' authentication.";
       }
     }
     description
