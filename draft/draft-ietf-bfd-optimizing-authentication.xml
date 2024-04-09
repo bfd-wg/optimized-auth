@@ -800,10 +800,11 @@ reference:    RFC XXXX
 	This section carries the updated IANA BFD Module,
 	iana-bfd-types.yang module, first defined in <xref
 	target="RFC9127">YANG Data Model for Bidirectional Forward
-	Detection (BFD)</xref>. The updated module carries two new
+	Detection (BFD)</xref>. The updated module carries three new
 	authentication type enum definitions, 'null' with a suggested
-	value of 6, and 'meticulous-keyed-isaac' with a suggested
-	value of 7. This module should replace the version that
+	value of 6, and 'optimized-md5-meticulous-keyed-isaac' with a suggested
+	value of 7, and 'optimized-sha1-meticulous-keyed-isaac' with a
+	suggested value of 8.  This module should replace the version that
 	currently exists in the IANA registry.
       </t>
 	<t>
