@@ -482,7 +482,7 @@
 
     <section anchor="IANA" title="IANA Considerations">
       <t>
-	This documents requests three new authentication types, one URI,
+	This documents requests two new authentication types, one URI,
 	one YANG model, and an update to an existing IANA YANG model.
       </t>
       <section anchor="auth-type" title="Auth Type">
