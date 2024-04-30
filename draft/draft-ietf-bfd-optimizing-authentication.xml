@@ -430,7 +430,7 @@
 	  This YANG module imports <xref target="RFC8177">YANG Key
 	  Chain </xref>, <xref target="RFC8349">A YANG Data Model for
 	  Routing Management (NMDA version)</xref>, and <xref
-	  target="RFC9314">YANG Data Model for Bidirectional Forwading
+	  target="RFC9314">YANG Data Model for Bidirectional Forwarding
 	  Detection (BFD)</xref>.
 	</t>
 	<t>

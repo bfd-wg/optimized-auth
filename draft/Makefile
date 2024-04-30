@@ -8,6 +8,7 @@ xml2rfc ?= xml2rfc
 kramdown-rfc2629 ?= kramdown-rfc2629
 oxtradoc ?= oxtradoc
 idnits ?= idnits
+codespell ?= codespell
 
 draft := $(basename $(lastword $(sort $(wildcard draft-*.xml)) $(sort $(wildcard draft-*.md)) $(sort $(wildcard draft-*.org)) ))
 
@@ -34,6 +35,9 @@ default: $(next).xml $(next).txt $(next).html
 
 idnits: $(next).txt
 	$(idnits) $<
+
+codespell: $(next).txt
+	$(codespell) $<
 
 clean:
 	-rm -f $(draft).txt $(draft).html index.html
@@ -68,6 +72,7 @@ $(next).xml: $(draft).xml ../src/yang/ietf-bfd-opt-auth.yang
 %.txt: %.xml
 	$(xml2rfc) $< -o $@ --text
 	$(idnits) $@
+	$(codespell) $@
 
 ifeq "$(shell uname -s 2>/dev/null)" "Darwin"
 sed_i := sed -i ''
