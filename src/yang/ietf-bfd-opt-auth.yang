@@ -101,198 +101,142 @@ module ietf-bfd-opt-auth {
        authentication as described in this document.";
   }
 
-  identity no-auth {
+  identity null-auth {
     base key-chain:crypto-algorithm;
     description
-      "No authentication will be used.";
+      "BFD Null Auth type defined in this draft.";
+    reference
+      "RFC XXXX: BFD Stability.";
   }
 
-  identity null {
+  identity optimized-md5-meticulous-keyed-isaac {
     base key-chain:crypto-algorithm;
     description
-      "BFD Null type defined in this draft.";
+      "BFD Optimized Authentication using Meticulous Keyed MD5 as the
+       strong authentication and Meticulous Keyed ISAAC Keyed as the
+       'optimized' authentication.";
     reference
-      "RFC XXXX: Optimizing BFD Authentication.";
+      "I-D.ietf-bfd-optimizing-authentication:
+         Meticulous Keyed ISAAC for BFD Authentication.
+       I-D.ietf-bfd-secure-sequence-numbers:
+         Meticulous Keyed ISAAC for BFD Authentication.";
   }
 
-  identity meticulous-keyed-isaac {
+  identity optimized-sha1-meticulous-keyed-isaac {
     base key-chain:crypto-algorithm;
     description
-      "BFD ISAAC Keyed Meticulous.";
+      "BFD Optimized Authentication using Meticulous Keyed SHA-1 as
+      the strong authentication and Meticulous Keyed ISAAC Keyed as
+      the 'optimized' authentication.";
     reference
-      "I-D.ietf-bfd-secure-sequence-numbers: Securing BFD Sequence
-                                             Numbers.";
+      "I-D.ietf-bfd-optimizing-authentication:
+         Meticulous Keyed ISAAC for BFD Authentication.
+       I-D.ietf-bfd-secure-sequence-numbers:
+         Meticulous Keyed ISAAC for BFD Authentication.";
   }
+
 
   augment "/rt:routing/rt:control-plane-protocols" +
           "/rt:control-plane-protocol/bfd:bfd/bfd-ip-sh:ip-sh" +
           "/bfd-ip-sh:sessions/bfd-ip-sh:session" +
           "/bfd-ip-sh:authentication" {
-    leaf optimized-auth {
-      if-feature optimized-auth;
-      type boolean;
-      default false;
-      description
-        "If set to true, BFD Single Hop Sessions will be
-         enabled for optimized authentication.";
-    }
-
     leaf reauth-interval {
-      when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
-         should be enabled to prevent a Person-In-The-Middle
-         attack. Default is 1 minute.
+         should be enabled to prevent an on-path-attacker attack.
+         Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
 
-    leaf up-auth-type {
-      type key-chain:key-chain-ref;
-      must "(../optimized-auth = 'true') and " +
-           "(../bfd-ip-sh:meticulous = 'true')";
-      description
-        "The authentication type that should be used once the
-         connection transitions to Up state. In case
-         of optimized auth, the choices are Reserved (or no
-         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
-    }
     description
-      "Augment the 'bfd' container to add attributes related to BFD
-       optimized authentication.";
+      "Augment the 'authentication' container in BFD module to
+       add attributes related to BFD optimized authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
           "rt:control-plane-protocol/bfd:bfd/bfd-ip-mh:ip-mh/" +
           "bfd-ip-mh:session-groups/bfd-ip-mh:session-group/" +
           "bfd-ip-mh:authentication" {
-    leaf optimized-auth {
-      if-feature optimized-auth;
-      type boolean;
-      default false;
-      description
-        "If set to true, BFD Multi Hop Sessions will be
-         enabled for optimized authentication.";
-    }
-
     leaf reauth-interval {
-      when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
-         should be enabled to prevent a Person-In-The-Middle
-         attack. Default is 1 minute.
+         should be enabled to prevent an on-path attacker attack.
+         Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
 
-    leaf up-auth-type {
-      type key-chain:key-chain-ref;
-      must "(../optimized-auth = 'true') and " +
-           "(../bfd-ip-mh:meticulous = 'true')";
-      description
-        "The authentication type that should be used once the
-         connection transitions to Up state. In case
-         of optimized auth, the choices are Reserved (or no
-         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
-    }
     description
-      "Augment the 'bfd' container to add attributes related to BFD
-       optimized authentication.";
+      "Augment the 'authentication' container in BFD module to
+       add attributes related to BFD optimized authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
           "rt:control-plane-protocol/bfd:bfd/bfd-lag:lag/" +
           "bfd-lag:sessions/bfd-lag:session/" +
           "bfd-lag:authentication" {
-    leaf optimized-auth {
-      if-feature optimized-auth;
-      type boolean;
-      default false;
-      description
-        "If set to true, BFD LAG Sessions will be
-         enabled for optimized authentication.";
-    }
-
     leaf reauth-interval {
-      when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
-         should be enabled to prevent a Person-In-The-Middle
-         attack. Default is 1 minute.
+         should be enabled to prevent an on-path attacker attack.
+         Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
 
-    leaf up-auth-type {
-      type key-chain:key-chain-ref;
-      must "(../optimized-auth = 'true') and " +
-           "(../bfd-lag:meticulous = 'true')";
-      description
-        "The authentication type that should be used once the
-         connection transitions to Up state. In case
-         of optimized auth, the choices are Reserved (or no
-         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
-    }
     description
-      "Augment the 'bfd' container to add attributes related to BFD
-       optimized authentication.";
+      "Augment the 'authentication' container in BFD module to
+       add attributes related to BFD optimized authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
           "rt:control-plane-protocol/bfd:bfd/bfd-mpls:mpls/" +
           "bfd-mpls:session-groups/bfd-mpls:session-group/" +
           "bfd-mpls:authentication" {
-    leaf optimized-auth {
-      if-feature optimized-auth;
-      type boolean;
-      default false;
-      description
-        "If set to true, BFD MPLS Sessions will be
-         enabled for optimized authentication.";
-    }
-
     leaf reauth-interval {
-      when "../optimized-auth = 'true'";
       type uint32;
-      units "microseconds";
-      default "60000000";
+      units "seconds";
+      default "60";
       description
         "Interval of time after which a strong authentication
-         should be enabled to prevent a Person-In-The-Middle
-         attack. Default is 1 minute.
+         should be enabled to prevent an on-path attacker attack.
+         Default is 1 minute.
+
+         A value of zero means that we do not do periodic
+         re-authorization using strong authentication.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
          operations.";
     }
 
-    leaf up-auth-type {
-      type key-chain:key-chain-ref;
-      must "(../optimized-auth = 'true') and " +
-           "(../bfd-mpls:meticulous = 'true')";
-      description
-        "The authentication type that should be used once the
-         connection transitions to Up state. In case
-         of optimized auth, the choices are Reserved (or no
-         authentication), NULL Auth, or Meticulous Keyed ISAAC.";
-    }
     description
-      "Augment the 'bfd' container to add attributes related to BFD
-       optimized authentication.";
+      "Augment the 'authentication' container in BFD module to
+       add attributes related to BFD optimized authentication.";
   }
 }

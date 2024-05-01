@@ -8,6 +8,7 @@ xml2rfc ?= xml2rfc
 kramdown-rfc2629 ?= kramdown-rfc2629
 oxtradoc ?= oxtradoc
 idnits ?= idnits
+codespell ?= codespell
 
 draft := $(basename $(lastword $(sort $(wildcard draft-*.xml)) $(sort $(wildcard draft-*.md)) $(sort $(wildcard draft-*.org)) ))
 
@@ -20,7 +21,7 @@ draft_type := $(suffix $(firstword $(wildcard $(draft).md $(draft).org $(draft).
 
 current_ver := $(shell git tag | grep '$(draft)-[0-9][0-9]' | tail -1 | sed -e"s/.*-//")
 ifeq "${current_ver}" ""
-next_ver ?= 14
+next_ver ?= 16
 else
 next_ver ?= $(shell printf "%.2d" $$((1$(current_ver)-99)))
 endif
@@ -35,10 +36,15 @@ default: $(next).xml $(next).txt $(next).html
 idnits: $(next).txt
 	$(idnits) $<
 
+codespell: $(next).txt
+	$(codespell) $<
+
 clean:
 	-rm -f $(draft).txt $(draft).html index.html
 	-rm -f $(next).txt $(next).html
 	-rm -f $(draft)-[0-9][0-9].xml
+	-rm -f $(draft)-[0-9][0-9].txt
+	-rm -f $(draft)-[0-9][0-9].html
 ifeq (md,$(draft_type))
 	-rm -f $(draft).xml
 endif
@@ -66,6 +72,7 @@ $(next).xml: $(draft).xml ../src/yang/ietf-bfd-opt-auth.yang
 %.txt: %.xml
 	$(xml2rfc) $< -o $@ --text
 	$(idnits) $@
+	$(codespell) $@
 
 ifeq "$(shell uname -s 2>/dev/null)" "Darwin"
 sed_i := sed -i ''

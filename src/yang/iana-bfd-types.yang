@@ -111,8 +111,8 @@ module iana-bfd-types {
         reference
           "RFC 5880: Bidirectional Forwarding Detection (BFD)
            RFC 6428: Proactive Connectivity Verification, Continuity
-           Check, and Remote Defect Indication for the MPLS Transport
-           Profile";
+           Check, and Remote Defect Indication for the MPLS
+           Transport Profile";
       }
     }
     description
@@ -160,10 +160,19 @@ module iana-bfd-types {
         description
           "NULL Auth.";
       }
-      enum meticulous-keyed-isaac {
+      enum optimized-md5-meticulous-keyed-isaac {
         value 7;
         description
-          "Meticulous Keyed ISAAC.";
+          "BFD Optimized Authentication using Meticulous Keyed
+           MD5 as the strong authentication and Meticulous Keyed
+           ISAAC as the 'optimized' authentication.";
+      }
+      enum optimized-sha1-meticulous-keyed-isaac {
+        value 8;
+        description
+          "BFD Optimized Authentication using Meticulous Keyed
+           SHA-1 as the strong authentication and Meticulous Keyed
+           ISAAC as the 'optimized' authentication.";
       }
     }
     description

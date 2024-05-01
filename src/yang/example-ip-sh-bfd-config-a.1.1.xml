@@ -17,7 +17,7 @@
         </accept-lifetime>
       </lifetime>
       <crypto-algorithm xmlns:opt-auth=
-      "urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth">opt-auth:meticulous-keyed-isaac</crypto-algorithm>
+      "urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth">opt-auth:optimized-sha1-meticulous-keyed-isaac</crypto-algorithm>
       <key-string>
         <keystring>testvector</keystring>
       </key-string>
@@ -52,10 +52,7 @@
                 10000
               </required-min-rx-interval>
               <authentication>
-                <meticulous>true</meticulous>
-                <opt-auth:optimized-auth>true</opt-auth:optimized-auth>
-                <opt-auth:reauth-interval>30000</opt-auth:reauth-interval>
-                <opt-auth:up-auth-type>bfd-auth-config</opt-auth:up-auth-type>
+                <opt-auth:reauth-interval>30</opt-auth:reauth-interval>
               </authentication>
             </session>
           </sessions>

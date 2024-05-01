@@ -148,39 +148,23 @@
 
       <t>
 	Once the session has reached the Up state, the session can
-	choose the Auth Type to be one of:
+	choose a less computationally intensive Auth Type.  Currently, this
+	includes:
 
 	<ul>
 	  <li>
-	    No authentication, i.e., Authentication Present (A-bit) is
-	    zero. Having no authentication provides computational
-	    relief to the system. However, a malicious user can
-	    blindly inject traffic that will be accepted by the BFD
-	    session.
-	  </li>
-	  <li>
-	    <xref target="null-auth-type">NULL Auth Type</xref> as
-	    defined in this document. This type prevents blind
-	    injection, but is vulnerable to active attacks, where the
-	    attacker is aware of the sequence number, and potentially
-	    becomes the PITM. However, periodic check with stronger
-	    authentication can thwart that attack as described below.
-	  </li>
-	  <li>
 	    Meticulous Keyed ISAAC authentication as described in
-	    <xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure
-	    BFD Sequence Numbers</xref>. This authentication type
-	    prevents the attack when the Up packets do not change,
-	    because only the paired devices know the shared secret,
+	    <xref target="I-D.ietf-bfd-secure-sequence-numbers"/>.
+	    This authentication type prevents the attack when the Up packets do
+	    not change, because only the paired devices know the shared secret,
 	    key, and sequence number to select the ISAAC result.
 	  </li>
 	</ul>
       </t>
 
       <t>
-	To detect a Person In the Middle (PITM) attack when the
-	session is in Up state, implementations have two options. They
-	can choose to use:
+	To detect an on-path attacker attack when the session is in the Up
+	state, implementations have two options. They can choose to use:
 	<ul>
 	  <li>
 	    Test periodic strong authentication using a Poll
@@ -192,26 +176,21 @@
 	    on the capability of the system.
 	  </li>
 	  <li>
-	    Meticulous Keyed ISAAC as defined in <xref
-	    target="I-D.ietf-bfd-secure-sequence-numbers">Securing BFD
-	    Sequence Numbers</xref>.
+	    Meticulous Keyed ISAAC as defined in 
+	    <xref target="I-D.ietf-bfd-secure-sequence-numbers"/>.
 	  </li>
 	</ul>
       </t>
 
       <t>
 	Most packets transmitted on a BFD session are BFD Up packets.
-	Authenticating a small subset of these packets with a Poll
+	Strongly authenticating a small subset of these packets with a Poll
 	sequence as described above, for example every one minute,
+	<!-- XXX JMH - one minute is probably now too small -->
 	significantly reduces the computational demand for the system
 	while maintaining security of the session across the
 	configured interval.
       </t>
-
-      <t>The rest of this document is structured as follows: Section 2 talks
-      about the changes to authentication mode as described in <xref
-      target="RFC5880">BFD</xref>. Section 3 goes into the details of the new
-      Authentication Type.</t>
 
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -281,40 +260,33 @@
       implementation SHOULD NOT allow the authentication state to be changed
       based on the receipt of a BFD control packet.</t>
 
-      <t>This document proposes that the authentication mode be modified to be
-      enabled on demand. Instead of authenticating every packet, BFD peers are
-      configured for which packets need to be authenticated, and authenticate
-      only those packets. The remaining packets MAY be transmitted and received
-      without authentication, or use a less expensive authentication.
-      For example, the two ends can be configured such
-      that BFD control packets that indicate a significant change should be
-      authenticated and enable authentication on those packets only. If the
-      two ends have previously been configured as such, but at least one side
-      decides not to authenticate a significant change packet, then the BFD
-      session will fail to come up.</t>
+      <t>This document proposes that an authentication mode that permits both a
+      strong authentication mode and a less expensive "optimized" mode to be
+      used within the same BFD session.  This pairing of a strong and an
+      optimized mode of authentication is carried in new BFD authentication
+      types representing a given authentication type pairing.</t>
 
       <t>
 	The proposal outlines which BFD control packets are required
-	to be authenticated. A BFD control packet that fails
+	to be strongly authenticated. A BFD control packet that fails
 	authentication is discarded, or a BFD control packet that was
-	supposed to be authenticated, but was not; e.g. a significant
+	supposed to be strongly authenticated, but was not; e.g. a significant
 	change packet, is discarded. However, there is no change to
 	the state machine for BFD, as the decision of a significant
 	change is still decided by how many valid consecutive packets
-	were received, authenticated or otherwise.
+	were received.
       </t>
 
       <t>
 	The following table summarizes when the Auth Type should be
-	set with a Auth or a OPT authentication type.  The table
-	should be read with the column indicating the BFD state the
-	receiver is currently in, and the row indicating the BFD state
-	the receiver might transition to based on the BFD control
-	packet received.  The intersection of the two indicates
-	whether the received BFD control packet should have the
-	Auth Type set to either Auth, or OPT.  The BFD state
-	refers to the states in BFD state machine described in Section
-	6.2 of <xref target="RFC5880">BFD</xref>.
+	set with a Auth (strongly authenticated) or an OPT ("optimized")
+	authentication type.  The table should be read with the column
+	indicating the BFD state the receiver is currently in, and the row
+	indicating the BFD state the receiver might transition to based on the
+	BFD control packet received.  The intersection of the two indicates
+	whether the received BFD control packet should have the Auth Type set to
+	either Auth, or OPT.  The BFD state refers to the states in BFD state
+	machine described in Section 6.2 of <xref target="RFC5880">BFD</xref>.
       </t>
 
       <t>
@@ -323,10 +295,11 @@
 	    <![CDATA[
        Read   : On state change from <column> to <row>
        Auth   : Strongly authenticated BFD control packet
-       OPT    : Any or no authentication, as configured.
+       OPT    : "Optimized" authentiation, as configured.
        n/a    : Invalid state transition.
-       Select : Most packets OPT AUTH. Selective (periodic) 
-                packets authenticated.
+       Select : Most packets "optimized" authentication. 
+                Selective (periodic) packets strongly 
+		authenticated.
       +--------+--------+--------+--------+
       |        | DOWN   | INIT   | UP     |
       +--------+--------+--------+--------+
@@ -346,68 +319,129 @@
 	aside from the authentication section without stronger
 	authentication.
       </t>
-
-      <t>
-	Implementations supporting this feature can send BFD packets
-	with or without authentication that carries a meticulously
-	increasing sequence number.  This meticulously increasing
-	sequence number prevents replay attacks, and it supports <xref
-	target="I-D.ietf-bfd-stability">BFD Stability</xref>.
-      </t>
-
-      <t>
-	The NULL Authentication type is defined in <xref
-	target="null-auth-type">NULL Authentication
-	Type</xref>.  This authentication type does not provide any
-	authentication of the BFD Control Up packets, but does carry a
-	meticulously increasing sequence number compatible with this
-	specification.
-      </t>
-
-      <t>
-	<xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD
-	Sequence Numbers</xref> defines an authentication mechanism
-	that does not provide any authentication of the BFD Control
-	packets, carries a meticulously increasing sequence number,
-	but provides for a stronger mechanism to prevent active
-	attacks against these procedures for Up packets without
-	requiring strong authentication.
-      </t>
-
     </section>
 
-    <section anchor="null-auth-type" title="NULL Auth Type">
-      <t>This section describes a new Authentication Type as:
-      <figure
-          align="center" title="NULL Auth Type">
-        <artwork><![CDATA[       0                   1                   2                   3
-       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |   Auth Type   |   Auth Len    |  Auth Key ID  |   Reserved    |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                        Sequence Number                        |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      ]]></artwork>
-      </figure>
-      where:
+    <section title="Signaling Optimized Authentication">
+      <t>
+        When the Authentication Present (A) bit is set and the Auth Type is a
+	type supporting Optimized BFD Authentication, the Auth Type signals a
+	pairing of a strong authentication type and an optimized authentication
+	type.  This pairing is advertised in a single Auth Type value in order
+	to permit implementations to be aware that:
+
+	<ul>
+	  <li>Optimized BFD procedures will be in use.</li>
+	  <li>The pairing of the strong and optimized authentication mechanisms
+	      will be used for that session.</li>
+	  <li>The current strong or optimized mode will be carried as described
+	      below:</li>
+	</ul>
       </t>
 
       <t>
-	Auth Type: The Authentication Type, which in this case is TBD
-	(NULL, to be assigned by IANA, with a suggested value of 6).
+	<figure
+	    align="center" title="Common BFD Authentication Section">
+	  <artwork><![CDATA[
+       0                   1                   2                   3
+       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+      |   Auth Type   |   Auth Len    |  Auth Key ID  |  Optimized    |
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+      |                   Authentication Specific Data                ~
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	]]></artwork>
+	</figure>
       </t>
 
-      <t>Auth Len: The length of the NULL Auth Type, in bytes; i.e. 8 bytes</t>
+      <t>
+        The Meticulous Keyed MD5, Meticulous Keyed SHA-1, and Meticulous Keyed
+	ISAAC authentication sections define the fourth octet as "Reserved".
+	This document repurposes the "Reserved" field as the "Optimized" field
+	when used for authentication types for optimized BFD procedures.
+      </t>
 
-      <t>Auth Key ID: The authentication key ID in use for this packet. Must
-      be set to zero.</t>
+      <t>
+        Optimized:
+	<ul>
+	  <li>1: When using the strong authentication type for optimized
+	      BFD Auth Types.</li>
+	  <li>2: When using the optimized authentication type for optimized
+	      BFD Auth Types.</li>
+        </ul>
+      </t>
 
-      <t>Reserved: This byte MUST be set to zero on transmit and ignored on
-      receive.</t>
+      <t>
+        Authentication Specific Data: When using the strong authentication type,
+	the remainder of the authentication section carries that type's data.
+      </t>
 
-      <t>Sequence Number: The sequence number for this packet.  Implementations
-      will use sequence numbers (bfd.XmitAuthSeq) as defined in <xref
-      target="RFC5880">BFD</xref>.</t>
+      <t>
+        For example, for Auth Type "Optimized MD5 Meticulous Keyed ISAAC
+	Authentication" (type TBD):
+      </t>
+      <t>
+	When Optimized is 1, the format of the authentication section is the
+	same as <xref target="RFC5880" section="4.3"/>, excepting that Auth Type
+	is still TBD and that Reserved is set to 1.
+      </t>
+      <t>
+	When Optimized is 2, the format of the authentication section is the
+	same as <xref target="I-D.ietf-bfd-secure-sequence-numbers" section="5"/>,
+	excepting that Auth Type is still TBD and that Reserved is set to 2.
+      </t>
+
+      <section title="Error Handling">
+        <t>
+	  If the received BFD Control packet contains an optimized
+	  authentication type using these procedures and the Optimized field is
+	  not 1 or 2, then the received packet MUST be discarded.
+	</t>
+      </section>
+    </section>
+
+    <section title="Optimized Authentication Operations">
+      <t>
+        As noted in Section 2, when using optimized BFD procedures, strong
+	authentication is used in the BFD state machine to bring a BFD session
+	to the Up state or to make any change of the BFD parameters as carried
+	in the BFD Control packet when in the Up state.
+      </t>
+
+      <t>
+        Once the BFD session has reached the Up state, the BFD Up state MUST
+	be signaled to the remote BFD system using the strong authentication for
+	at least Detect Mult packets before switching to the optimized
+	authentication mode.  This is to permit mechanisms such as 
+	<xref target="I-D.ietf-bfd-secure-sequence-numbers">
+	Meticulous Keyed ISAAC</xref> to be bootstrapped before switching to
+	optimized authentication.
+      </t>
+
+      <t>
+        It is RECOMMENDED that when using optimized authentication that
+	implementations switch from strong authentication to optimized
+	authentication after sending at least Detect Mult packets.  In the
+	circumstances where a BFD session successfully reaches the Up state with
+	strong authentication, but there is problems with the optimized
+	authentication, this will permit the remote system to tear down the
+	session as quickly as possible.
+      </t>
+
+      <t>
+        BFD sessions using optimized authentication that succeed in reaching the
+	Up state using strong authentication and fail using the optimized
+	authentication SHOULD bring the issue to the attention of the operator.
+	Further, implementations MAY wish to throttle session restarts.
+      </t>
+
+      <t>
+	It is further RECOMMENDED that BFD implementations using optimized
+	authentication defer notifying their client that the session has reached
+	the Up state until it has transitioned to using the optimized
+	authentication mode.  In the event where optimized authentication is
+	failing in the protocol, this avoids propagating the failed transitions
+	to optimized mode to the clients.
+      </t>
     </section>
 
     <section anchor="opt-auth-yang-model" title="Optimizing Authentication YANG Model">
@@ -417,9 +451,10 @@
 	  this document augments the "ietf-bfd" module to add
 	  configuration relevant to the management of the feature
 	  defined in this document. In particular, it adds crypto
-	  algorithms that are described in this model, and in <xref
-	  target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD
-	  Sequence Numbers</xref>. It adds a feature statement to
+	  algorithms that are described in this model, and in 
+	  <xref target="I-D.ietf-bfd-secure-sequence-numbers">
+	  Meticulous Keyed ISAAC for BFD Authentication</xref>.
+	  It adds a feature statement to
 	  enable optimized authentication. Finally, it adds a flag to
 	  enable optimized authentication, an interval value that
 	  specifies how often the BFD session should be
@@ -446,7 +481,7 @@
 	  This YANG module imports <xref target="RFC8177">YANG Key
 	  Chain </xref>, <xref target="RFC8349">A YANG Data Model for
 	  Routing Management (NMDA version)</xref>, and <xref
-	  target="RFC9314">YANG Data Model for Bidirectional Forwading
+	  target="RFC9314">YANG Data Model for Bidirectional Forwarding
 	  Detection (BFD)</xref>.
 	</t>
 	<t>
@@ -473,15 +508,18 @@
 	  BFD AuthType:
 	  <ul>
 	    <li>
-	      <xref target="null-auth-type">NULL Auth Type</xref>,
-	      with a suggested value of 6.
+	      <xref target="I-D.ietf-bfd-secure-sequence-numbers"
+	      sectionFormat="parens"
+	      section="meticulous-keyed-isaac-authentication">
+	      Optimized MD5 Meticulous Keyed ISAAC Authentication</xref>,
+	      with a suggested value of 7.
 	    </li>
 	    <li>
 	      <xref target="I-D.ietf-bfd-secure-sequence-numbers"
 	      sectionFormat="parens"
-	      section="meticulous-keyed-isaac-authentication">Meticulous
-	      Keyed ISAAC Authentication</xref>, with a suggested
-	      value of 7.
+	      section="meticulous-keyed-isaac-authentication">
+	      Optimized SHA-1 Meticulous Keyed ISAAC Authentication</xref>,
+	      with a suggested value of 8.
 	    </li>
 	  </ul>
 	</t>
@@ -565,12 +603,6 @@ reference:    RFC XXXX
       </t>
 
       <ul>
-	<li>
-	  'optimized-auth' flag is used to enable optimized
-	  authentication for the session. If this was not intended, or
-	  the other end is not configured with the same flag, the BFD
-	  session will fail to come up.
-	</li>
 	<li>
 	  'reauth-interval' specifies the interval in Up state, after
 	  which a strong authentication SHOULD be performed to prevent
@@ -791,10 +823,11 @@ reference:    RFC XXXX
 	This section carries the updated IANA BFD Module,
 	iana-bfd-types.yang module, first defined in <xref
 	target="RFC9127">YANG Data Model for Bidirectional Forward
-	Detection (BFD)</xref>. The updated module carries two new
+	Detection (BFD)</xref>. The updated module carries three new
 	authentication type enum definitions, 'null' with a suggested
-	value of 6, and 'meticulous-keyed-isaac' with a suggested
-	value of 7. This module should replace the version that
+	value of 6, and 'optimized-md5-meticulous-keyed-isaac' with a suggested
+	value of 7, and 'optimized-sha1-meticulous-keyed-isaac' with a
+	suggested value of 8.  This module should replace the version that
 	currently exists in the IANA registry.
       </t>
 	<t>
