@@ -362,12 +362,16 @@
 
       <t>
         Optimized:
-	<ul>
-	  <li>1: When using the strong authentication type for optimized
-	      BFD Auth Types.</li>
-	  <li>2: When using the optimized authentication type for optimized
-	      BFD Auth Types.</li>
-        </ul>
+	<ol>
+	  <li>
+	    When using the strong authentication type for optimized
+	    BFD Auth Types.
+	  </li>
+	  <li>
+	    When using the optimized authentication type for optimized
+	    BFD Auth Types.
+	  </li>
+        </ol>
       </t>
 
       <t>
