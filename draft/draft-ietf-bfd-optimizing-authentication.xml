@@ -408,27 +408,6 @@
       <t>Sequence Number: The sequence number for this packet.  Implementations
       will use sequence numbers (bfd.XmitAuthSeq) as defined in <xref
       target="RFC5880">BFD</xref>.</t>
-      <t>
-	Once the session has reached the Up state, the session can
-	choose the Auth Type to be one of:
-
-	<ul>
-	  <li>No authentication. (I.e., Authentication Present bit is
-	  zero.)</li>
-	  <li>Optimized authentication as defined in this
-	  document.</li>
-	  <li>Meticulous Keyed ISAAC authentication as described in 
-	    <xref target="I-D.ietf-bfd-secure-sequence-numbers">Secure
-	    BFD Sequence Numbers</xref>.</li>
-	</ul>
-      </t>
-
-      <t>
-	The use of NULL or Meticulous Keyed
-	ISAAC authentication methods protects against replay attacks
-	by allowing the session to maintain an incrementing sequence
-	number for all packets.
-      </t>
     </section>
 
     <section anchor="opt-auth-yang-model" title="Optimizing Authentication YANG Model">
