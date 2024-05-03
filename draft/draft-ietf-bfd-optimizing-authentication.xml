@@ -407,8 +407,8 @@
 	at least Detect Mult packets before switching to the optimized
 	authentication mode.  This is to permit mechanisms such as 
 	<xref target="I-D.ietf-bfd-secure-sequence-numbers">
-	Meticulous Keyed ISAAC</xref> to be bootstrapped before switching to
-	optimized authentication.
+	Meticulous Keyed ISAAC for BFD Authentication</xref> to be
+	bootstrapped before switching to optimized authentication.
       </t>
 
       <t>
@@ -641,9 +641,9 @@ reference:    RFC XXXX
 	packet; e.g. with a Down state to take a session down will
 	fail. That combined with the proposal of using sequence number
 	defined in <xref
-	target="I-D.ietf-bfd-secure-sequence-numbers">Secure BFD
-	Sequence Numbers</xref> further enhances the security of BFD
-	sessions.
+	target="I-D.ietf-bfd-secure-sequence-numbers">Meticulous Keyed
+	ISAAC for BFD Authentication</xref> further enhances the
+	security of BFD sessions.
       </t>
     </section>
 
