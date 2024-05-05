@@ -674,7 +674,6 @@ reference:    RFC XXXX
       <?rfc include='reference.RFC.9127.xml'?>
       <?rfc include='reference.RFC.9314.xml'?>
       <?rfc include='reference.I-D.ietf-bfd-secure-sequence-numbers.xml'?>
-      <?rfc include='reference.I-D.ietf-bfd-stability.xml'?>
     </references>
 
     <references title="Informative References">
