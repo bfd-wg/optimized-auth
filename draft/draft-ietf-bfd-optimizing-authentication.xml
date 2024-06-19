@@ -472,6 +472,11 @@
 	  Detection (BFD)</xref>.
 	</t>
 	<t>
+	  Implementations supporting the optimization procedures defined in
+	  this document enable optimization by using one of the newly 
+	  defined key-chain crypto-algorithms defined in this YANG module.
+	</t>
+	<t>
 	  <figure>
             <artwork><![CDATA[
 	    <CODE BEGINS> file "ietf-bfd-opt-auth@YYYY-MM-DD.yang"
