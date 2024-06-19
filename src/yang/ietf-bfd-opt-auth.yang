@@ -145,8 +145,8 @@ module ietf-bfd-opt-auth {
       units "seconds";
       default "60";
       description
-        "Interval of time after which a strong authentication
-         should be enabled to prevent an on-path-attacker attack.
+        "Interval of time after which strong authentication
+         should be utilized to prevent an on-path-attacker attack.
          Default is 1 minute.
 
          A value of zero means that we do not do periodic
@@ -171,8 +171,8 @@ module ietf-bfd-opt-auth {
       units "seconds";
       default "60";
       description
-        "Interval of time after which a strong authentication
-         should be enabled to prevent an on-path attacker attack.
+        "Interval of time after which strong authentication
+         should be utilized to prevent an on-path attacker attack.
          Default is 1 minute.
 
          A value of zero means that we do not do periodic
@@ -197,8 +197,8 @@ module ietf-bfd-opt-auth {
       units "seconds";
       default "60";
       description
-        "Interval of time after which a strong authentication
-         should be enabled to prevent an on-path attacker attack.
+        "Interval of time after which strong authentication
+         should be utilized to prevent an on-path attacker attack.
          Default is 1 minute.
 
          A value of zero means that we do not do periodic
@@ -223,8 +223,8 @@ module ietf-bfd-opt-auth {
       units "seconds";
       default "60";
       description
-        "Interval of time after which a strong authentication
-         should be enabled to prevent an on-path attacker attack.
+        "Interval of time after which strong authentication
+         should be utilized to prevent an on-path attacker attack.
          Default is 1 minute.
 
          A value of zero means that we do not do periodic

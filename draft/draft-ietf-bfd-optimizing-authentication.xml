@@ -416,7 +416,7 @@
 	implementations switch from strong authentication to optimized
 	authentication after sending at least Detect Mult packets.  In the
 	circumstances where a BFD session successfully reaches the Up state with
-	strong authentication, but there is problems with the optimized
+	strong authentication, but there are problems with the optimized
 	authentication, this will permit the remote system to tear down the
 	session as quickly as possible.
       </t>
@@ -601,8 +601,10 @@ reference:    RFC XXXX
 	  'reauth-interval' specifies the interval in Up state, after
 	  which a strong authentication SHOULD be performed to prevent
 	  a Person-In-The-Middle (PITM) attack. If this interval is
-	  set very low, or very high, then it will make optimization
-	  worthless.
+	  set very low, the utility of these optimization procedures are
+	  lessened. If this interval is set very high, attacks detected
+	  by the strong authentication mechanisms may happen overly
+	  late.
 	</li>
       </ul>
 
