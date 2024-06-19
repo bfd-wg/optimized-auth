@@ -123,7 +123,7 @@
 	state change, a demand mode change (to D bit), a poll sequence
 	change (P or F bit change) be categorized as a significant
 	change. Control packets that do not require a poll sequence,
-	such as bfd.RequiredMinRxInterval or
+	such as change in bfd.RequiredMinRxInterval or
 	bfd.RequiredMinTxInterval, are also considered as a
 	significant change. In other words, the contents of an Up
 	packet MUST NOT change aside from the authentication section
@@ -153,23 +153,15 @@
       </t>
 
       <t>
-	To detect an on-path attacker attack when the session is in the Up
-	state, implementations have two options. They can choose to use:
-	<ul>
-	  <li>
-	    Test periodic strong authentication using a Poll
-	    sequence. To perform a strong authentication, a Poll
-	    sequence SHOULD be initiated by the sender. If a Fin is
-	    not received within the Detect Interval, the session has
-	    been compromised, and should be brought down. The interval
-	    for initiating a Poll sequence can be configured depending
-	    on the capability of the system.
-	  </li>
-	  <li>
-	    Meticulous Keyed ISAAC as defined in 
-	    <xref target="I-D.ietf-bfd-secure-sequence-numbers"/>.
-	  </li>
-	</ul>
+        When using optimized methods of authentication, BFD sessions should
+	periodically test the session using strong authentication.  Strong
+	authentication is tested using a Poll sequence. To test strong
+	authentication, a Poll sequence SHOULD be initiated by the sender using
+	the strong authentication Auth Type rather than the chosen optimized
+	Auth Type. If a control packet with the Final (F) bit is not received
+	within the Detect Interval, the session has been compromised, and should
+	be brought down. The interval for initiating a Poll sequence can be
+	configured depending on the capability of the system.
       </t>
 
       <t>
@@ -179,7 +171,7 @@
 	<!-- XXX JMH - one minute is probably now too small -->
 	significantly reduces the computational demand for the system
 	while maintaining security of the session across the
-	configured interval.
+	configured strong reauthentication interval.
       </t>
 
       <section title="Requirements Language">
@@ -213,8 +205,8 @@
         <xref target="RFC5880">BFD</xref>.</t>
 
         <t><list style="symbols">
+	    <t>Auth Type</t>
             <t>Detect Multiplier</t>
-
             <t>Detection Time</t>
           </list></t>
 
@@ -231,7 +223,7 @@
 	    bfd.RequiredMinTxInterval, or bfd.DetectMult are also
 	    considered as a significant change.
 	  </c>
-          <c>configured interval</c>
+          <c>configured strong reauthentication interval</c>
           <c>
 	    Interval at which BFD control packets are retried with a
 	    stronger authentication.
@@ -285,7 +277,7 @@
 	    <![CDATA[
        Read   : On state change from <column> to <row>
        Auth   : Strongly authenticated BFD control packet
-       OPT    : "Optimized" authentiation, as configured.
+       OPT    : "Optimized" authentication, as configured.
        n/a    : Invalid state transition.
        Select : Most packets "optimized" authentication. 
                 Selective (periodic) packets strongly 
@@ -293,9 +285,9 @@
       +--------+--------+--------+--------+
       |        | DOWN   | INIT   | UP     |
       +--------+--------+--------+--------+
-      | DOWN   |  OPT   |  Auth  |  Auth  |
+      | DOWN   |  Auth  |  Auth  |  Auth  |
       +--------+--------+--------+--------+
-      | INIT   |  Auth  |  OPT   |  n/a   |
+      | INIT   |  Auth  |  Auth  |  n/a   |
       +--------+--------+--------+--------+
       | UP     |  Auth  |  Auth  | Select |
       +--------+--------+--------+--------+
@@ -314,7 +306,8 @@
     <section title="Signaling Optimized Authentication">
       <t>
         When the Authentication Present (A) bit is set and the Auth Type is a
-	type supporting Optimized BFD Authentication, the Auth Type signals a
+	type supporting Optimized BFD Authentication
+	(<xref target="auth-type"/>), the Auth Type signals a
 	pairing of a strong authentication type and an optimized authentication
 	type.  This pairing is advertised in a single Auth Type value in order
 	to permit implementations to be aware that:
@@ -351,7 +344,7 @@
       </t>
 
       <t>
-        Optimized:
+        The values of the Optimized field are:
 	<ol>
 	  <li>
 	    When using the strong authentication type for optimized
@@ -601,7 +594,7 @@ reference:    RFC XXXX
 	  'reauth-interval' specifies the interval in Up state, after
 	  which a strong authentication SHOULD be performed to prevent
 	  a Person-In-The-Middle (PITM) attack. If this interval is
-	  set very low, the utility of these optimization procedures are
+	  set very low, the utility of these optimization procedures is
 	  lessened. If this interval is set very high, attacks detected
 	  by the strong authentication mechanisms may happen overly
 	  late.
@@ -652,7 +645,7 @@ reference:    RFC XXXX
     <section title="Contributors" anchor="contributors">
       <t>
 	The authors of this document would like to acknowledge Reshad
-	Rehman as a contributor to this document.
+	Rahman as a contributor to this document.
       </t>
     </section>
   </middle>
