@@ -123,7 +123,7 @@
 	state change, a demand mode change (to D bit), a poll sequence
 	change (P or F bit change) be categorized as a significant
 	change. Control packets that do not require a poll sequence,
-	such as change in bfd.RequiredMinRxInterval or
+	such as a change in bfd.RequiredMinRxInterval or
 	bfd.RequiredMinTxInterval, are also considered as a
 	significant change. In other words, the contents of an Up
 	packet MUST NOT change aside from the authentication section
