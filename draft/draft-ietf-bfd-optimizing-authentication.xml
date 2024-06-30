@@ -260,46 +260,10 @@
       </t>
 
       <t>
-	The following table summarizes when the Auth Type should be
-	set with a Auth (strongly authenticated) or an OPT ("optimized")
-	authentication type.  The table should be read with the column
-	indicating the BFD state the receiver is currently in, and the row
-	indicating the BFD state the receiver might transition to based on the
-	BFD control packet received.  The intersection of the two indicates
-	whether the received BFD control packet should have the Auth Type set to
-	either Auth, or OPT.  The BFD state refers to the states in BFD state
-	machine described in Section 6.2 of <xref target="RFC5880">BFD</xref>.
-      </t>
-
-      <t>
-	<figure align="center" title="Optimized Authentication Map">
-          <artwork>
-	    <![CDATA[
-       Read   : On state change from <column> to <row>
-       Auth   : Strongly authenticated BFD control packet
-       OPT    : "Optimized" authentication, as configured.
-       n/a    : Invalid state transition.
-       Select : Most packets "optimized" authentication. 
-                Selective (periodic) packets strongly 
-		authenticated.
-      +--------+--------+--------+--------+
-      |        | DOWN   | INIT   | UP     |
-      +--------+--------+--------+--------+
-      | DOWN   |  Auth  |  Auth  |  Auth  |
-      +--------+--------+--------+--------+
-      | INIT   |  Auth  |  Auth  |  n/a   |
-      +--------+--------+--------+--------+
-      | UP     |  Auth  |  Auth  | Select |
-      +--------+--------+--------+--------+
-	    ]]>
-	  </artwork>
-	</figure>
-      </t>
-
-      <t>
-	In other words, the contents of an Up packet MUST NOT change
+	In this proposal, the contents of an Up packet MUST NOT change
 	aside from the authentication section without stronger
-	authentication.
+	authentication.  The full procedure is documented in the following
+	sections.
       </t>
     </section>
 
