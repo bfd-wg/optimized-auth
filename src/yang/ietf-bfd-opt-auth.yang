@@ -101,14 +101,6 @@ module ietf-bfd-opt-auth {
        authentication as described in this document.";
   }
 
-  identity null-auth {
-    base key-chain:crypto-algorithm;
-    description
-      "BFD Null Auth type defined in this draft.";
-    reference
-      "RFC XXXX: BFD Stability.";
-  }
-
   identity optimized-md5-meticulous-keyed-isaac {
     base key-chain:crypto-algorithm;
     description
@@ -135,18 +127,16 @@ module ietf-bfd-opt-auth {
          Meticulous Keyed ISAAC for BFD Authentication.";
   }
 
-
-  augment "/rt:routing/rt:control-plane-protocols" +
-          "/rt:control-plane-protocol/bfd:bfd/bfd-ip-sh:ip-sh" +
-          "/bfd-ip-sh:sessions/bfd-ip-sh:session" +
-          "/bfd-ip-sh:authentication" {
+  grouping bfd-opt-auth-config {
+    description
+      "Grouping for BFD Optimized Authentication Parameters.";
     leaf reauth-interval {
       type uint32;
       units "seconds";
       default "60";
       description
-        "Interval of time after which a strong authentication
-         should be enabled to prevent an on-path-attacker attack.
+        "Interval of time after which strong authentication
+         should be utilized to prevent an on-path-attacker attack.
          Default is 1 minute.
 
          A value of zero means that we do not do periodic
@@ -156,6 +146,13 @@ module ietf-bfd-opt-auth {
          self-synchronization during expensive authentication
          operations.";
     }
+  }
+
+  augment "/rt:routing/rt:control-plane-protocols" +
+          "/rt:control-plane-protocol/bfd:bfd/bfd-ip-sh:ip-sh" +
+          "/bfd-ip-sh:sessions/bfd-ip-sh:session" +
+          "/bfd-ip-sh:authentication" {
+    uses bfd-opt-auth-config;
 
     description
       "Augment the 'authentication' container in BFD module to
@@ -166,22 +163,7 @@ module ietf-bfd-opt-auth {
           "rt:control-plane-protocol/bfd:bfd/bfd-ip-mh:ip-mh/" +
           "bfd-ip-mh:session-groups/bfd-ip-mh:session-group/" +
           "bfd-ip-mh:authentication" {
-    leaf reauth-interval {
-      type uint32;
-      units "seconds";
-      default "60";
-      description
-        "Interval of time after which a strong authentication
-         should be enabled to prevent an on-path attacker attack.
-         Default is 1 minute.
-
-         A value of zero means that we do not do periodic
-         re-authorization using strong authentication.
-
-         This value SHOULD have jitter applied to it to avoid
-         self-synchronization during expensive authentication
-         operations.";
-    }
+    uses bfd-opt-auth-config;
 
     description
       "Augment the 'authentication' container in BFD module to
@@ -192,22 +174,7 @@ module ietf-bfd-opt-auth {
           "rt:control-plane-protocol/bfd:bfd/bfd-lag:lag/" +
           "bfd-lag:sessions/bfd-lag:session/" +
           "bfd-lag:authentication" {
-    leaf reauth-interval {
-      type uint32;
-      units "seconds";
-      default "60";
-      description
-        "Interval of time after which a strong authentication
-         should be enabled to prevent an on-path attacker attack.
-         Default is 1 minute.
-
-         A value of zero means that we do not do periodic
-         re-authorization using strong authentication.
-
-         This value SHOULD have jitter applied to it to avoid
-         self-synchronization during expensive authentication
-         operations.";
-    }
+    uses bfd-opt-auth-config;
 
     description
       "Augment the 'authentication' container in BFD module to
@@ -218,22 +185,7 @@ module ietf-bfd-opt-auth {
           "rt:control-plane-protocol/bfd:bfd/bfd-mpls:mpls/" +
           "bfd-mpls:session-groups/bfd-mpls:session-group/" +
           "bfd-mpls:authentication" {
-    leaf reauth-interval {
-      type uint32;
-      units "seconds";
-      default "60";
-      description
-        "Interval of time after which a strong authentication
-         should be enabled to prevent an on-path attacker attack.
-         Default is 1 minute.
-
-         A value of zero means that we do not do periodic
-         re-authorization using strong authentication.
-
-         This value SHOULD have jitter applied to it to avoid
-         self-synchronization during expensive authentication
-         operations.";
-    }
+    uses bfd-opt-auth-config;
 
     description
       "Augment the 'authentication' container in BFD module to

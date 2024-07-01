@@ -52,6 +52,7 @@
                 10000
               </required-min-rx-interval>
               <authentication>
+                <key-chain>bfd-auth-config</key-chain>
                 <opt-auth:reauth-interval>30</opt-auth:reauth-interval>
               </authentication>
             </session>

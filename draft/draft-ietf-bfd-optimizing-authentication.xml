@@ -123,7 +123,7 @@
 	state change, a demand mode change (to D bit), a poll sequence
 	change (P or F bit change) be categorized as a significant
 	change. Control packets that do not require a poll sequence,
-	such as bfd.RequiredMinRxInterval or
+	such as a change in bfd.RequiredMinRxInterval or
 	bfd.RequiredMinTxInterval, are also considered as a
 	significant change. In other words, the contents of an Up
 	packet MUST NOT change aside from the authentication section
@@ -153,23 +153,15 @@
       </t>
 
       <t>
-	To detect an on-path attacker attack when the session is in the Up
-	state, implementations have two options. They can choose to use:
-	<ul>
-	  <li>
-	    Test periodic strong authentication using a Poll
-	    sequence. To perform a strong authentication, a Poll
-	    sequence SHOULD be initiated by the sender. If a Fin is
-	    not received within the Detect Interval, the session has
-	    been compromised, and should be brought down. The interval
-	    for initiating a Poll sequence can be configured depending
-	    on the capability of the system.
-	  </li>
-	  <li>
-	    Meticulous Keyed ISAAC as defined in 
-	    <xref target="I-D.ietf-bfd-secure-sequence-numbers"/>.
-	  </li>
-	</ul>
+        When using optimized methods of authentication, BFD sessions should
+	periodically test the session using strong authentication.  Strong
+	authentication is tested using a Poll sequence. To test strong
+	authentication, a Poll sequence SHOULD be initiated by the sender using
+	the strong authentication Auth Type rather than the chosen optimized
+	Auth Type. If a control packet with the Final (F) bit is not received
+	within the Detect Interval, the session has been compromised, and should
+	be brought down. The interval for initiating a Poll sequence can be
+	configured depending on the capability of the system.
       </t>
 
       <t>
@@ -179,7 +171,7 @@
 	<!-- XXX JMH - one minute is probably now too small -->
 	significantly reduces the computational demand for the system
 	while maintaining security of the session across the
-	configured interval.
+	configured strong reauthentication interval.
       </t>
 
       <section title="Requirements Language">
@@ -213,8 +205,8 @@
         <xref target="RFC5880">BFD</xref>.</t>
 
         <t><list style="symbols">
+	    <t>Auth Type</t>
             <t>Detect Multiplier</t>
-
             <t>Detection Time</t>
           </list></t>
 
@@ -231,7 +223,7 @@
 	    bfd.RequiredMinTxInterval, or bfd.DetectMult are also
 	    considered as a significant change.
 	  </c>
-          <c>configured interval</c>
+          <c>configured strong reauthentication interval</c>
           <c>
 	    Interval at which BFD control packets are retried with a
 	    stronger authentication.
@@ -268,53 +260,18 @@
       </t>
 
       <t>
-	The following table summarizes when the Auth Type should be
-	set with a Auth (strongly authenticated) or an OPT ("optimized")
-	authentication type.  The table should be read with the column
-	indicating the BFD state the receiver is currently in, and the row
-	indicating the BFD state the receiver might transition to based on the
-	BFD control packet received.  The intersection of the two indicates
-	whether the received BFD control packet should have the Auth Type set to
-	either Auth, or OPT.  The BFD state refers to the states in BFD state
-	machine described in Section 6.2 of <xref target="RFC5880">BFD</xref>.
-      </t>
-
-      <t>
-	<figure align="center" title="Optimized Authentication Map">
-          <artwork>
-	    <![CDATA[
-       Read   : On state change from <column> to <row>
-       Auth   : Strongly authenticated BFD control packet
-       OPT    : "Optimized" authentiation, as configured.
-       n/a    : Invalid state transition.
-       Select : Most packets "optimized" authentication. 
-                Selective (periodic) packets strongly 
-		authenticated.
-      +--------+--------+--------+--------+
-      |        | DOWN   | INIT   | UP     |
-      +--------+--------+--------+--------+
-      | DOWN   |  OPT   |  Auth  |  Auth  |
-      +--------+--------+--------+--------+
-      | INIT   |  Auth  |  OPT   |  n/a   |
-      +--------+--------+--------+--------+
-      | UP     |  Auth  |  Auth  | Select |
-      +--------+--------+--------+--------+
-	    ]]>
-	  </artwork>
-	</figure>
-      </t>
-
-      <t>
-	In other words, the contents of an Up packet MUST NOT change
+	In this proposal, the contents of an Up packet MUST NOT change
 	aside from the authentication section without stronger
-	authentication.
+	authentication.  The full procedure is documented in the following
+	sections.
       </t>
     </section>
 
     <section title="Signaling Optimized Authentication">
       <t>
         When the Authentication Present (A) bit is set and the Auth Type is a
-	type supporting Optimized BFD Authentication, the Auth Type signals a
+	type supporting Optimized BFD Authentication
+	(<xref target="auth-type"/>), the Auth Type signals a
 	pairing of a strong authentication type and an optimized authentication
 	type.  This pairing is advertised in a single Auth Type value in order
 	to permit implementations to be aware that:
@@ -351,7 +308,7 @@
       </t>
 
       <t>
-        Optimized:
+        The values of the Optimized field are:
 	<ol>
 	  <li>
 	    When using the strong authentication type for optimized
@@ -416,7 +373,7 @@
 	implementations switch from strong authentication to optimized
 	authentication after sending at least Detect Mult packets.  In the
 	circumstances where a BFD session successfully reaches the Up state with
-	strong authentication, but there is problems with the optimized
+	strong authentication, but there are problems with the optimized
 	authentication, this will permit the remote system to tear down the
 	session as quickly as possible.
       </t>
@@ -477,6 +434,11 @@
 	  Routing Management (NMDA version)</xref>, and <xref
 	  target="RFC9314">YANG Data Model for Bidirectional Forwarding
 	  Detection (BFD)</xref>.
+	</t>
+	<t>
+	  Implementations supporting the optimization procedures defined in
+	  this document enable optimization by using one of the newly 
+	  defined key-chain crypto-algorithms defined in this YANG module.
 	</t>
 	<t>
 	  <figure>
@@ -601,8 +563,10 @@ reference:    RFC XXXX
 	  'reauth-interval' specifies the interval in Up state, after
 	  which a strong authentication SHOULD be performed to prevent
 	  a Person-In-The-Middle (PITM) attack. If this interval is
-	  set very low, or very high, then it will make optimization
-	  worthless.
+	  set very low, the utility of these optimization procedures is
+	  lessened. If this interval is set very high, attacks detected
+	  by the strong authentication mechanisms may happen overly
+	  late.
 	</li>
       </ul>
 
@@ -650,7 +614,7 @@ reference:    RFC XXXX
     <section title="Contributors" anchor="contributors">
       <t>
 	The authors of this document would like to acknowledge Reshad
-	Rehman as a contributor to this document.
+	Rahman as a contributor to this document.
       </t>
     </section>
   </middle>
