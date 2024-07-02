@@ -42,7 +42,9 @@ module iana-bfd-types {
     description
       "Add NULL and Meticulous ISAAC authentication type.";
     reference
-      "I-D.ietf-bfd-optimized-auth: Optimizing BFD Authentication.";
+      "I-D.ietf-bfd-optimizing-authentication:
+           Optimizing BFD Authentication,
+       I-D.ietf-bfd-stability: BFD Stability.";
   }
 
   revision 2021-10-21 {
@@ -158,7 +160,7 @@ module iana-bfd-types {
       enum null {
         value 6;
         description
-          "NULL Auth.";
+          "NULL Auth. Used for stability measurement.";
       }
       enum optimized-md5-meticulous-keyed-isaac {
         value 7;
@@ -180,6 +182,9 @@ module iana-bfd-types {
        maintained in the 'BFD Authentication Types' IANA registry.
        Range is 0 to 255.";
     reference
-      "RFC 5880: Bidirectional Forwarding Detection (BFD)";
+      "RFC 5880: Bidirectional Forwarding Detection (BFD),
+       I-D.ietf-bfd-optimizing-authentication:
+           Optimizing BFD Authentication,
+       I-D.ietf-bfd-stability: BFD Stability.";
   }
 }

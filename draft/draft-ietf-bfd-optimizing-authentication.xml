@@ -774,6 +774,7 @@ reference:    RFC XXXX
       <?rfc include='reference.RFC.6151.xml'?>
 
       <?rfc include='reference.RFC.6194.xml'?>
+      <?rfc include='reference.I-D.ietf-bfd-stability.xml'?>
     </references>
     <section anchor="updated-bfd-iana-module" title="Updated BFD IANA Module">
       <t>
@@ -782,10 +783,14 @@ reference:    RFC XXXX
 	target="RFC9127">YANG Data Model for Bidirectional Forward
 	Detection (BFD)</xref>. The updated module carries three new
 	authentication type enum definitions, 'null' with a suggested
-	value of 6, and 'optimized-md5-meticulous-keyed-isaac' with a suggested
-	value of 7, and 'optimized-sha1-meticulous-keyed-isaac' with a
-	suggested value of 8.  This module should replace the version that
-	currently exists in the IANA registry.
+	value of 6, and 'optimized-md5-meticulous-keyed-isaac' with a
+	suggested value of 7, and
+	'optimized-sha1-meticulous-keyed-isaac' with a suggested value
+	of 8. Note, the null enum type is used by <xref
+	target="I-D.ietf-bfd-stability">BFD Stability</xref> only, but
+	is being defined here to make sure changes to this YANG module
+	do not cause a conflict. This module should replace the
+	version that currently exists in the IANA registry.
       </t>
 	<t>
           <figure>
