@@ -14,41 +14,41 @@ module ietf-bfd-opt-auth {
     prefix bfd;
     reference
       "RFC 9314: YANG Data Model for Bidirectional
-       Forwarding Detection.";
+      Forwarding Detection (BFD).";
   }
 
   import ietf-bfd-ip-sh {
     prefix bfd-ip-sh;
     reference
       "RFC 9314: YANG Data Model for Bidirectional
-       Forwarding Detection.";
+      Forwarding Detection (BFD).";
   }
 
   import ietf-bfd-ip-mh {
     prefix bfd-ip-mh;
     reference
       "RFC 9314: YANG Data Model for Bidirectional
-       Forwarding Detection.";
+      Forwarding Detection (BFD).";
   }
 
   import ietf-bfd-lag {
     prefix bfd-lag;
     reference
       "RFC 9314: YANG Data Model for Bidirectional
-       Forwarding Detection.";
+      Forwarding Detection (BFD).";
   }
 
   import ietf-bfd-mpls {
     prefix bfd-mpls;
     reference
       "RFC 9314: YANG Data Model for Bidirectional
-       Forwarding Detection.";
+      Forwarding Detection (BFD).";
   }
 
   import ietf-key-chain {
     prefix key-chain;
     reference
-      "RFC 8177: YANG Key Chain.";
+      "RFC 8177: YANG Data Model for Key Chains.";
   }
 
   organization
@@ -108,8 +108,7 @@ module ietf-bfd-opt-auth {
        strong authentication and Meticulous Keyed ISAAC Keyed as the
        'optimized' authentication.";
     reference
-      "I-D.ietf-bfd-optimizing-authentication:
-         Meticulous Keyed ISAAC for BFD Authentication.
+      "RFC XXXX: Meticulous Keyed ISAAC for BFD Authentication.
        I-D.ietf-bfd-secure-sequence-numbers:
          Meticulous Keyed ISAAC for BFD Authentication.";
   }
@@ -155,8 +154,9 @@ module ietf-bfd-opt-auth {
     uses bfd-opt-auth-config;
 
     description
-      "Augment the 'authentication' container in BFD module to
-       add attributes related to BFD optimized authentication.";
+      "Augment the 'authentication' container for single hop BFD
+       module to add attributes related to BFD optimized
+       authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
@@ -166,8 +166,9 @@ module ietf-bfd-opt-auth {
     uses bfd-opt-auth-config;
 
     description
-      "Augment the 'authentication' container in BFD module to
-       add attributes related to BFD optimized authentication.";
+      "Augment the 'authentication' container for multi-hop BFD
+       module to add attributes related to BFD optimized
+       authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
@@ -177,8 +178,9 @@ module ietf-bfd-opt-auth {
     uses bfd-opt-auth-config;
 
     description
-      "Augment the 'authentication' container in BFD module to
-       add attributes related to BFD optimized authentication.";
+      "Augment the 'authentication' container for BFD over LAG
+       module to add attributes related to BFD optimized
+       authentication.";
   }
 
   augment "/rt:routing/rt:control-plane-protocols/" +
@@ -188,7 +190,8 @@ module ietf-bfd-opt-auth {
     uses bfd-opt-auth-config;
 
     description
-      "Augment the 'authentication' container in BFD module to
-       add attributes related to BFD optimized authentication.";
+      "Augment the 'authentication' container for BFD over MPLS
+       module to add attributes related to BFD optimized
+       authentication.";
   }
 }
