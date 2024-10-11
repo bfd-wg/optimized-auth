@@ -13,7 +13,6 @@
     category="exp"
     docName="draft-ietf-bfd-optimizing-authentication-latest"
     ipr="trust200902"
-    updates="5880"
     submissionType="IETF"
     consensus="true">
   <front>
@@ -94,9 +93,10 @@
     <keyword>authentication</keyword>
 
     <abstract>
-      <t>This document describes an optimization to BFD Authentication as
-      described in Section 6.7 of BFD RFC 5880. This document updates RFC
-      5880.</t>
+      <t>
+	This document describes an optimization to BFD Authentication
+	as described in Section 6.7 of BFD RFC 5880.
+      </t>
     </abstract>
   </front>
 
