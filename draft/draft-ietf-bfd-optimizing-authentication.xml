@@ -119,6 +119,23 @@
       authenticating every packet even more difficult to achieve.</t>
 
       <t>
+	This document describes an experimental updates to <xref
+	target="RFC5880">BFD</xref>. This experiment is intended to
+	provide additional insights into what happens when the
+	optimized authentication method defined in this document is
+	used.
+      </t>
+
+      <t>
+	This document is classified as Experimental and is not part of
+	the IETF Standards Track. Implementations based on this
+	document should not be considered as compliant with <xref
+	target="RFC5880">BFD</xref> and should not assume
+	interoperability with other implementations that conform to
+	the existing document.
+      </t>
+
+      <t>
 	This document proposes that BFD control packets that signal a
 	state change, a demand mode change (to D bit), a poll sequence
 	change (P or F bit change) be categorized as a significant
@@ -453,8 +470,9 @@
 
     <section anchor="IANA" title="IANA Considerations">
       <t>
-	This documents requests two new authentication types, one URI,
-	one YANG model, and an update to an existing IANA YANG model.
+	This documents requests the assignment of two new
+	authentication types, one URI, one YANG model, and an update
+	to an existing IANA YANG model.
       </t>
       <section anchor="auth-type" title="Auth Type">
 	<t>
@@ -481,10 +499,10 @@
       </section>
       <section anchor="ietf-xml-registry" title="IETF XML Registry">
 	<t>
-	  This document registers one URIs in the "ns" subregistry of
-	  the "IETF XML" registry <xref target="RFC3688"/>. Following
-	  the format in <xref target="RFC3688"/>, the following
-	  registration is requested:
+	  This document registers one URIs in the "ns"
+	  subregistry of the "IETF XML" registry <xref
+	  target="RFC3688"/>. Following the format in <xref
+	  target="RFC3688"/>, the following registration is requested:
 	</t>
         <t>
 	  <figure>
