@@ -106,7 +106,7 @@
       with <xref target="RFC1321">MD5
       Message-Digest Algorithm </xref>, or Secure Hash Algorithm (SHA-1)
       is a computationally intensive process. This makes it
-      difficult, if not impossible to authenticate every packet - particularly
+      difficult, if not impossible, to authenticate every packet - particularly
       at faster rates. Also, the recent escalating series of attacks on MD5
       and SHA-1 described in <xref target="SHA-1-attack1">Finding Collisions
       in the Full SHA-1 </xref> and <xref target="SHA-1-attack2">New Collision
@@ -115,11 +115,11 @@
       Considerations for the MD5 Message-Digest and the HMAC-MD5 Algorithm
       </xref> and <xref target="RFC6194">Security Considerations for the SHA-0
       and SHA-1 Message-Digest Algorithm </xref>. If replaced by stronger
-      algorithms, the computational overhead, will make the task of
+      algorithms the computational overhead will make the task of
       authenticating every packet even more difficult to achieve.</t>
 
       <t>
-	This document describes an experimental updates to <xref
+	This document describes an experimental update to <xref
 	target="RFC5880">BFD</xref>. This experiment is intended to
 	provide additional insights into what happens when the
 	optimized authentication method defined in this document is
@@ -130,28 +130,38 @@
 	This document is classified as Experimental and is not part of
 	the IETF Standards Track. Implementations based on this
 	document should not be considered as compliant with <xref
-	target="RFC5880">BFD</xref> and should not assume
-	interoperability with other implementations that conform to
-	the existing document.
+	target="RFC5880">BFD</xref>.
       </t>
 
       <t>
 	This document proposes that BFD control packets that signal a
-	state change, a demand mode change (to D bit), a poll sequence
-	change (P or F bit change) be categorized as a significant
-	change. Control packets that do not require a poll sequence,
+	state change, a change in demand mode (D bit), or a poll sequence
+	(P or F bit change) be categorized as a "significant
+	change". Control packets that do not require a poll sequence,
 	such as a change in bfd.RequiredMinRxInterval or
 	bfd.RequiredMinTxInterval, are also considered as a
-	significant change. In other words, the contents of an Up
-	packet MUST NOT change aside from the authentication section
-	without stronger authentication to take advantage of the
-	method described in this document.
+	significant change.
       </t>
-
-      <t>In the Up state, most packets that are transmitted and received have no state change
-      associated with them. Limiting authentication to packets that affect a
-      BFD session's state allows more sessions to be supported with this
-      optimized method of authentication.</t>
+      <t>
+        Such significant changes are intended to be protected by a "strong"
+        authentication mechanism, such as those already defined for use with
+        BFD.  For example, MD5 and SHA1. 
+        (<xref target="RFC5880" section="6.7"/>)
+      </t>
+      <t>
+        The majority of packets exchanged on a BFD session in the Up state are
+        not significant changes.  This document proposes a new optimized
+        authentication mode where packets that are not significant changes may
+        use a less computationally intensive authentication mechanism.
+      </t>
+      <t>
+        The intention of these optimized procedures is to permit strong
+        authentication for BFD state changes and utilize the less
+        computationally intensive authentication mechanisms to provide
+        protection for the session in the Up state while performing less
+        overall work.  Such procedures will aid BFD session scaling without
+        compromising BFD session security.
+      </t>
 
       <t>
 	Once the session has reached the Up state, the session can
@@ -162,30 +172,34 @@
 	  <li>
 	    Meticulous Keyed ISAAC authentication as described in
 	    <xref target="I-D.ietf-bfd-secure-sequence-numbers"/>.
-	    This authentication type prevents the attack when the Up packets do
-	    not change, because only the paired devices know the shared secret,
-	    key, and sequence number to select the ISAAC result.
+            This authentication type protects the BFD session when BFD Up
+            packets do not change, because only the paired devices know the
+            shared secret, key, and sequence number to select the ISAAC
+            result.
 	  </li>
 	</ul>
       </t>
 
       <t>
-        When using optimized methods of authentication, BFD sessions should
-	periodically test the session using strong authentication.  Strong
-	authentication is tested using a Poll sequence. To test strong
-	authentication, a Poll sequence SHOULD be initiated by the sender using
-	the strong authentication Auth Type rather than the chosen optimized
-	Auth Type. If a control packet with the Final (F) bit is not received
-	within the Detect Interval, the session has been compromised, and should
-	be brought down. The interval for initiating a Poll sequence can be
-	configured depending on the capability of the system.
+        When using the less computationally intensive authentication
+        mechanism, BFD should periodically test the session using the strong
+        authentication mechanism.  Strong authentication is tested using a
+        Poll sequence. To test strong authentication, a Poll sequence SHOULD
+        be initiated by the sender using the strong authentication mode rather
+        than the less computationally intensive mechanism. If a control packet
+        with the Final (F) bit is not received within the Detect Interval, the
+        session has been compromised, and MUST be brought down.
+      </t>
+      <t>
+        This "strong reauthentication interval" for performing such periodic
+        tests using the strong authentication mechanism can be configured
+        depending on the capability of the system.
       </t>
 
       <t>
 	Most packets transmitted on a BFD session are BFD Up packets.
 	Strongly authenticating a small subset of these packets with a Poll
 	sequence as described above, for example every one minute,
-	<!-- XXX JMH - one minute is probably now too small -->
 	significantly reduces the computational demand for the system
 	while maintaining security of the session across the
 	configured strong reauthentication interval.
@@ -235,8 +249,8 @@
           <c>significant change</c>
           <c>
 	    State change, a demand mode change (to D bit) or a poll
-	    sequence change (P or F bit). Control packets that do not
-	    require a poll sequence, such as bfd.RequiredMinRxInterval
+            sequence change (P or F bit). Changes to BFD control packets that
+            do not require a poll sequence, such as bfd.RequiredMinRxInterval,
 	    bfd.RequiredMinTxInterval, or bfd.DetectMult are also
 	    considered as a significant change.
 	  </c>
@@ -251,7 +265,7 @@
 
     <section title="Authentication Mode  ">
       <t>The cryptographic authentication mechanisms specified in <xref
-      target="RFC5880">BFD</xref> describes enabling and disabling of
+      target="RFC5880" section="6.7">BFD</xref> describes enabling and disabling of
       authentication as a one time operation. As a security precaution, it
       mentions that authentication state be allowed to change at most once.
       Once enabled, every packet must have Authentication Bit set and the
@@ -259,14 +273,17 @@
       implementation SHOULD NOT allow the authentication state to be changed
       based on the receipt of a BFD control packet.</t>
 
-      <t>This document proposes that an authentication mode that permits both a
-      strong authentication mode and a less expensive "optimized" mode to be
-      used within the same BFD session.  This pairing of a strong and an
-      optimized mode of authentication is carried in new BFD authentication
-      types representing a given authentication type pairing.</t>
+      <t>
+        This document proposes that an "optimized" authentication mode that
+        permits both a strong authentication mode and a less computationally
+        intensive mode to be used within the same BFD session.  This pairing
+        of a strong and an less computationally intensive  mode of
+        authentication is carried in new BFD authentication types representing
+        a given optimized authentication type pairing.
+      </t>
 
       <t>
-	The proposal outlines which BFD control packets are required
+	This document defines which BFD control packets are required
 	to be strongly authenticated. A BFD control packet that fails
 	authentication is discarded, or a BFD control packet that was
 	supposed to be strongly authenticated, but was not; e.g. a significant
@@ -277,7 +294,7 @@
       </t>
 
       <t>
-	In this proposal, the contents of an Up packet MUST NOT change
+	In this specification, the contents of an Up packet MUST NOT change
 	aside from the authentication section without stronger
 	authentication.  The full procedure is documented in the following
 	sections.
@@ -289,16 +306,17 @@
         When the Authentication Present (A) bit is set and the Auth Type is a
 	type supporting Optimized BFD Authentication
 	(<xref target="auth-type"/>), the Auth Type signals a
-	pairing of a strong authentication type and an optimized authentication
+	pairing of a strong authentication type and an less computationally
+        intensive authentication
 	type.  This pairing is advertised in a single Auth Type value in order
 	to permit implementations to be aware that:
 
 	<ul>
 	  <li>Optimized BFD procedures will be in use.</li>
-	  <li>The pairing of the strong and optimized authentication mechanisms
-	      will be used for that session.</li>
-	  <li>The current strong or optimized mode will be carried as described
-	      below:</li>
+          <li>The pairing of the strong and less computationally intensive
+              authentication mechanisms will be used for that session.</li>
+          <li>The current strong or less computationally intensive  mode will
+              be carried as described below:</li>
 	</ul>
       </t>
 
@@ -309,7 +327,7 @@
        0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |   Auth Type   |   Auth Len    |  Auth Key ID  |  Optimized    |
+      |   Auth Type   |   Auth Len    |  Auth Key ID  |   Opt. Mode   |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                   Authentication Specific Data                ~
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -320,20 +338,21 @@
       <t>
         The Meticulous Keyed MD5, Meticulous Keyed SHA-1, and Meticulous Keyed
 	ISAAC authentication sections define the fourth octet as "Reserved".
-	This document repurposes the "Reserved" field as the "Optimized" field
-	when used for authentication types for optimized BFD procedures.
+	This document repurposes the "Reserved" field as the "Optimized
+        Authentication Mode" field when used for authentication types for
+        optimized BFD procedures.
       </t>
 
       <t>
-        The values of the Optimized field are:
+        The values of the Optimized Authentication Mode field are:
 	<ol>
 	  <li>
 	    When using the strong authentication type for optimized
 	    BFD Auth Types.
 	  </li>
 	  <li>
-	    When using the optimized authentication type for optimized
-	    BFD Auth Types.
+            When using the less computationally intensive authentication type
+            for optimized BFD Auth Types.
 	  </li>
         </ol>
       </t>
@@ -348,21 +367,23 @@
 	Authentication" (type TBD):
       </t>
       <t>
-	When Optimized is 1, the format of the authentication section is the
-	same as <xref target="RFC5880" section="4.3"/>, excepting that Auth Type
-	is still TBD and that Reserved is set to 1.
+        When Optimized Authentication Mode is 1, the format of the authentication
+        section is the same as <xref target="RFC5880" section="4.3"/>,
+        excepting that Auth Type is still TBD and that Reserved is set to 1.
       </t>
       <t>
-	When Optimized is 2, the format of the authentication section is the
-	same as <xref target="I-D.ietf-bfd-secure-sequence-numbers" section="5"/>,
-	excepting that Auth Type is still TBD and that Reserved is set to 2.
+        When Optimized Authentication Mode is 2, the format of the authentication
+        section is the same as 
+        <xref target="I-D.ietf-bfd-secure-sequence-numbers" section="5"/>,
+        excepting that Auth Type is still TBD and that Reserved is set to 2.
       </t>
 
       <section title="Error Handling">
         <t>
 	  If the received BFD Control packet contains an optimized
-	  authentication type using these procedures and the Optimized field is
-	  not 1 or 2, then the received packet MUST be discarded.
+	  authentication type using these procedures and the Optimized
+          Authentication Mode field is not 1 or 2, then the received packet
+          MUST be discarded.
 	</t>
       </section>
     </section>
@@ -378,21 +399,24 @@
       <t>
         Once the BFD session has reached the Up state, the BFD Up state MUST
 	be signaled to the remote BFD system using the strong authentication for
-	at least Detect Mult packets before switching to the optimized
+	an interval that is at least the Detection Time before switching to
+        the less computationally intensive 
 	authentication mode.  This is to permit mechanisms such as 
 	<xref target="I-D.ietf-bfd-secure-sequence-numbers">
 	Meticulous Keyed ISAAC for BFD Authentication</xref> to be
-	bootstrapped before switching to optimized authentication.
+	bootstrapped before switching to the less computationally intensive
+        mode.
       </t>
 
       <t>
         It is RECOMMENDED that when using optimized authentication that
-	implementations switch from strong authentication to optimized
-	authentication after sending at least Detect Mult packets.  In the
-	circumstances where a BFD session successfully reaches the Up state with
-	strong authentication, but there are problems with the optimized
-	authentication, this will permit the remote system to tear down the
-	session as quickly as possible.
+        implementations switch from strong authentication to the less
+        computationally intensive authentication mode after an interval that
+        is at least the Detection Time. In the circumstances where a BFD
+        session successfully reaches the Up state with strong authentication,
+        but there are problems with the optimized authentication, this will
+        permit the remote system to tear down the session as quickly as
+        possible.
       </t>
 
       <t>
@@ -408,7 +432,7 @@
 	the Up state until it has transitioned to using the optimized
 	authentication mode.  In the event where optimized authentication is
 	failing in the protocol, this avoids propagating the failed transitions
-	to optimized mode to the clients.
+	to the optimized mode to their clients.
       </t>
     </section>
 
@@ -425,8 +449,7 @@
 	  adds a feature statement to enable optimized
 	  authentication. Finally, it adds an interval value that
 	  specifies how often the BFD session should be
-	  re-authenticated once it is in the Up state, and the key
-	  chain that should be used in the Up state.
+	  re-authenticated once it is in the Up state.
 	</t>
       </section>
       <section anchor="tree-diagram" title="Tree Diagram">
