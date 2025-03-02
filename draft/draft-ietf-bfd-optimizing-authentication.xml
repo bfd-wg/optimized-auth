@@ -256,8 +256,8 @@
 	  </c>
           <c>configured strong reauthentication interval</c>
           <c>
-	    Interval at which BFD control packets are retried with a
-	    stronger authentication.
+	    Interval at which BFD control packets are retried with
+	    strong authentication.
 	  </c>
         </texttable>
       </section>
@@ -295,7 +295,7 @@
 
       <t>
 	In this specification, the contents of an Up packet MUST NOT change
-	aside from the authentication section without stronger
+	aside from the authentication section without strong
 	authentication.  The full procedure is documented in the following
 	sections.
       </t>
@@ -306,7 +306,7 @@
         When the Authentication Present (A) bit is set and the Auth Type is a
 	type supporting Optimized BFD Authentication
 	(<xref target="auth-type"/>), the Auth Type signals a
-	pairing of a strong authentication type and an less computationally
+	pairing of a strong authentication type and a less computationally
         intensive authentication
 	type.  This pairing is advertised in a single Auth Type value in order
 	to permit implementations to be aware that:
@@ -398,7 +398,7 @@
 
       <t>
         Once the BFD session has reached the Up state, the BFD Up state MUST
-	be signaled to the remote BFD system using the strong authentication for
+	be signaled to the remote BFD system using the strong authentication mode for
 	an interval that is at least the Detection Time before switching to
         the less computationally intensive 
 	authentication mode.  This is to permit mechanisms such as 
@@ -656,6 +656,9 @@ reference:    RFC XXXX
 	The authors of this document would like to acknowledge Reshad
 	Rahman as a contributor to this document.
       </t>
+    </section>
+    <section title="Acknowledgments">
+      <t>The authors would like to thank Qiufang Ma and Stephen Farrell for providing directorate review of this document.</t>
     </section>
   </middle>
 
