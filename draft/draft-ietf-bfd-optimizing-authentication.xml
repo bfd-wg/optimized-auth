@@ -95,7 +95,12 @@
     <abstract>
       <t>
 	This document describes an optimization to BFD Authentication
-	as described in Section 6.7 of BFD RFC 5880.
+	as described in Section 6.7 of BFD RFC 5880.  It provides procedure
+	where only important BFD state transitions require strong
+	authentication and permits the majority of BFD Control Packets to use
+	a less computationally intensive authentication mechanism.  This
+	enables BFD to scale better when there is a desire to use strong
+	authentication.
       </t>
     </abstract>
   </front>
@@ -645,10 +650,10 @@ reference:    RFC XXXX
       <t>
 	The approach described in this document enhances the ability
 	to authenticate a BFD session by taking away the onerous
-	requirement that every BFD control packet be authenticated. By
-	authenticating packets that affect the state of the session,
+	requirement that every BFD control packet be strongly authenticated. By
+	strongly authenticating packets that affect the state of the session,
 	the security of the BFD session is maintained. In this mode,
-	packets that are a significant change but are not
+	packets that are a significant change but are not strongly
 	authenticated, are dropped by the system. Therefore, a
 	malicious user that tries to inject a non-authenticated
 	packet; e.g. with a Down state to take a session down will
