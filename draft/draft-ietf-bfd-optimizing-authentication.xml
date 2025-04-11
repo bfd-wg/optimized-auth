@@ -309,7 +309,7 @@
 
       <t>
 	In this specification, the contents of an Up packet MUST NOT change
-	aside from the authentication section without strong
+	aside from the Authentication Section without strong
 	authentication.  The full procedure is documented in the following
 	sections.
       </t>
@@ -354,7 +354,7 @@
 
       <t>
         The Meticulous Keyed MD5, Meticulous Keyed SHA-1, and Meticulous Keyed
-	ISAAC authentication sections define the fourth octet as "Reserved".
+	ISAAC Authentication Sections define the fourth octet as "Reserved".
 	This document repurposes the "Reserved" field as the "Optimized
         Authentication Mode" field when used for authentication types for
         optimized BFD procedures.
@@ -376,7 +376,7 @@
 
       <t>
         Authentication Specific Data: When using the strong authentication type,
-	the remainder of the authentication section carries that type's data.
+	the remainder of the Authentication Section carries that type's data.
       </t>
 
       <t>
@@ -397,22 +397,27 @@
 
       <section title="Receipt Using Optimized Authentication">
         <t>
-          The procedures for authenticating BFD Control packets is similar to
-          the existing procedures covered in <xref target="RFC5880" section="6.7"/>. 
-          The Optimized Authentication mode provides requirements for
-          authentication key processing and how the result of the authentication
-          operation is stored in the authentication section for that mode.
-          Similarly, the value of the Auth Len field is specified by the
-          Optimized Authentication mode in each of their specifications.
+	  The procedures for authenticating BFD Control packets using Optimized
+	  Authentication is similar to the existing procedures covered in 
+	  <xref target="RFC5880" section="6.7"/>. 
+          Optimized Authentication modes have common procedural requirements for 
+	  authentication regardless of which strong and less computationally
+	  intensive authentication modes are used.
+        </t>
+        <t>
+	  The required value of the Auth Len field for a given Optimized
+	  Authentication mode is defined in the respective specifications for
+	  the strong mode and less computationally instive mode.
         </t>
         <t>
           The following common procedures apply to authenticating BFD Control
           packets utilizing Optimized Authentication:
         </t>
         <t>
-          If the received BFD Control packet does not contain an Authentication
-          Section, or the Auth Type is not a supported Optimized Authentication
-          Auth Type, then the received packet MUST be discarded.
+          If the received BFD Control packet does not contain an 
+	  Authentication Section (<xref target="RFC5880" sectionFormat="comma" section="4.1"/>), or
+	  the Auth Type is not a supported Optimized Authentication Auth Type,
+	  then the received packet MUST be discarded.
         </t>
         <t>
 	  If the received BFD Control packet contains an optimized
