@@ -407,7 +407,7 @@
         <t>
 	  The required value of the Auth Len field for a given Optimized
 	  Authentication mode is defined in the respective specifications for
-	  the strong mode and less computationally instive mode.
+	  the strong mode and less computationally intensive mode.
         </t>
         <t>
           The following common procedures apply to authenticating BFD Control
