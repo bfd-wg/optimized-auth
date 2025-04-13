@@ -433,7 +433,7 @@
           If bfd.AuthSeqKnown is 1, examine the Sequence Number field.  If the
           sequence number lies outside of the range of bfd.RcvAuthSeq+1 to
           bfd.RcvAuthSeq+(3*Detect Mult) inclusive (when treated as an unsigned
-          32-bit circular number space, the received packet MUST be discarded.
+          32-bit circular number space) the received packet MUST be discarded.
         </t>
         <t>
           Otherwise (bfd.AuthSeqKnown is 0), bfd.AuthSeqKnown MUST be set to 1,
