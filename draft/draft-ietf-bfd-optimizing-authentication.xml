@@ -309,7 +309,7 @@
 
       <t>
 	In this specification, the contents of an Up packet MUST NOT change
-	aside from the authentication section without strong
+	aside from the Authentication Section without strong
 	authentication.  The full procedure is documented in the following
 	sections.
       </t>
@@ -329,7 +329,8 @@
 	  <li>Optimized BFD procedures will be in use.</li>
           <li>The pairing of the strong and less computationally intensive
               authentication mechanisms will be used for that session.</li>
-          <li>The current strong or less computationally intensive  mode will
+          <li>The requirement to carry a Sequence Number.</li>
+          <li>The current strong or less computationally intensive mode will
               be carried as described below:</li>
 	</ul>
       </t>
@@ -343,6 +344,8 @@
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |   Auth Type   |   Auth Len    |  Auth Key ID  |   Opt. Mode   |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+      |                        Sequence Number                        |
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                   Authentication Specific Data                ~
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	]]></artwork>
@@ -351,7 +354,7 @@
 
       <t>
         The Meticulous Keyed MD5, Meticulous Keyed SHA-1, and Meticulous Keyed
-	ISAAC authentication sections define the fourth octet as "Reserved".
+	ISAAC Authentication Sections define the fourth octet as "Reserved".
 	This document repurposes the "Reserved" field as the "Optimized
         Authentication Mode" field when used for authentication types for
         optimized BFD procedures.
@@ -373,7 +376,7 @@
 
       <t>
         Authentication Specific Data: When using the strong authentication type,
-	the remainder of the authentication section carries that type's data.
+	the remainder of the Authentication Section carries that type's data.
       </t>
 
       <t>
@@ -392,12 +395,56 @@
         excepting that Auth Type is still TBD and that Reserved is set to 2.
       </t>
 
-      <section title="Error Handling">
+      <section title="Receipt Using Optimized Authentication">
+        <t>
+	  The procedures for authenticating BFD Control packets using Optimized
+	  Authentication is similar to the existing procedures covered in 
+	  <xref target="RFC5880" section="6.7"/>. 
+          Optimized Authentication modes have common procedural requirements for 
+	  authentication regardless of which strong and less computationally
+	  intensive authentication modes are used.
+        </t>
+        <t>
+	  The required value of the Auth Len field for a given Optimized
+	  Authentication mode is defined in the respective specifications for
+	  the strong mode and less computationally intensive mode.
+        </t>
+        <t>
+          The following common procedures apply to authenticating BFD Control
+          packets utilizing Optimized Authentication:
+        </t>
+        <t>
+          If the received BFD Control packet does not contain an 
+	  Authentication Section (<xref target="RFC5880" sectionFormat="comma" section="4.1"/>), or
+	  the Auth Type is not a supported Optimized Authentication Auth Type,
+	  then the received packet MUST be discarded.
+        </t>
         <t>
 	  If the received BFD Control packet contains an optimized
 	  authentication type using these procedures and the Optimized
           Authentication Mode field is not 1 or 2, then the received packet
           MUST be discarded.
+        </t>
+        <t>
+          If the Auth Len field is not equal to a value appropriate for the
+          Optimized Authentication Mode field, the packet MUST be discarded.
+        </t>
+        <t>
+          If bfd.AuthSeqKnown is 1, examine the Sequence Number field.  If the
+          sequence number lies outside of the range of bfd.RcvAuthSeq+1 to
+          bfd.RcvAuthSeq+(3*Detect Mult) inclusive (when treated as an unsigned
+          32-bit circular number space) the received packet MUST be discarded.
+        </t>
+        <t>
+          Otherwise (bfd.AuthSeqKnown is 0), bfd.AuthSeqKnown MUST be set to 1,
+          bfd.RcvAuthSeq MUST be set to the value of the received Sequence
+          Number field, and the received packet MUST be accepted.
+        </t>
+        <t>
+          For the specified Auth Type and Optimized Authentication Mode, perform
+          the appropriate authentication procedures.  If authentication
+          succeeds, the received packet MUST be accepted.  Otherwise, the
+          received packet MUST be discarded.
 	</t>
       </section>
     </section>
