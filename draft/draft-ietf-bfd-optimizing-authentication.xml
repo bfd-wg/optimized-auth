@@ -94,8 +94,8 @@
 
     <abstract>
       <t>
-	This document describes an optimization to BFD Authentication
-	as described in Section 6.7 of BFD RFC 5880.  It provides procedure
+	This document describes an optimization to BFD Authentication.
+	It provides procedure
 	where only important BFD state transitions require strong
 	authentication and permits the majority of BFD Control Packets to use
 	a less computationally intensive authentication mechanism.  This
@@ -111,7 +111,7 @@
       with <xref target="RFC1321">MD5
       Message-Digest Algorithm </xref>, or Secure Hash Algorithm (SHA-1)
       is a computationally intensive process. This makes it
-      difficult, if not impossible, to authenticate every packet - particularly
+      difficult, if not impossible, to authenticate BFD every packet - particularly
       at faster rates. Also, the recent escalating series of attacks on MD5
       and SHA-1 described in <xref target="SHA-1-attack1">Finding Collisions
       in the Full SHA-1 </xref> and <xref target="SHA-1-attack2">New Collision
@@ -124,8 +124,9 @@
       authenticating every packet even more difficult to achieve.</t>
 
       <t>
-	This document describes an experimental update to <xref
-	target="RFC5880">BFD</xref>. This experiment is intended to
+	This document describes an experiment that presents a candidate
+	solution to update BFD Authentication that is currently specified in
+	<xref target="RFC5880"/>.  This experiment is intended to
 	provide additional insights into what happens when the
 	optimized authentication method defined in this document is
 	used. Here are the reasons why this document is on the Experimental track:
@@ -353,8 +354,8 @@
       </t>
 
       <t>
-        The Meticulous Keyed MD5, Meticulous Keyed SHA-1, and Meticulous Keyed
-	ISAAC Authentication Sections define the fourth octet as "Reserved".
+        The Meticulous Keyed MD5 (<xref target="RFC5880" section="6.7.3"/>), Meticulous Keyed SHA-1 (<xref target="RFC5880" section="6.7.4"/>), and Meticulous Keyed
+	ISAAC Authentication (<xref target="I-D.ietf-bfd-secure-sequence-numbers" section="5"/>) Sections define the fourth octet as "Reserved".
 	This document repurposes the "Reserved" field as the "Optimized
         Authentication Mode" field when used for authentication types for
         optimized BFD procedures.
@@ -631,85 +632,89 @@ reference:    RFC XXXX
     </section>
 
     <section anchor="Security" title="Security Considerations">
-      <t>
-	The YANG module specified in this document defines a schema
-	for data that is designed to be accessed via network
-	management protocols such as <xref
-	target="RFC6241">NETCONF</xref> or <xref
-	target="RFC8040">RESTCONF</xref>. The lowest NETCONF layer is
-	the secure transport layer, and the mandatory-to-implement
-	secure transport is <xref target="RFC6242">Secure Shell
-	(SSH)</xref>. The lowest RESTCONF layer is HTTPS, and the
-	mandatory-to-implement secure transport is <xref
-	target="RFC8446">TLS</xref>. The <xref
-	target="RFC8341">NETCONF Access Control Model (NACM) </xref>
-	provides the means to restrict access for particular NETCONF
-	or RESTCONF users to a preconfigured subset of all available
-	NETCONF or RESTCONF protocol operations and content.
-      </t>
+      <section anchor="Protocol Security" title="Protocol Security Considerations">
+	<t>
+	  The approach described in this document enhances the ability
+	  to authenticate a BFD session by taking away the onerous
+	  requirement that every BFD control packet be strongly authenticated. By
+	  strongly authenticating packets that affect the state of the session,
+	  the security of the BFD session is maintained. In this mode,
+	  packets that are a significant change but are not strongly
+	  authenticated, are dropped by the system. Therefore, a
+	  malicious user that tries to inject a non-authenticated
+	  packet; e.g. with a Down state to take a session down will
+	  fail. That combined with the proposal of using sequence number
+	  defined in <xref
+	  target="I-D.ietf-bfd-secure-sequence-numbers">Meticulous Keyed
+	  ISAAC for BFD Authentication</xref> further enhances the
+	  security of BFD sessions.
+	</t>
+      </section>
+      <section anchor="YANG Security" title="YANG Security Considerations">
+	<t>
+	  The YANG module specified in this document defines a schema
+	  for data that is designed to be accessed via network
+	  management protocols such as <xref
+	  target="RFC6241">NETCONF</xref> or <xref
+	  target="RFC8040">RESTCONF</xref>. The lowest NETCONF layer is
+	  the secure transport layer, and the mandatory-to-implement
+	  secure transport is <xref target="RFC6242">Secure Shell
+	  (SSH)</xref>. The lowest RESTCONF layer is HTTPS, and the
+	  mandatory-to-implement secure transport is <xref
+	  target="RFC8446">TLS</xref>. The <xref
+	  target="RFC8341">NETCONF Access Control Model (NACM) </xref>
+	  provides the means to restrict access for particular NETCONF
+	  or RESTCONF users to a preconfigured subset of all available
+	  NETCONF or RESTCONF protocol operations and content.
+	</t>
 
-      <t>
-	There are a number of data nodes defined in this YANG module
-	that are writable/creatable/deletable (i.e., config true,
-	which is the default).  These data nodes may be considered
-	sensitive or vulnerable in some network environments. Write
-	operations (e.g., edit-config) to these data nodes without
-	proper protection can have a negative effect on network
-	operations. Some of the subtrees and data nodes and their
-	sensitivity/vulnerability are described here.
-      </t>
+	<t>
+	  There are a number of data nodes defined in this YANG module
+	  that are writable/creatable/deletable (i.e., config true,
+	  which is the default).  These data nodes may be considered
+	  sensitive or vulnerable in some network environments. Write
+	  operations (e.g., edit-config) to these data nodes without
+	  proper protection can have a negative effect on network
+	  operations. Some of the subtrees and data nodes and their
+	  sensitivity/vulnerability are described here.
+	</t>
 
-      <ul>
-	<li>
-	  'reauth-interval' specifies the interval in Up state, after
-	  which a strong authentication SHOULD be performed to prevent
-	  a Person-In-The-Middle (PITM) attack. If this interval is
-	  set very low, the utility of these optimization procedures is
-	  lessened. If this interval is set very high, attacks detected
-	  by the strong authentication mechanisms may happen overly
-	  late.
-	</li>
-      </ul>
+	<ul>
+	  <li>
+	    'reauth-interval' specifies the interval in Up state, after
+	    which a strong authentication SHOULD be performed to prevent
+	    a Person-In-The-Middle (PITM) attack. If this interval is
+	    set very low, the utility of these optimization procedures is
+	    lessened. If this interval is set very high, attacks detected
+	    by the strong authentication mechanisms may happen overly
+	    late.
+	  </li>
+	</ul>
 
-      <t>
-	Some of the readable data nodes in this YANG module may be
-	considered sensitive or vulnerable in some network
-	environments. It is thus important to control read access
-	(e.g., via get, get-config, or notification) to these data
-	nodes.
-      </t>
+	<t>
+	  Some of the readable data nodes in this YANG module may be
+	  considered sensitive or vulnerable in some network
+	  environments. It is thus important to control read access
+	  (e.g., via get, get-config, or notification) to these data
+	  nodes.
+	</t>
 
-      <t>
-	There are no read-only data nodes defined in this model.
-      </t>
+	<t>
+	  There are no read-only data nodes defined in this model.
+	</t>
 
-      <t>
-	Some of the RPC operations in this YANG module may be
-	considered sensitive or vulnerable in some network
-	environments. It is thus important to control access to these
-	operations.
-      </t>
+	<t>
+	  Some of the RPC operations in this YANG module may be
+	  considered sensitive or vulnerable in some network
+	  environments. It is thus important to control access to these
+	  operations.
+	</t>
 
-      <t>
-	There are no RPC operations defined in this model.
-      </t>
+	<t>
+	  There are no RPC operations defined in this model.
+	</t>
 
-      <t>
-	The approach described in this document enhances the ability
-	to authenticate a BFD session by taking away the onerous
-	requirement that every BFD control packet be strongly authenticated. By
-	strongly authenticating packets that affect the state of the session,
-	the security of the BFD session is maintained. In this mode,
-	packets that are a significant change but are not strongly
-	authenticated, are dropped by the system. Therefore, a
-	malicious user that tries to inject a non-authenticated
-	packet; e.g. with a Down state to take a session down will
-	fail. That combined with the proposal of using sequence number
-	defined in <xref
-	target="I-D.ietf-bfd-secure-sequence-numbers">Meticulous Keyed
-	ISAAC for BFD Authentication</xref> further enhances the
-	security of BFD sessions.
-      </t>
+      </section>
     </section>
 
     <section title="Contributors" anchor="contributors">
