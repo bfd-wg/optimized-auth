@@ -185,7 +185,7 @@
 	authentication mechanisms such as those already defined for use with BFD.
 	For example, MD5 and SHA1. 
 	(<xref target="RFC5880" section="6.7"/>)
-        The use of stronger cryptograhic mechanisms such as SHA2 while using
+        The use of stronger cryptographic mechanisms such as SHA2 while using
 	optimized BFD authentication is left for future study.
       </t>
       <t>
@@ -323,8 +323,7 @@
     <section title="Signaling Optimized Authentication">
       <t>
         When the Authentication Present (A) bit is set and the Auth Type is a
-	type supporting Optimized BFD Authentication
-	(<xref target="auth-type"/>), the Auth Type signals a
+	type supporting Optimized BFD Authentication, the Auth Type signals a
 	pairing of a strong authentication type and a less computationally
         intensive authentication
 	type.  This pairing is advertised in a single Auth Type value in order
@@ -570,33 +569,8 @@
 
     <section anchor="IANA" title="IANA Considerations">
       <t>
-	This documents requests the assignment of two new
-	authentication types, one URI, one YANG model, and an update
-	to an existing IANA YANG model.
+	This documents requests the assignment of one URI and one YANG model.
       </t>
-      <section anchor="auth-type" title="Auth Type">
-	<t>
-	  This document requests an update to the registry titled "BFD
-	  Authentication Types". IANA is requested to assign two new
-	  BFD AuthType:
-	  <ul>
-	    <li>
-	      <xref target="I-D.ietf-bfd-secure-sequence-numbers"
-	      sectionFormat="parens"
-	      section="meticulous-keyed-isaac-authentication">
-	      Optimized MD5 Meticulous Keyed ISAAC Authentication</xref>,
-	      with a suggested value of 7.
-	    </li>
-	    <li>
-	      <xref target="I-D.ietf-bfd-secure-sequence-numbers"
-	      sectionFormat="parens"
-	      section="meticulous-keyed-isaac-authentication">
-	      Optimized SHA-1 Meticulous Keyed ISAAC Authentication</xref>,
-	      with a suggested value of 8.
-	    </li>
-	  </ul>
-	</t>
-      </section>
       <section anchor="ietf-xml-registry" title="IETF XML Registry">
 	<t>
 	  This document registers one URIs in the "ns"
@@ -634,14 +608,6 @@ reference:    RFC XXXX
 	      ]]>
 	    </artwork>
           </figure>
-	</t>
-      </section>
-      <section anchor="updated-iana-module" title="Updated IANA Module">
-	<t>
-	  This document also requests an update to an existing IANA
-	  YANG module described in <xref
-	  target="updated-bfd-iana-module">Updated BFD IANA
-	  Module</xref>.
 	</t>
       </section>
     </section>
@@ -776,7 +742,6 @@ reference:    RFC XXXX
       <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8349.xml'?>
       <?rfc include='reference.RFC.8446.xml'?>
-      <?rfc include='reference.RFC.9127.xml'?>
       <?rfc include='reference.RFC.9314.xml'?>
       <?rfc include='reference.I-D.ietf-bfd-secure-sequence-numbers.xml'?>
     </references>
@@ -917,35 +882,7 @@ reference:    RFC XXXX
 
       <?rfc include='reference.RFC.6194.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
-      <?rfc include='reference.I-D.ietf-bfd-stability.xml'?>
     </references>
-    <section anchor="updated-bfd-iana-module" title="Updated BFD IANA Module">
-      <t>
-	This section carries the updated IANA BFD Module,
-	iana-bfd-types.yang module, first defined in <xref
-	target="RFC9127">YANG Data Model for Bidirectional Forward
-	Detection (BFD)</xref>. The updated module carries three new
-	authentication type enum definitions, 'null' with a suggested
-	value of 6, and 'optimized-md5-meticulous-keyed-isaac' with a
-	suggested value of 7, and
-	'optimized-sha1-meticulous-keyed-isaac' with a suggested value
-	of 8. Note, the null enum type is used by <xref
-	target="I-D.ietf-bfd-stability">BFD Stability</xref> only, but
-	is being defined here to make sure changes to this YANG module
-	do not cause a conflict. This module should replace the
-	version that currently exists in the IANA registry.
-      </t>
-	<t>
-          <figure>
-            <artwork><![CDATA[
-	    <CODE BEGINS> file "iana-bfd-types@YYYY-MM-DD.yang"
-            INSERT_TEXT_FROM_FILE(../bin/iana-bfd-types@YYYY-MM-DD.yang,68)
-	    <CODE ENDS>
-            ]]>
-            </artwork>
-          </figure>
-	</t>
-    </section>
     <section anchor="examples" title="Examples">
       <t>
 	This section tries to show some examples in how the model can
