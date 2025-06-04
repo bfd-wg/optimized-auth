@@ -59,9 +59,10 @@ module ietf-bfd-opt-auth {
      WG List:  <rtg-bfd@ietf.org>
 
      Authors: Mahesh Jethanandani (mjethanandani@gmail.com)
-              Ashesh Mishra (mishra.ashesh@gmail.com)
+              Ashesh Mishra (ashesh@aalyria.com)
               Ankur Saxena (ankurpsaxena@gmail.com)
-              Manav Bhatia (mnvbhatia@google.com).";
+              Manav Bhatia (mnvbhatia@google.com)
+              Jeffrey Haas (jhaas@juniper.net).";
               
 
   description
