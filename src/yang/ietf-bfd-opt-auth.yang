@@ -62,7 +62,7 @@ module ietf-bfd-opt-auth {
               Ashesh Mishra (ashesh@aalyria.com)
               Ankur Saxena (ankurpsaxena@gmail.com)
               Manav Bhatia (mnvbhatia@google.com)
-	      Jeffrey Haas (jhaas@juniper.net).";
+              Jeffrey Haas (jhaas@juniper.net).";
               
 
   description
