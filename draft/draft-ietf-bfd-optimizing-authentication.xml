@@ -95,8 +95,7 @@
     <abstract>
       <t>
 	This document describes an experimental optimization to BFD Authentication.
-	It provides procedure
-	where only significant BFD state transitions defined in this document require strong
+        It provides procedure where BFD state transitions require strong
 	authentication and permits the majority of BFD Control Packets to use
 	a less computationally intensive authentication mechanism.  This
 	enables BFD to scale better when there is a desire to use strong
