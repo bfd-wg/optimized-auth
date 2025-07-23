@@ -166,7 +166,7 @@
 	<c>
 	  State change, a demand mode change (to D bit) or a poll
 	  sequence change (P or F bit). Changes to BFD control packets that
-	  do not require a poll sequence, such or bfd.DetectMult are also
+	  do not require a poll sequence, such as bfd.DetectMult are also
 	  considered as a significant change.
 	</c>
 	<c>configured strong reauthentication interval</c>
@@ -217,8 +217,7 @@
 	  state change, a change in demand mode (D bit), or a poll sequence
 	  (P or F bit change) be categorized as a "significant
 	  change". Control packets that do not require a poll sequence,
-	  such as a change in bfd.RequiredMinRxInterval or
-	  bfd.RequiredMinTxInterval, are also considered as a
+	  such as a bfd.DetectMult are also considered as a
 	  significant change.
 	</t>
 	<t>
