@@ -95,8 +95,7 @@
     <abstract>
       <t>
 	This document describes an experimental optimization to BFD Authentication.
-	It provides procedure
-	where only important BFD state transitions require strong
+        It provides procedure where BFD state transitions require strong
 	authentication and permits the majority of BFD Control Packets to use
 	a less computationally intensive authentication mechanism.  This
 	enables BFD to scale better when there is a desire to use strong
@@ -166,8 +165,7 @@
 	<c>
 	  State change, a demand mode change (to D bit) or a poll
 	  sequence change (P or F bit). Changes to BFD control packets that
-	  do not require a poll sequence, such as bfd.RequiredMinRxInterval,
-	  bfd.RequiredMinTxInterval, or bfd.DetectMult are also
+	  do not require a poll sequence, such as bfd.DetectMult are also
 	  considered as a significant change.
 	</c>
 	<c>configured strong reauthentication interval</c>
@@ -183,8 +181,8 @@
       <t>
 	For purposes of this document, "strong authentication" refers to BFD
 	authentication mechanisms such as those already defined for use with BFD.
-	For example, MD5 and SHA1. 
-	(<xref target="RFC5880" section="6.7"/>)
+	For example, MD5 and SHA1
+	(<xref target="RFC5880" section="6.7"/>).
         The use of stronger cryptographic mechanisms such as SHA2 while using
 	optimized BFD authentication is left for future study.
       </t>
@@ -210,7 +208,7 @@
       Authentication Section without strong authentication.</t>
 
       <t>In addition to these requirements, BFD "significant changes" require
-      strong authentication:</t>
+      strong authentication.</t>
 
       <section anchor="significant changes" title="Protecting BFD Significant Changes with Strong Authentication">
 	<t>
@@ -218,8 +216,7 @@
 	  state change, a change in demand mode (D bit), or a poll sequence
 	  (P or F bit change) be categorized as a "significant
 	  change". Control packets that do not require a poll sequence,
-	  such as a change in bfd.RequiredMinRxInterval or
-	  bfd.RequiredMinTxInterval, are also considered as a
+	  such as a bfd.DetectMult are also considered as a
 	  significant change.
 	</t>
 	<t>
