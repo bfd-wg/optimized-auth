@@ -114,8 +114,9 @@
       session scale and at faster rates.</t>
 
       <t>This document describes an experimental procedure whereby only
-      significant BFD state transitions require strong authentication.  The
-      majority of BFD Control Packets use a less computationally intensive
+      BFD state transitions and some other changes (as described later in this
+      document) require strong authentication.  The majority of BFD Control
+      Packets use a less computationally intensive
       authentication mechanism.  The details of the motivation for experimental
       status are given in <xref target="experiment"/>.</t>
 
