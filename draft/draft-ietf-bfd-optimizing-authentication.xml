@@ -261,17 +261,17 @@
         be initiated by the sender using the strong authentication mode rather
         than the less computationally intensive mechanism. If a control packet
         with the Final (F) bit is not received within twice the Detect Interval
-	as would be calculated by the receiving system, the session has been
-	compromised, and MUST be brought down.
+        as would be calculated by the receiving system, the session has been
+        compromised, and MUST be brought down.
       </t>
       <t>
-	The value "twice the Detect interval as would be calculated by the
-	receiving system" is, roughly, twice the number of packets the local
-	system would transmit to the receiving system within its own Detect
-	Interval.  This accommodates for possible packet loss from the sending
-	system during the Poll sequence to the receiving system, plus time for
-	the receiving system to transmit control packet with the Final (F) bit
-	set to the local system.
+        The value "twice the Detect interval as would be calculated by the
+        receiving system" is, roughly, twice the number of packets the local
+        system would transmit to the receiving system within its own Detect
+        Interval.  This accommodates for possible packet loss from the sending
+        system during the Poll sequence to the receiving system, plus time for
+        the receiving system to transmit control packet with the Final (F) bit
+        set to the local system.
       </t>
       <t>
         This "strong reauthentication interval" for performing such periodic
@@ -280,12 +280,12 @@
       </t>
 
       <t>
-	Most packets transmitted on a BFD session are BFD Up packets.
-	Strongly authenticating a small subset of these packets with a Poll
-	sequence as described above, for example every one minute,
-	significantly reduces the computational demand for the system
-	while maintaining security of the session across the
-	configured strong reauthentication interval.
+        Most packets transmitted on a BFD session are BFD Up packets.
+        Strongly authenticating a small subset of these packets with a Poll
+        sequence as described above, for example every one minute,
+        significantly reduces the computational demand for the system
+        while maintaining security of the session across the
+        configured strong reauthentication interval.
       </t>
     </section>
 
