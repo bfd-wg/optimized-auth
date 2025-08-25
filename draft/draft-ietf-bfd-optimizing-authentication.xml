@@ -202,7 +202,7 @@
       <t>Once the BFD state machine has reached the Up state, it will continue
       to send BFD Control Packets in the Up state for a period as discussed in
       <xref target="operations"/>.  If optimized authentication mechanisms are
-      in use, the session MAY switch to the less computationally intensive
+      in use, as defined later in this document, the session MAY switch to the less computationally intensive
       mode.</t>
 
       <t>The contents of an Up packet MUST NOT change aside from the
@@ -217,7 +217,7 @@
 	  state change, a change in demand mode (D bit), or a poll sequence
 	  (P or F bit change) be categorized as a "significant
 	  change". Control packets that do not require a poll sequence,
-	  such as a bfd.DetectMult are also considered as a
+	  such as bfd.DetectMult are also considered as a
 	  significant change.
 	</t>
 	<t>
@@ -398,13 +398,13 @@
       <t>
         When Optimized Authentication Mode is 1, the format of the authentication
         section is the same as <xref target="RFC5880" section="4.3"/>,
-        excepting that Auth Type is still TBD and that Reserved is set to 1.
+        excepting that Auth Type is TBD and that the Optimized Authentication Mode field is set to 1.
       </t>
       <t>
         When Optimized Authentication Mode is 2, the format of the authentication
         section is the same as 
         <xref target="I-D.ietf-bfd-secure-sequence-numbers" section="5"/>,
-        excepting that Auth Type is still TBD and that Reserved is set to 2.
+        excepting that Auth Type is TBD and that the Optimized Authentication Mode field is set to 2.
       </t>
 
       <section title="Transmitting and Receiving Using Optimized Authentication">
@@ -519,7 +519,7 @@
       </section>
     </section>
 
-    <section anchor="opt-auth-yang-model" title="Optimizing Authentication YANG Model">
+    <section anchor="opt-auth-yang-model" title="Optimizing Authentication YANG Data Model">
       <section anchor="data-model-overview" title="Data Model Overview">
 	<t>
 	  The <xref target="RFC7950">YANG 1.1</xref> model defined in
@@ -549,7 +549,7 @@
           </figure>
 	</t>
       </section>
-      <section anchor="the-yang-model" title="The YANG Model">
+      <section anchor="the-yang-model" title="The YANG Data Model">
 	<t>
 	  This YANG module imports <xref target="RFC8177">YANG Key
 	  Chain </xref>, <xref target="RFC8349">A YANG Data Model for
