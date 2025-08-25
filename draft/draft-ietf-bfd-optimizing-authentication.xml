@@ -95,7 +95,7 @@
     <abstract>
       <t>
 	This document describes an experimental optimization to BFD Authentication.
-        It provides procedure where BFD state transitions require strong
+        It provides a procedure where BFD state transitions require strong
 	authentication and permits the majority of BFD Control Packets to use
 	a less computationally intensive authentication mechanism.  This
 	enables BFD to scale better when there is a desire to use strong
@@ -197,7 +197,7 @@
       </t>
 
       <t>All BFD Control Packets with the states AdminDown, Down, and Init
-      require strong authentication.</t>
+      MUST use strong authentication.</t>
 
       <t>Once the BFD state machine has reached the Up state, it will continue
       to send BFD Control Packets in the Up state for a period as discussed in
@@ -291,11 +291,16 @@
 
     <section anchor="optimized modes" title="Optimized Authentication Modes">
       <t>The cryptographic authentication mechanisms specified in <xref
-      target="RFC5880" section="6.7">BFD</xref> describes enabling and disabling of
-      authentication as a one time operation. As a security precaution, it
-      mentions that authentication state be allowed to change at most once.
+      target="RFC5880" section="6.7">BFD</xref> describe enabling and disabling of
+      authentication as a one time operation.
+      "... implementations using this method SHOULD only allow the
+      authentication state to be changed at most once without some form of
+      intervention (so that authentication cannot be turned on and off
+      repeatedly simply based on the receipt of BFD Control packets from remote
+      systems)." (<xref target="RFC5880" section="6.7.1"/>)
       Once enabled, every packet must have Authentication Bit set and the
-      associated Authentication Type appended. In addition, it states that an
+      associated Authentication Type appended (<xref target="RFC5880" section="4.1"/>).
+      In addition, it states that an
       implementation SHOULD NOT allow the authentication state to be changed
       based on the receipt of a BFD control packet.</t>
 
