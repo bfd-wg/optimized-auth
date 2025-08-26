@@ -184,8 +184,6 @@
 	authentication mechanisms such as those already defined for use with BFD.
 	For example, MD5 and SHA1
 	(<xref target="RFC5880" section="6.7"/>).
-        The use of stronger cryptographic mechanisms such as SHA2 while using
-	optimized BFD authentication is left for future study.
       </t>
       <t>
 	The intention of these optimized procedures is to permit strong
@@ -394,22 +392,6 @@
       <t>
         Authentication Specific Data: When using the strong authentication type,
 	the remainder of the Authentication Section carries that type's data.
-      </t>
-
-      <t>
-        For example, for Auth Type "Optimized MD5 Meticulous Keyed ISAAC
-	Authentication" (type TBD):
-      </t>
-      <t>
-        When Optimized Authentication Mode is 1, the format of the authentication
-        section is the same as <xref target="RFC5880" section="4.3"/>,
-        excepting that Auth Type is TBD and that the Optimized Authentication Mode field is set to 1.
-      </t>
-      <t>
-        When Optimized Authentication Mode is 2, the format of the authentication
-        section is the same as 
-        <xref target="I-D.ietf-bfd-secure-sequence-numbers" section="5"/>,
-        excepting that Auth Type is TBD and that the Optimized Authentication Mode field is set to 2.
       </t>
 
       <section title="Transmitting and Receiving Using Optimized Authentication">
