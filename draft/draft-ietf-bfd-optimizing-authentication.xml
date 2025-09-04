@@ -512,7 +512,7 @@
 	  The <xref target="RFC7950">YANG 1.1</xref> model defined in
 	  this document augments the "ietf-bfd" module to add
 	  data nodes relevant to the management of the feature defined in this
-	  document.  In particular, it adds identities for crypto
+	  document. In particular, it adds identities for crypto
 	  algorithms that are described in this model, and in 
 	  <xref target="I-D.ietf-bfd-secure-sequence-numbers">
 	  Meticulous Keyed ISAAC for BFD Authentication</xref>.  It
