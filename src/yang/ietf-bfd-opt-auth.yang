@@ -98,8 +98,10 @@ module ietf-bfd-opt-auth {
 
   feature optimized-auth {
     description
-      "When enabled, this implementation supports optimized
-       authentication as described in this document.";
+      "Indicates that the implementation supports optimized
+       authentication.";
+    reference
+      "RFC XXXX: Optimizing BFD Authentication.";
   }
 
   grouping bfd-opt-auth-config {
@@ -112,7 +114,6 @@ module ietf-bfd-opt-auth {
       description
         "Interval of time after which strong authentication
          should be utilized to prevent an on-path-attacker attack.
-         Default is 1 minute.
 
          A value of zero means that we do not do periodic
          reauthentication using the strong authentication method.
