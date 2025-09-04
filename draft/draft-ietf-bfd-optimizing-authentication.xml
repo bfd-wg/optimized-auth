@@ -511,12 +511,12 @@
 	<t>
 	  The <xref target="RFC7950">YANG 1.1</xref> model defined in
 	  this document augments the "ietf-bfd" module to add
-	  configuration relevant to the management of the feature
-	  defined in this document. In particular, it adds crypto
+	  data nodes relevant to the management of the feature defined in this
+	  document. In particular, it adds identities for crypto
 	  algorithms that are described in this model, and in 
 	  <xref target="I-D.ietf-bfd-secure-sequence-numbers">
 	  Meticulous Keyed ISAAC for BFD Authentication</xref>.  It
-	  adds a feature statement to enable optimized
+	  adds a feature to enable optimized
 	  authentication. Finally, it adds an interval value that
 	  specifies how often the BFD session should be
 	  re-authenticated once it is in the Up state.
@@ -598,6 +598,7 @@ XML: N/A, the requested URI is an XML namespace.
 name:         ietf-bfd-opt-auth
 namespace:    urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth
 prefix:       bfd-oa
+maintained by IANA: No
 reference:    RFC XXXX
 	      ]]>
 	    </artwork>
@@ -645,31 +646,36 @@ reference:    RFC XXXX
       </section>
       <section anchor="YANG Security" title="YANG Security Considerations">
 	<t>
-	  The YANG module specified in this document defines a schema
-	  for data that is designed to be accessed via network
-	  management protocols such as <xref
-	  target="RFC6241">NETCONF</xref> or <xref
-	  target="RFC8040">RESTCONF</xref>. The lowest NETCONF layer is
-	  the secure transport layer, and the mandatory-to-implement
-	  secure transport is <xref target="RFC6242">Secure Shell
-	  (SSH)</xref>. The lowest RESTCONF layer is HTTPS, and the
-	  mandatory-to-implement secure transport is <xref
-	  target="RFC8446">TLS</xref>. The <xref
-	  target="RFC8341">NETCONF Access Control Model (NACM) </xref>
-	  provides the means to restrict access for particular NETCONF
-	  or RESTCONF users to a preconfigured subset of all available
-	  NETCONF or RESTCONF protocol operations and content.
+	  This section is modeled after the template described in Section 3.7
+	  of <xref target="I-D.ietf-netmod-rfc8407bis"/>.
+	</t>
+	<t>
+	  The "ietf-bfd-opt-auth" YANG module defines a data model that
+	  is designed to be accessed via YANG-based management protocols, such
+	  as <xref target="RFC6241">NETCONF</xref> or <xref target="RFC8040">RESTCONF</xref>.
+	  These YANG-based management protocols (1) have to use a secure
+	  transport layer (e.g., <xref target="RFC4252">SSH</xref>
+	  <xref target="RFC8446">TLS</xref>, and <xref target="RFC9000">QUIC</xref>)
+	  and (2) have to use mutual authentication.
 	</t>
 
 	<t>
-	  There are a number of data nodes defined in this YANG module
-	  that are writable/creatable/deletable (i.e., config true,
-	  which is the default).  These data nodes may be considered
-	  sensitive or vulnerable in some network environments. Write
-	  operations (e.g., edit-config) to these data nodes without
-	  proper protection can have a negative effect on network
-	  operations. Some of the subtrees and data nodes and their
-	  sensitivity/vulnerability are described here.
+	  The Network Configuration Access Control Model
+	  <xref target="RFC8341">(NACM)</xref> provides the means to restrict
+	  access for particular NETCONF or RESTCONF users to a preconfigured
+	  subset of all available NETCONF or RESTCONF protocol operations and
+	  content.
+	</t>
+
+	<t>
+	  There are a number of data nodes defined in this YANG module that are
+	  writable/creatable/deletable (i.e., "config true", which is the
+	  default).  All writable data nodes are likely to be sensitive or
+	  vulnerable in some network environments.  Write operations (e.g.,
+	  edit-config) and delete operations to these data nodes without proper
+	  protection or authentication can have a negative effect on network
+	  operations.  The following subtrees and data nodes have particular
+	  sensitivities/vulnerabilities:
 	</t>
 
 	<ul>
@@ -685,28 +691,20 @@ reference:    RFC XXXX
 	</ul>
 
 	<t>
-	  Some of the readable data nodes in this YANG module may be
-	  considered sensitive or vulnerable in some network
-	  environments. It is thus important to control read access
-	  (e.g., via get, get-config, or notification) to these data
-	  nodes.
+	  Some of the readable data nodes in this YANG module may be considered
+	  sensitive or vulnerable in some network environments.  It is thus
+	  important to control read access (e.g., via get, get-config, or
+	  notification) to these data nodes. Specifically, the following
+	  subtrees and data nodes have particular sensitivities/
+	  vulnerabilities:
 	</t>
-
 	<t>
 	  There are no read-only data nodes defined in this model.
 	</t>
 
 	<t>
-	  Some of the RPC operations in this YANG module may be
-	  considered sensitive or vulnerable in some network
-	  environments. It is thus important to control access to these
-	  operations.
-	</t>
-
-	<t>
 	  There are no RPC operations defined in this model.
 	</t>
-
       </section>
     </section>
 
@@ -717,7 +715,7 @@ reference:    RFC XXXX
       </t>
     </section>
     <section title="Acknowledgments">
-      <t>The authors would like to thank Qiufang Ma and Stephen Farrell for providing directorate review of this document.</t>
+      <t>The authors would like to thank Qiufang Ma, Stephen Farrell, and Acee Lindem for providing directorate review of this document.</t>
     </section>
   </middle>
 
@@ -727,15 +725,10 @@ reference:    RFC XXXX
       <?rfc include='reference.RFC.3688.xml'?>
       <?rfc include='reference.RFC.5880.xml'?>
       <?rfc include='reference.RFC.6020.xml'?>
-      <?rfc include='reference.RFC.6241.xml'?>
-      <?rfc include='reference.RFC.6242.xml'?>
       <?rfc include='reference.RFC.7950.xml'?>
-      <?rfc include='reference.RFC.8040.xml'?>
       <?rfc include='reference.RFC.8174.xml'?>
       <?rfc include='reference.RFC.8177.xml'?>
-      <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8349.xml'?>
-      <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.9314.xml'?>
       <?rfc include='reference.I-D.ietf-bfd-secure-sequence-numbers.xml'?>
     </references>
@@ -876,6 +869,13 @@ reference:    RFC XXXX
 
       <?rfc include='reference.RFC.6194.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
+      <?rfc include='reference.RFC.4252.xml'?>
+      <?rfc include='reference.RFC.6241.xml'?>
+      <?rfc include='reference.RFC.8040.xml'?>
+      <?rfc include='reference.RFC.8341.xml'?>
+      <?rfc include='reference.RFC.8446.xml'?>
+      <?rfc include='reference.RFC.9000.xml'?>
+      <?rfc include='reference.I-D.ietf-netmod-rfc8407bis.xml'?>
     </references>
     <section anchor="examples" title="Examples">
       <t>
