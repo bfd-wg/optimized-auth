@@ -194,17 +194,17 @@
 	compromising BFD session security.
       </t>
 
-      <t>All BFD Control Packets with the states AdminDown, Down, and Init
+      <t>All BFD Control Packets with the state AdminDown, Down, and Init
       MUST use strong authentication.</t>
 
       <t>Once the BFD state machine has reached the Up state, it will continue
-      to send BFD Control Packets in the Up state for a period as discussed in
+      to send BFD Control Packets with strong authentication in the Up state for a period as discussed in
       <xref target="operations"/>.  If optimized authentication mechanisms are
       in use, as defined later in this document, the session MAY switch to the less computationally intensive
       mode.</t>
 
       <t>The contents of an Up packet MUST NOT change aside from the
-      Authentication Section without strong authentication.</t>
+      Authentication Section unless strong authentication is in use.</t>
 
       <t>In addition to these requirements, BFD "significant changes" require
       strong authentication.</t>
@@ -227,7 +227,7 @@
 
     <section anchor="optimized type" title="Using Less Computationally Intensive Auth Types">
       <t>
-	The majority of packets exchanged on a BFD session in the Up state are
+	The majority of packets exchanged in a BFD session in the Up state are
 	not significant changes.  This document proposes a new optimized
 	authentication mode where packets that are not significant changes may
 	use a less computationally intensive authentication mechanism.
@@ -278,8 +278,8 @@
       </t>
 
       <t>
-        Most packets transmitted on a BFD session are BFD Up packets.
-        Strongly authenticating a small subset of these packets with a Poll
+        Most packets transmitted in a BFD session are BFD Up packets.
+        Strongly authenticating a limited subset of these packets with a Poll
         sequence as described above, for example every one minute,
         significantly reduces the computational demand for the system
         while maintaining security of the session across the
