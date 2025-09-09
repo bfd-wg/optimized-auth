@@ -203,7 +203,7 @@
       in use, as defined later in this document, the session MAY switch to the less computationally intensive
       mode.</t>
 
-      <t>The contents of an Up packet MUST NOT change aside from the
+      <t>The contents of an Up packet must not change aside from the
       Authentication Section unless strong authentication is in use.</t>
 
       <t>In addition to these requirements, BFD "significant changes" require
@@ -538,7 +538,7 @@
       </section>
       <section anchor="the-yang-model" title="The YANG Data Model">
 	<t>
-	  This YANG module imports <xref target="RFC8177">YANG Key
+	  This YANG module imports modules defined in <xref target="RFC8177">YANG Key
 	  Chain </xref>, <xref target="RFC8349">A YANG Data Model for
 	  Routing Management (NMDA version)</xref>, and <xref
 	  target="RFC9314">YANG Data Model for Bidirectional Forwarding
@@ -691,15 +691,7 @@ reference:    RFC XXXX
 	</ul>
 
 	<t>
-	  Some of the readable data nodes in this YANG module may be considered
-	  sensitive or vulnerable in some network environments.  It is thus
-	  important to control read access (e.g., via get, get-config, or
-	  notification) to these data nodes. Specifically, the following
-	  subtrees and data nodes have particular sensitivities/
-	  vulnerabilities:
-	</t>
-	<t>
-	  There are no read-only data nodes defined in this model.
+	  There are no particularly sensitive readable data nodes.
 	</t>
 
 	<t>

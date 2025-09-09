@@ -67,7 +67,8 @@ module ietf-bfd-opt-auth {
 
   description
     "This YANG module augments the base BFD YANG model to add
-     attributes related to BFD Optimized Authentication.
+     attributes related to the experimental BFD Optimized
+     Authentication.
 
      Copyright (c) 2025 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
