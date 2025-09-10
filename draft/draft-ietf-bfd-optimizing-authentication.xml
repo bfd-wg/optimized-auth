@@ -95,7 +95,7 @@
     <abstract>
       <t>
 	This document describes an experimental optimization to BFD Authentication.
-        It provides a procedure where BFD state transitions require strong
+        It provides a procedure where BFD significant changes require strong
 	authentication and permits the majority of BFD Control Packets to use
 	a less computationally intensive authentication mechanism.  This
 	enables BFD to scale better when there is a desire to use strong
@@ -194,17 +194,17 @@
 	compromising BFD session security.
       </t>
 
-      <t>All BFD Control Packets with the states AdminDown, Down, and Init
+      <t>All BFD Control Packets with the state AdminDown, Down, and Init
       MUST use strong authentication.</t>
 
       <t>Once the BFD state machine has reached the Up state, it will continue
-      to send BFD Control Packets in the Up state for a period as discussed in
+      to send BFD Control Packets with strong authentication in the Up state for a period as discussed in
       <xref target="operations"/>.  If optimized authentication mechanisms are
       in use, as defined later in this document, the session MAY switch to the less computationally intensive
       mode.</t>
 
-      <t>The contents of an Up packet MUST NOT change aside from the
-      Authentication Section without strong authentication.</t>
+      <t>The contents of an Up packet must not change aside from the
+      Authentication Section unless strong authentication is in use.</t>
 
       <t>In addition to these requirements, BFD "significant changes" require
       strong authentication.</t>
@@ -227,7 +227,7 @@
 
     <section anchor="optimized type" title="Using Less Computationally Intensive Auth Types">
       <t>
-	The majority of packets exchanged on a BFD session in the Up state are
+	The majority of packets exchanged in a BFD session in the Up state are
 	not significant changes.  This document proposes a new optimized
 	authentication mode where packets that are not significant changes may
 	use a less computationally intensive authentication mechanism.
@@ -278,8 +278,8 @@
       </t>
 
       <t>
-        Most packets transmitted on a BFD session are BFD Up packets.
-        Strongly authenticating a small subset of these packets with a Poll
+        Most packets transmitted in a BFD session are BFD Up packets.
+        Strongly authenticating a limited subset of these packets with a Poll
         sequence as described above, for example every one minute,
         significantly reduces the computational demand for the system
         while maintaining security of the session across the
@@ -538,7 +538,7 @@
       </section>
       <section anchor="the-yang-model" title="The YANG Data Model">
 	<t>
-	  This YANG module imports <xref target="RFC8177">YANG Key
+	  This YANG module imports modules defined in <xref target="RFC8177">YANG Key
 	  Chain </xref>, <xref target="RFC8349">A YANG Data Model for
 	  Routing Management (NMDA version)</xref>, and <xref
 	  target="RFC9314">YANG Data Model for Bidirectional Forwarding
@@ -691,15 +691,7 @@ reference:    RFC XXXX
 	</ul>
 
 	<t>
-	  Some of the readable data nodes in this YANG module may be considered
-	  sensitive or vulnerable in some network environments.  It is thus
-	  important to control read access (e.g., via get, get-config, or
-	  notification) to these data nodes. Specifically, the following
-	  subtrees and data nodes have particular sensitivities/
-	  vulnerabilities:
-	</t>
-	<t>
-	  There are no read-only data nodes defined in this model.
+	  There are no particularly sensitive readable data nodes.
 	</t>
 
 	<t>
