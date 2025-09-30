@@ -95,11 +95,11 @@
     <abstract>
       <t>
 	This document describes an experimental optimization to BFD Authentication.
+	This optimization enables BFD to scale better when there is a desire to
+	use strong authentication.
         It provides a procedure where BFD significant changes require strong
 	authentication and permits the majority of BFD Control Packets to use
-	a less computationally intensive authentication mechanism.  This
-	enables BFD to scale better when there is a desire to use strong
-	authentication.
+	a less computationally intensive authentication mechanism.
       </t>
     </abstract>
   </front>
