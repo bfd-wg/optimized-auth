@@ -108,7 +108,8 @@
     <section anchor="introduction" title="Introduction">
       <t>Authenticating every <xref target="RFC5880">BFD</xref> control packet
       with <xref target="RFC1321">MD5
-      Message-Digest Algorithm </xref>, or Secure Hash Algorithm (SHA-1)
+      Message-Digest Algorithm </xref>, or 
+      <xref target="RFC3174">Secure Hash Algorithm (SHA-1)</xref>
       is a computationally intensive process. This makes it
       difficult, if not impossible, to authenticate every BFD packet at high
       session scale and at faster rates.</t>
@@ -856,9 +857,8 @@ reference:    RFC XXXX
 
       <?rfc include='reference.RFC.1321.xml'?>
       <?rfc include='reference.RFC.2026.xml'?>
-
+      <?rfc include='reference.RFC.3174.xml'?>
       <?rfc include='reference.RFC.6151.xml'?>
-
       <?rfc include='reference.RFC.6194.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
       <?rfc include='reference.RFC.4252.xml'?>
