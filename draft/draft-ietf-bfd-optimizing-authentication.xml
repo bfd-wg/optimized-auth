@@ -518,14 +518,9 @@
 	  The <xref target="RFC7950">YANG 1.1</xref> model defined in
 	  this document augments the "ietf-bfd" module to add
 	  data nodes relevant to the management of the feature defined in this
-	  document. In particular, it adds identities for crypto
-	  algorithms that are described in this model, and in 
-	  <xref target="I-D.ietf-bfd-secure-sequence-numbers">
-	  Meticulous Keyed ISAAC for BFD Authentication</xref>.  It
-	  adds a feature to enable optimized
-	  authentication. Finally, it adds an interval value that
-	  specifies how often the BFD session should be
-	  re-authenticated once it is in the Up state.
+	  document. It adds an interval value that specifies how often the BFD
+	  session should be re-authenticated using more computationally
+	  intensive authentication once it is in the Up state.
 	</t>
       </section>
       <section anchor="tree-diagram" title="Tree Diagram">
