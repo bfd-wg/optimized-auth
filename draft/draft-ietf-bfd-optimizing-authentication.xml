@@ -447,8 +447,8 @@
         The values of the Optimized Authentication Mode field are:
 	<ol>
 	  <li>
-	    When using the strong authentication type for optimized
-	    BFD Auth Types.
+	    When using the more computationally intensive authentication type
+	    for optimized BFD Auth Types.
 	  </li>
 	  <li>
             When using the less computationally intensive authentication type
