@@ -348,7 +348,7 @@
       <t>The cryptographic authentication mechanisms specified in <xref
       target="RFC5880" section="6.7">BFD</xref> describe enabling and disabling of
       authentication as a one time operation.
-      "... implementations using this method SHOULD only allow the
+      "... implementations using this mechanism SHOULD only allow the
       authentication state to be changed at most once without some form of
       intervention (so that authentication cannot be turned on and off
       repeatedly simply based on the receipt of BFD Control packets from remote
@@ -680,22 +680,55 @@ reference:    RFC XXXX
 	  software or hardware, due to the use of additional computational
 	  resources these mechanisms use.
 	</t>
+
 	<t>
-	  The approach described in this document enhances the ability
-	  to authenticate a BFD session by taking away the 
-	  requirement that every BFD control packet be authenticated using
-	  authentication mechanisms of the same computational intensity. 
-	  Packets that affect the state of the session are authenticated with a
-	  more computationally intensive mechanism to maintain the security of
-	  the BFD session. In this mode, packets that are a significant change
-	  but do not validate versus the more computationally intensive
-	  mechanism are dropped by the system. Therefore, a malicious user that
-	  tries to inject a non-authenticated packet; e.g. with a Down state to
-	  take a session down will fail.  The majority of BFD Up packets are
-	  protected with a less computationally intensive mechanism.  Potential
-	  weaknesses in the cryptographic strength of the less
-	  computationally intensive mechanism are mitigated via the more
-	  computationally intensive re-authentication procedures.
+	  The optimized procedures in this document provide a different level of
+	  resistance to attack than methods using a single authentication
+	  mechanism:
+	  <ul>
+	    <li>
+	      The more computationally intensive authentication mechanisms used
+	      for optimized authentication are expected to have similar
+	      cryptographic strength acceptable for BFD use as mechanisms that
+	      do not use optimized authentication.
+	    </li>
+	    <li>
+	      When the BFD state machine is attempting to move from the Down
+	      state to the Up state, the more computationally intensive
+	      authentication mechanism is intended to protect vs. attempts to
+	      inappropriately start BFD sessions.
+	    </li>
+	    <li>
+	      When the BFD state machine is in the Up state, the more
+	      computationally intensive authentication mechanism is intended to
+	      protect vs. attempts to change BFD session parameters or to reset
+	      the BFD session.
+	    </li>
+	    <li>
+	      When the BFD state machine is in the Up state, the less
+	      computationally intensive authentication mechanism is intended
+	      to provide resistance to keeping a BFD session in the Up state
+	      inappropriately.  Since the procedures for changing BFD state
+	      require the more computationally intensive mechanism and the less
+	      computationally intensive mechanism requires that the contents of
+	      the Control Packet in the Up state not change its contents, the
+	      only thing that successfully spoofing such packets can do is keep
+	      the session Up.
+	    </li>
+	    <li>
+	      The periodic more computationally intensive re-authentication
+	      procedure provides protection against long-term successful
+	      spoofing of the less computationally intensive authentication
+	      mechanism.
+	    </li>
+	  </ul>
+	</t>
+
+	<t>
+	  In other words, the intention of optimized BFD procedures is to make
+	  it difficult to reset or inappropriately start BFD sessions.  However,
+	  protecting against keeping the session Up is seen as a less
+	  interesting attack and can receive less protection.
 	</t>
 
 	<t>The recent escalating series of attacks on MD5
@@ -966,7 +999,7 @@ reference:    RFC XXXX
 	solution to update BFD Authentication that is currently specified in
 	<xref target="RFC5880"/>.  This experiment is intended to
 	provide additional insights into what happens when the
-	optimized authentication method defined in this document is
+	optimized authentication mechanism defined in this document is
 	used. Here are the reasons why this document is on the Experimental track:
       <t><list style="symbols">
         <t>
@@ -983,7 +1016,7 @@ reference:    RFC XXXX
 	  There are no known implementations (even proof-of-concept) or
 	  implementation plans. As a result, we do not currently know if there
 	  will be interop issues with legacy implementations or what exactly
-	  are the performance benefits of the optimization method.
+	  are the performance benefits of the optimization mechanism.
 	</t>
 	<t>
 	  The work in this document could become very valuable in the future,
