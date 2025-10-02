@@ -82,9 +82,9 @@
       </address>
     </author>
     <author fullname="Jeffrey Haas" initials="J." surname="Haas">
-      <organization>Juniper Networks</organization>
+      <organization>HPE</organization>
       <address>
-        <email>jhaas@pfrc.org</email>
+        <email>jhaas@juniper.net</email>
       </address>
     </author>
 
@@ -95,11 +95,11 @@
     <abstract>
       <t>
 	This document describes an experimental optimization to BFD Authentication.
+	This optimization enables BFD to scale better when there is a desire to
+	use strong authentication.
         It provides a procedure where BFD significant changes require strong
 	authentication and permits the majority of BFD Control Packets to use
-	a less computationally intensive authentication mechanism.  This
-	enables BFD to scale better when there is a desire to use strong
-	authentication.
+	a less computationally intensive authentication mechanism.
       </t>
     </abstract>
   </front>
@@ -108,7 +108,8 @@
     <section anchor="introduction" title="Introduction">
       <t>Authenticating every <xref target="RFC5880">BFD</xref> control packet
       with <xref target="RFC1321">MD5
-      Message-Digest Algorithm </xref>, or Secure Hash Algorithm (SHA-1)
+      Message-Digest Algorithm </xref>, or 
+      <xref target="RFC3174">Secure Hash Algorithm (SHA-1)</xref>
       is a computationally intensive process. This makes it
       difficult, if not impossible, to authenticate every BFD packet at high
       session scale and at faster rates.</t>
@@ -121,11 +122,12 @@
       status are given in <xref target="experiment"/>.</t>
 
       <section title="Requirements Language">
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <xref
-        target="RFC2119">BCP 14</xref> <xref target="RFC8174"/> when, and only
-        when, they appear in all capitals, as shown here.</t>
+          <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
+          "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT
+          RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+          interpreted as described in BCP 14 <xref target="RFC2119"/>
+          <xref target="RFC8174"/> when, and only when, they appear in
+          all capitals, as shown here.</t>
       </section>
 
       <section anchor="note-to-rfc-editor" title="Note to RFC Editor">
@@ -200,14 +202,11 @@
       <t>Once the BFD state machine has reached the Up state, it will continue
       to send BFD Control Packets with strong authentication in the Up state for a period as discussed in
       <xref target="operations"/>.  If optimized authentication mechanisms are
-      in use, as defined later in this document, the session MAY switch to the less computationally intensive
+      in use, as defined in <xref target="optimized modes"/>, the session MAY switch to the less computationally intensive
       mode.</t>
 
       <t>The contents of an Up packet must not change aside from the
       Authentication Section unless strong authentication is in use.</t>
-
-      <t>In addition to these requirements, BFD "significant changes" require
-      strong authentication.</t>
 
       <section anchor="significant changes" title="Protecting BFD Significant Changes with Strong Authentication">
 	<t>
@@ -234,8 +233,9 @@
       </t>
       <t>
 	Once the session has reached the Up state, the session can
-	use a less computationally intensive Auth Type.  Currently, this
-	includes:
+	use a less computationally intensive Auth Type derived from
+	the format in <xref target="signaling"/>.
+	Currently, this includes:
 
 	<ul>
 	  <li>
@@ -247,6 +247,9 @@
             result.
 	  </li>
 	</ul>
+      </t>
+      <t>
+        Other mechanisms may be defined in the future.
       </t>
     </section>
 
@@ -331,10 +334,12 @@
       </t>
     </section>
 
-    <section title="Signaling Optimized Authentication">
+    <section anchor="signaling" title="Signaling Optimized Authentication">
       <t>
-        When the Authentication Present (A) bit is set and the Auth Type is a
-	type supporting Optimized BFD Authentication, the Auth Type signals a
+        When the
+	Authentication Present (A) bit is set and the Auth Type
+	(<xref target="RFC5880" section="4.1" sectionFormat="comma"/>)
+	is a type supporting Optimized BFD Authentication, the Auth Type signals a
 	pairing of a strong authentication type and a less computationally
         intensive authentication
 	type.  This pairing is advertised in a single Auth Type value in order
@@ -472,7 +477,8 @@
 	  the less computationally intensive 
 	  authentication mode.  This is to permit mechanisms such as 
 	  <xref target="I-D.ietf-bfd-secure-sequence-numbers">
-	  Meticulous Keyed ISAAC for BFD Authentication</xref> to be
+	  Meticulous Keyed ISAAC for BFD Authentication</xref>,
+	  or other approved less intensive authentication mechanisms, to be
 	  bootstrapped before switching to the less computationally intensive
 	  mode.
 	</t>
@@ -512,14 +518,9 @@
 	  The <xref target="RFC7950">YANG 1.1</xref> model defined in
 	  this document augments the "ietf-bfd" module to add
 	  data nodes relevant to the management of the feature defined in this
-	  document. In particular, it adds identities for crypto
-	  algorithms that are described in this model, and in 
-	  <xref target="I-D.ietf-bfd-secure-sequence-numbers">
-	  Meticulous Keyed ISAAC for BFD Authentication</xref>.  It
-	  adds a feature to enable optimized
-	  authentication. Finally, it adds an interval value that
-	  specifies how often the BFD session should be
-	  re-authenticated once it is in the Up state.
+	  document. It adds an interval value that specifies how often the BFD
+	  session should be re-authenticated using more computationally
+	  intensive authentication once it is in the Up state.
 	</t>
       </section>
       <section anchor="tree-diagram" title="Tree Diagram">
@@ -609,6 +610,15 @@ reference:    RFC XXXX
 
     <section anchor="Security" title="Security Considerations">
       <section anchor="Protocol Security" title="Protocol Security Considerations">
+	<t>
+	  Devices implementing BFD are often resource constrained, whether in a
+	  single session, or a multidimensional set of scaled sessions.
+	  Desired detection intervals for the BFD sessions, and their number,
+	  are common scaling considerations for BFD implementations.  Security
+	  mechanisms also impact the performance of implementations, whether in
+	  software or hardware, due to the use of additional computational
+	  resources these mechanisms use.
+	</t>
 	<t>
 	  The approach described in this document enhances the ability
 	  to authenticate a BFD session by taking away the onerous
@@ -856,9 +866,8 @@ reference:    RFC XXXX
 
       <?rfc include='reference.RFC.1321.xml'?>
       <?rfc include='reference.RFC.2026.xml'?>
-
+      <?rfc include='reference.RFC.3174.xml'?>
       <?rfc include='reference.RFC.6151.xml'?>
-
       <?rfc include='reference.RFC.6194.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
       <?rfc include='reference.RFC.4252.xml'?>
