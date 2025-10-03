@@ -330,8 +330,9 @@
       </t>
       <t>
 	This "more computationally intensive reauthentication interval" for
-	performing such periodic tests using the strong authentication mechanism
-	can be configured depending on the capability of the system.
+	performing such periodic tests using the more computationally intensive
+	authentication mechanism can be configured depending on the capability
+	of the system.
       </t>
 
       <t>
