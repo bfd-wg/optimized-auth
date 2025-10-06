@@ -690,8 +690,8 @@ reference:    RFC XXXX
 	    <li>
 	      The more computationally intensive authentication mechanisms used
 	      for optimized authentication are expected to have similar
-	      cryptographic strength acceptable for BFD use as mechanisms that
-	      do not use optimized authentication.
+	      cryptographic strength acceptable for BFD for authenticating the
+	      entire session, as described in <xref target="RFC5880"/>.
 	    </li>
 	    <li>
 	      When the BFD state machine is attempting to move from the Down
@@ -1014,10 +1014,7 @@ reference:    RFC XXXX
 	  <xref target="RFC2026"/>
 	</t>
 	<t>
-	  There are no known implementations (even proof-of-concept) or
-	  implementation plans. As a result, we do not currently know if there
-	  will be interop issues with legacy implementations or what exactly
-	  are the performance benefits of the optimization mechanism.
+	  There are no known implementations at this time.
 	</t>
 	<t>
 	  The work in this document could become very valuable in the future,
