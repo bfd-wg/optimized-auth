@@ -96,30 +96,59 @@
       <t>
 	This document describes an experimental optimization to BFD Authentication.
 	This optimization enables BFD to scale better when there is a desire to
-	use strong authentication.
-        It provides a procedure where BFD significant changes require strong
-	authentication and permits the majority of BFD Control Packets to use
-	a less computationally intensive authentication mechanism.
+	use authentication where applying the same authentication mechanism to
+	every BFD Control Packet may adversely impact performance.
+	This optimization partitions BFD Authentication into a more
+	computationally intensive mechanism that is applied to BFD significant
+	changes, and a less computationally intensive mechanism applied to the
+	majority of BFD Control Packets.
       </t>
     </abstract>
   </front>
 
   <middle>
     <section anchor="introduction" title="Introduction">
-      <t>Authenticating every <xref target="RFC5880">BFD</xref> control packet
-      with <xref target="RFC1321">MD5
-      Message-Digest Algorithm </xref>, or 
-      <xref target="RFC3174">Secure Hash Algorithm (SHA-1)</xref>
-      is a computationally intensive process. This makes it
-      difficult, if not impossible, to authenticate every BFD packet at high
-      session scale and at faster rates.</t>
+      <t><xref target="RFC5880">BFD</xref> authentication procedures, when enabled,
+      authenticate each control packet using the same authentication mechanism.
+      Devices implementing BFD are often resource constrained and authentication
+      may adversely impact the performance of BFD, thus discouraging the
+      deployment of authentication.</t>
 
-      <t>This document describes an experimental procedure whereby only
-      BFD state transitions and some other changes (as described later in this
-      document) require strong authentication.  The majority of BFD Control
-      Packets use a less computationally intensive
-      authentication mechanism.  The details of the motivation for experimental
-      status are given in <xref target="experiment"/>.</t>
+      <t>When implemented in software, BFD authentication mechanisms compete
+      with other necessary work done by the systems implementing the protocol.
+      When implemented using hardware acceleration, these mechanisms may scale
+      better situationally, but still impose a cost on the implementation.
+      BFD's value is tied to its ability to scale in terms of numbers of
+      sessions, and a detection time that relies on sending its control packets
+      at a high rate.  Implementers and operators are forced to evaluate
+      tradeoffs of the benefits of authentication vs. its impact on BFD
+      performance.</t>
+
+      <t>The authentication mechanisms documented in <xref target="RFC5880"/>, 
+      <xref target="RFC1321">MD5 Message-Digest Algorithm </xref> and 
+      <xref target="RFC3174">Secure Hash Algorithm (SHA-1)</xref>, are not
+      particularly strong in a cryptographic sense.  However, they may still not
+      appropriately scale situationally in a given implementation.  In the
+      future, there may be a desire to use stronger authentication mechanisms
+      than those already specified, and those mechanisms are likely to use even
+      more resources.</t>
+
+      <t>The BFD prototocol can broadly be described as the set of procedures
+      that handle its state machine changes to reach the Up state, and once BFD
+      is in the Up state sending those Up packets at the negotiated high rate.
+      The number of BFD Control Packets needed to signal state changes (called
+      significant changes) is very small, while the majority of the Control
+      Packets validate that the session remains in the Up state.</t>
+
+      <t>This document describes an experimental optimization to BFD
+      Authentication.  This optimization partitions BFD Authentication into a
+      more computationally intensive (MCI) mechanism used to authenticate
+      significant changes, and a less computationally intensive (LCI) mechanism
+      applied to the majority of the BFD Control Packets that don't signal such
+      significant changes.</t>
+
+      <t>The details of the motivation for experimental status are given in
+      <xref target="experiment"/>.</t>
 
       <section title="Requirements Language">
           <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
@@ -171,44 +200,68 @@
 	  do not require a poll sequence, such as bfd.DetectMult are also
 	  considered as a significant change.
 	</c>
-	<c>configured strong reauthentication interval</c>
+	<c>More Computationally Intensive (MCI) authentication</c>
 	<c>
-	  Interval at which BFD control packets are retried with
-	  strong authentication.
+	  The authentication mechanism applied to BFD Control Packets that are
+	  significant changes.
+	</c>
+	<c>Less Computationally Intensive (LCI) authentication</c>
+	<c>
+	  The authentication mechanism applied to BFD Control Packets that are
+	  NOT significant changes.
+	</c>
+	<c>configured MCI reauthentication interval</c>
+	<c>
+	  Interval at which BFD control packets are retried using
+	  more computationally intensive authentication.
 	</c>
       </texttable>
+
+      <t>
+        The authentication mechanisms described in this optimization are paired
+	as more and less computationally intensive.  While it will be generally
+	the case that the relationship between these mechanisms will be
+	"stronger" and "less strong", this document doesn't use the term
+	"strong" to avoid conflation with either mechanism's relative
+	cryptographic strength.  The relative criteria for each mechanism is the
+	impact on the implementation.
+      </t>
     </section>
 
-
-    <section anchor="strong authentication" title="BFD Control Packets That Require Strong Authentication">
+    <section anchor="strong authentication" title="BFD Control Packets That
+    Require More Computationally Intensive  Authentication">
+      <!--
       <t>
 	For purposes of this document, "strong authentication" refers to BFD
 	authentication mechanisms such as those already defined for use with BFD.
 	For example, MD5 and SHA1
 	(<xref target="RFC5880" section="6.7"/>).
       </t>
+      -->
       <t>
-	The intention of these optimized procedures is to permit strong
+	The intention of these optimized procedures is to permit more
+	computationally intensive
 	authentication for BFD state changes and utilize the less
 	computationally intensive authentication mechanisms to provide
 	protection for the session in the Up state while performing less
-	overall work.  Such procedures will aid BFD session scaling without
-	compromising BFD session security.
+	overall work.  Such procedures are intended to aid BFD session scaling
+	without compromising BFD session security.
       </t>
 
       <t>All BFD Control Packets with the state AdminDown, Down, and Init
-      MUST use strong authentication.</t>
+      MUST use MCI authentication.</t>
 
       <t>Once the BFD state machine has reached the Up state, it will continue
-      to send BFD Control Packets with strong authentication in the Up state for a period as discussed in
+      to send BFD Control Packets with MCI authentication in the Up state for a period as discussed in
       <xref target="operations"/>.  If optimized authentication mechanisms are
-      in use, as defined in <xref target="optimized modes"/>, the session MAY switch to the less computationally intensive
-      mode.</t>
+      in use, as defined in <xref target="optimized modes"/>, the session MAY
+      switch to the LCI mode.</t>
 
       <t>The contents of an Up packet must not change aside from the
-      Authentication Section unless strong authentication is in use.</t>
+      Authentication Section unless MCI authentication is in use.</t>
 
-      <section anchor="significant changes" title="Protecting BFD Significant Changes with Strong Authentication">
+      <section anchor="significant changes" title="Protecting BFD Significant
+      Changes with More Computationally Intensive Authentication">
 	<t>
 	  This document proposes that BFD control packets that signal a
 	  state change, a change in demand mode (D bit), or a poll sequence
@@ -218,8 +271,8 @@
 	  significant change.
 	</t>
 	<t>
-	  Such significant changes are intended to be protected by strong
-	  authentication.
+	  Such significant changes are intended to be protected by more
+	  computationally intensive authentication.
 	</t>
       </section>
     </section>
@@ -253,17 +306,18 @@
       </t>
     </section>
 
-    <section title="Periodic Strong Reauthentication">
+    <section title="Periodic More Computationally Intensive Reauthentication">
       <t>
         When using the less computationally intensive authentication
-        mechanism, BFD should periodically test the session using the strong
-        authentication mechanism.  Strong authentication is tested using a
-        Poll sequence. To test strong authentication, a Poll sequence SHOULD
-        be initiated by the sender using the strong authentication mode rather
-        than the less computationally intensive mechanism. If a control packet
-        with the Final (F) bit is not received within twice the Detect Interval
-        as would be calculated by the receiving system, the session has been
-        compromised, and MUST be brought down.
+        mechanism, BFD should periodically test the session using the MCI
+        authentication mechanism.  MCI authentication is tested using a
+        Poll sequence. To test MCI authentication, a Poll sequence SHOULD
+        be initiated by the sender using the MCI authentication mode rather
+        than the LCI mechanism. If a control packet
+        with the Final (F) bit is not received using MCI authentication
+	within twice the Detect Interval as would be calculated by the
+	receiving system, the session has been compromised, and MUST be brought
+	down.
       </t>
       <t>
         The value "twice the Detect interval as would be calculated by the
@@ -275,18 +329,19 @@
         set to the local system.
       </t>
       <t>
-        This "strong reauthentication interval" for performing such periodic
-        tests using the strong authentication mechanism can be configured
-        depending on the capability of the system.
+	This "more computationally intensive reauthentication interval" for
+	performing such periodic tests using the more computationally intensive
+	authentication mechanism can be configured depending on the capability
+	of the system.
       </t>
 
       <t>
         Most packets transmitted in a BFD session are BFD Up packets.
-        Strongly authenticating a limited subset of these packets with a Poll
+        MCI authenticating a limited subset of these packets with a Poll
         sequence as described above, for example every one minute,
         significantly reduces the computational demand for the system
         while maintaining security of the session across the
-        configured strong reauthentication interval.
+        configured MCI reauthentication interval.
       </t>
     </section>
 
@@ -294,7 +349,7 @@
       <t>The cryptographic authentication mechanisms specified in <xref
       target="RFC5880" section="6.7">BFD</xref> describe enabling and disabling of
       authentication as a one time operation.
-      "... implementations using this method SHOULD only allow the
+      "... implementations using this mechanism SHOULD only allow the
       authentication state to be changed at most once without some form of
       intervention (so that authentication cannot be turned on and off
       repeatedly simply based on the receipt of BFD Control packets from remote
@@ -307,19 +362,19 @@
 
       <t>
         This document proposes that an "optimized" authentication mode that
-        permits both a strong authentication mode and a less computationally
-        intensive mode to be used within the same BFD session.  This pairing
-        of a strong and an less computationally intensive  mode of
-        authentication is carried in new BFD authentication types representing
-        a given optimized authentication type pairing.
+	permits both a more computationally intensive authentication mode and a
+	less computationally intensive mode to be used within the same BFD
+	session.  This pairing of a MCI and a LCI mode of authentication is
+	carried in new BFD authentication types representing a given optimized
+	authentication type pairing.
       </t>
 
       <t>
 	This document defines in <xref target="significant changes"/>
-	which BFD control packets are required
-	to be strongly authenticated. A BFD control packet that fails
+	which BFD control packets require MCI authentication.
+	A BFD control packet that fails
 	authentication is discarded, or a BFD control packet that was
-	supposed to be strongly authenticated, but was not; e.g. a significant
+	supposed to be MCI authenticated, but was not; e.g. a significant
 	change packet, is discarded. However, there is no change to
 	the state machine for BFD, as the decision of a significant
 	change is still decided by how many valid consecutive packets
@@ -328,7 +383,7 @@
 
       <t>
 	In this specification, the contents of an Up packet MUST NOT change
-	aside from the Authentication Section without strong
+	aside from the Authentication Section without MCI
 	authentication.  The full procedure is documented in the following
 	sections.
       </t>
@@ -340,24 +395,23 @@
 	Authentication Present (A) bit is set and the Auth Type
 	(<xref target="RFC5880" section="4.1" sectionFormat="comma"/>)
 	is a type supporting Optimized BFD Authentication, the Auth Type signals a
-	pairing of a strong authentication type and a less computationally
-        intensive authentication
-	type.  This pairing is advertised in a single Auth Type value in order
-	to permit implementations to be aware that:
+	pairing of a more computationally intensive authentication type and a
+	less computationally intensive authentication type.  This pairing is
+	advertised in a single Auth Type value in order to permit
+	implementations to be aware that:
 
 	<ul>
 	  <li>Optimized BFD procedures will be in use.</li>
-          <li>The pairing of the strong and less computationally intensive
+          <li>The pairing of the MCI and LCI
               authentication mechanisms will be used for that session.</li>
           <li>The requirement to carry a Sequence Number.</li>
-          <li>The current strong or less computationally intensive mode will
-              be carried as described below:</li>
+          <li>The current MCI or LCI mode will be carried as described below:</li>
 	</ul>
       </t>
 
       <t>
 	<figure
-	    align="center" title="Common BFD Authentication Section">
+	    align="center" title="Common Optimized BFD Authentication Section">
 	  <artwork><![CDATA[
        0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -372,20 +426,30 @@
 	</figure>
       </t>
 
+      <!--
       <t>
-        The Meticulous Keyed MD5 (<xref target="RFC5880" section="6.7.3"/>), Meticulous Keyed SHA-1 (<xref target="RFC5880" section="6.7.4"/>), and Meticulous Keyed
-	ISAAC Authentication (<xref target="I-D.ietf-bfd-secure-sequence-numbers" section="5"/>) Sections define the fourth octet as "Reserved".
-	This document repurposes the "Reserved" field as the "Optimized
-        Authentication Mode" field when used for authentication types for
-        optimized BFD procedures.
+        The Meticulous Keyed MD5 (<xref target="RFC5880" section="6.7.3"/>),
+	Meticulous Keyed SHA-1 (<xref target="RFC5880" section="6.7.4"/>),
+	and Meticulous Keyed ISAAC Authentication (<xref target="I-D.ietf-bfd-secure-sequence-numbers" section="5"/>)
+	Sections define the fourth octet of their respective PDUs as "Reserved".
+	When used as the more computationally intensive authentication mechanism
+	for new optimized authentication Auth Codes, the 
+	"Reserved" field of the PDU is repurosed as the "Optimized
+        Authentication Mode" field.
+      </t>
+      -->
+
+      <t>
+        The values of Auth Type and Auth Len are defined in their respective
+	optimized BFD authentication procedural documents.
       </t>
 
       <t>
         The values of the Optimized Authentication Mode field are:
 	<ol>
 	  <li>
-	    When using the strong authentication type for optimized
-	    BFD Auth Types.
+	    When using the more computationally intensive authentication type
+	    for optimized BFD Auth Types.
 	  </li>
 	  <li>
             When using the less computationally intensive authentication type
@@ -405,13 +469,13 @@
 	  Authentication is similar to the existing procedures covered in 
 	  <xref target="RFC5880" section="6.7"/>. 
           Optimized Authentication modes have common procedural requirements for 
-	  authentication regardless of which strong and less computationally
+	  authentication regardless of which more or less computationally
 	  intensive authentication modes are used.
         </t>
         <t>
 	  The required value of the Auth Len field for a given Optimized
 	  Authentication mode is defined in the respective specifications for
-	  the strong mode and less computationally intensive mode.
+	  their respective more and less computationally intensive modes.
         </t>
         <t>
           The following common procedures apply to authenticating BFD Control
@@ -464,7 +528,7 @@
       <section anchor="operations" title="Optimized Authentication Operations">
 	<t>
 	  As noted in <xref target="significant changes"/>,
-	  when using optimized BFD procedures, strong
+	  when using optimized BFD procedures, more computationally intensive
 	  authentication is used in the BFD state machine to bring a BFD session
 	  to the Up state or to make any change of the BFD parameters as carried
 	  in the BFD Control packet when in the Up state.
@@ -472,42 +536,40 @@
 
 	<t>
 	  Once the BFD session has reached the Up state, the BFD Up state MUST
-	  be signaled to the remote BFD system using the strong authentication mode for
+	  be signaled to the remote BFD system using the MCI authentication mode for
 	  an interval that is at least the Detection Time before switching to
-	  the less computationally intensive 
-	  authentication mode.  This is to permit mechanisms such as 
+	  the LCI authentication mode.  This is to permit mechanisms such as 
 	  <xref target="I-D.ietf-bfd-secure-sequence-numbers">
 	  Meticulous Keyed ISAAC for BFD Authentication</xref>,
 	  or other approved less intensive authentication mechanisms, to be
-	  bootstrapped before switching to the less computationally intensive
-	  mode.
+	  bootstrapped before switching to the LCI mode.
 	</t>
 
 	<t>
 	  It is RECOMMENDED that when using optimized authentication that
-	  implementations switch from strong authentication to the less
-	  computationally intensive authentication mode after an interval that
+	  implementations switch from MCI authentication to LCI
+	  authentication mode after an interval that
 	  is at least the Detection Time. In the circumstances where a BFD
-	  session successfully reaches the Up state with strong authentication,
-	  but there are problems with the optimized authentication, this will
+	  session successfully reaches the Up state with MCI authentication,
+	  but there are problems with the LCI authentication, this will
 	  permit the remote system to tear down the session as quickly as
 	  possible.
 	</t>
 
 	<t>
 	  BFD sessions using optimized authentication that succeed in reaching the
-	  Up state using strong authentication and fail using the optimized
-	  authentication SHOULD bring the issue to the attention of the operator.
-	  Further, implementations MAY wish to throttle session restarts.
+	  Up state using MCI authentication and fail using LCI authentication
+	  SHOULD bring the issue to the attention of the operator.  Further,
+	  implementations MAY wish to throttle session restarts.
 	</t>
 
 	<t>
 	  It is further RECOMMENDED that BFD implementations using optimized
 	  authentication defer notifying their client that the session has reached
-	  the Up state until it has transitioned to using the optimized
-	  authentication mode.  In the event where optimized authentication is
+	  the Up state until it has transitioned to using the LCI
+	  authentication mode.  In the event where LCI authentication is
 	  failing in the protocol, this avoids propagating the failed transitions
-	  to the optimized mode to their clients.
+	  to the LCI mode to their clients.
 	</t>
       </section>
     </section>
@@ -619,21 +681,55 @@ reference:    RFC XXXX
 	  software or hardware, due to the use of additional computational
 	  resources these mechanisms use.
 	</t>
+
 	<t>
-	  The approach described in this document enhances the ability
-	  to authenticate a BFD session by taking away the onerous
-	  requirement that every BFD control packet be strongly authenticated. By
-	  strongly authenticating packets that affect the state of the session,
-	  the security of the BFD session is maintained. In this mode,
-	  packets that are a significant change but are not strongly
-	  authenticated, are dropped by the system. Therefore, a
-	  malicious user that tries to inject a non-authenticated
-	  packet; e.g. with a Down state to take a session down will
-	  fail. That combined with the proposal of using sequence number
-	  defined in <xref
-	  target="I-D.ietf-bfd-secure-sequence-numbers">Meticulous Keyed
-	  ISAAC for BFD Authentication</xref> further enhances the
-	  security of BFD sessions.
+	  The optimized procedures in this document provide a different level of
+	  resistance to attack than methods using a single authentication
+	  mechanism:
+	  <ul>
+	    <li>
+	      The more computationally intensive authentication mechanisms used
+	      for optimized authentication are expected to have similar
+	      cryptographic strength acceptable for BFD for authenticating the
+	      entire session, as described in <xref target="RFC5880"/>.
+	    </li>
+	    <li>
+	      When the BFD state machine is attempting to move from the Down
+	      state to the Up state, the more computationally intensive
+	      authentication mechanism is intended to protect vs. attempts to
+	      inappropriately start BFD sessions.
+	    </li>
+	    <li>
+	      When the BFD state machine is in the Up state, the more
+	      computationally intensive authentication mechanism is intended to
+	      protect vs. attempts to change BFD session parameters or to reset
+	      the BFD session.
+	    </li>
+	    <li>
+	      When the BFD state machine is in the Up state, the less
+	      computationally intensive authentication mechanism is intended
+	      to provide resistance to keeping a BFD session in the Up state
+	      inappropriately.  Since the procedures for changing BFD state
+	      require the more computationally intensive mechanism and the less
+	      computationally intensive mechanism requires that the contents of
+	      the Control Packet in the Up state not change its contents, the
+	      only thing that successfully spoofing such packets can do is keep
+	      the session Up.
+	    </li>
+	    <li>
+	      The periodic more computationally intensive re-authentication
+	      procedure provides protection against long-term successful
+	      spoofing of the less computationally intensive authentication
+	      mechanism.
+	    </li>
+	  </ul>
+	</t>
+
+	<t>
+	  In other words, the intention of optimized BFD procedures is to make
+	  it difficult to reset or inappropriately start BFD sessions.  However,
+	  protecting against keeping the session Up is seen as a less
+	  interesting attack and can receive less protection.
 	</t>
 
 	<t>The recent escalating series of attacks on MD5
@@ -691,12 +787,12 @@ reference:    RFC XXXX
 	<ul>
 	  <li>
 	    'reauth-interval' specifies the interval in Up state, after
-	    which a strong authentication SHOULD be performed to prevent
-	    a Person-In-The-Middle (PITM) attack. If this interval is
-	    set very low, the utility of these optimization procedures is
-	    lessened. If this interval is set very high, attacks detected
-	    by the strong authentication mechanisms may happen overly
-	    late.
+	    which more computationally intensive authentication SHOULD be
+	    performed to prevent a Person-In-The-Middle (PITM) attack. If this
+	    interval is set very low, the utility of these optimization
+	    procedures is lessened. If this interval is set very high, attacks
+	    detected by the more computationally intensive authentication
+	    mechanisms may happen overly late.
 	  </li>
 	</ul>
 
@@ -904,16 +1000,27 @@ reference:    RFC XXXX
 	solution to update BFD Authentication that is currently specified in
 	<xref target="RFC5880"/>.  This experiment is intended to
 	provide additional insights into what happens when the
-	optimized authentication method defined in this document is
+	optimized authentication mechanism defined in this document is
 	used. Here are the reasons why this document is on the Experimental track:
       <t><list style="symbols">
-	      <t>In the initial stages of the document, there were significant participation and reviews from the working group. 
-	Since then, there has been considerable changes to the document, e.g. the use of ISAAC, allowing for ISAAC bootstrapping 
-	when a BFD session comes up and use of a single Auth Type to indicate use of optimized authentication etc. 
-	These changes did not get significant review from the working group and therefore does not meet the bar set in Section 4.1.1 of <xref target="RFC2026"/></t>
-	<t>There are no known implementations (even proof-of-concept) or implementation plans. As a result, we do not currently know if there will be interop issues with 
-	legacy implementations or what exactly are the performance benefits of the optimization method.</t>
-	<t>The work in this document could become very valuable in the future, especially if the need for deploying BFD authentication at scale becomes a reality.</t>
+        <t>
+	  In the initial stages of the document, there were significant
+	  participation and reviews from the working group.  Since then, there
+	  has been considerable changes to the document, e.g. the use of ISAAC,
+	  allowing for ISAAC bootstrapping when a BFD session comes up and use
+	  of a single Auth Type to indicate use of optimized authentication
+	  etc.  These changes did not get significant review from the working
+	  group and therefore does not meet the bar set in Section 4.1.1 of
+	  <xref target="RFC2026"/>
+	</t>
+	<t>
+	  There are no known implementations at this time.
+	</t>
+	<t>
+	  The work in this document could become very valuable in the future,
+	  especially if the need for deploying BFD authentication at scale
+	  becomes a reality.
+	</t>
       </list></t>
       </t>
 
