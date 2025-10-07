@@ -749,6 +749,11 @@ reference:    RFC XXXX
 	this requires operators to evaluate the tradeoffs of the less
 	computationally intensive mechanisms adequately address their desired
 	security stance.</t>
+
+	<t>Keys generated and distributed out of band for the purposes described
+	in this specification are generally limited in the security they can
+	provide. It is essential that these keys are selected well, and
+	protected when stored.</t>
       </section>
       <section anchor="YANG Security" title="YANG Security Considerations">
 	<t>
