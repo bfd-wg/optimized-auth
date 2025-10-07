@@ -459,8 +459,9 @@
       </t>
 
       <t>
-        Authentication Specific Data: When using the strong authentication type,
-	the remainder of the Authentication Section carries that type's data.
+	Authentication Specific Data: When using the more computationally
+	intensive  authentication type, the remainder of the Authentication
+	Section carries that type's data.
       </t>
 
       <section title="Transmitting and Receiving Using Optimized Authentication">

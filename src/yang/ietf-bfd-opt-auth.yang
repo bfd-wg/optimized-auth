@@ -113,11 +113,13 @@ module ietf-bfd-opt-auth {
       units "seconds";
       default "60";
       description
-        "Interval of time after which strong authentication
-         should be utilized to prevent an on-path-attacker attack.
+        "Interval of time after which more computationally intensive
+	 authentication should be utilized to prevent an
+	 on-path-attacker attack.
 
          A value of zero means that we do not do periodic
-         reauthentication using the strong authentication method.
+         reauthentication using the more computationally intensive
+	 authentication method.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
