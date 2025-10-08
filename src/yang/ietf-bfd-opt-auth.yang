@@ -45,10 +45,11 @@ module ietf-bfd-opt-auth {
       Forwarding Detection (BFD).";
   }
 
-  import ietf-key-chain {
-    prefix key-chain;
+  import ietf-bfd-met-keyed-isaac {
+    prefix bfd-mki;
     reference
-      "RFC 8177: YANG Data Model for Key Chains.";
+      "RFC YYYY: Meticulous Keyed ISAAC for BFD Optimized
+                 Authentication.";
   }
 
   organization
