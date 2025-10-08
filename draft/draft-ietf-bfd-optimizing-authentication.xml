@@ -52,6 +52,13 @@
       </address>
     </author>
 
+    <author fullname="Jeffrey Haas" initials="J." surname="Haas">
+      <organization>HPE</organization>
+      <address>
+        <email>jhaas@juniper.net</email>
+      </address>
+    </author>
+
     <author fullname="Ankur Saxena" initials="A" surname="Saxena">
       <organization>Ciena Corporation</organization>
       <address>
@@ -79,12 +86,6 @@
           <country>India</country>
 	</postal>
         <email>mnvbhatia@google.com</email>
-      </address>
-    </author>
-    <author fullname="Jeffrey Haas" initials="J." surname="Haas">
-      <organization>HPE</organization>
-      <address>
-        <email>jhaas@juniper.net</email>
       </address>
     </author>
 
