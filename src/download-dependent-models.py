@@ -9,7 +9,8 @@ list_of_ietf_models =\
   ["ietf-tls-client", "draft-ietf-netconf-tls-client-server", "41"],
   ["ietf-tls-common", "draft-ietf-netconf-tls-client-server", "41"],
   ["ietf-tls-server", "draft-ietf-netconf-tls-client-server", "41"],
-  ["ietf-http-client", "draft-ietf-netconf-http-client-server", "20"] ]
+  ["ietf-http-client", "draft-ietf-netconf-http-client-server", "20"],
+  ["ietf-bfd-met-keyed-isaac", "draft-ietf-bfd-secure-sequence-numbers", "26"]]
 
 
 def fetch_and_extract(draft, module, version):

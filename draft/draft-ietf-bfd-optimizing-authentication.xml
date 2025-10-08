@@ -171,6 +171,11 @@
 	  at the time of publication.
 	</t>
 
+	<t>
+	  RFC YYYY, where YYYY is the number assigned to <xref
+	  target="I-D.ietf-bfd-secure-sequence-numbers"/>
+	</t>
+
         <t>
 	  YYYY-MM-DD with the actual date of the publication of this
 	  document.
