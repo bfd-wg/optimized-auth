@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <key-chains
-    xmlns="urn:ietf:params:xml:ns:yang:ietf-key-chain">
+    xmlns="urn:ietf:params:xml:ns:yang:ietf-key-chain"
+    xmlns:opt-auth="urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth"
+    xmlns:bfd-mki="urn:ietf:params:xml:ns:yang:ietf-bfd-met-keyed-isaac">
   <key-chain>
     <name>bfd-auth-config</name>
     <description>"An example for BFD Optimized Auth configuration."</description>
@@ -16,8 +18,7 @@
           <end-date-time>2017-02-01T00:00:05Z</end-date-time>
         </accept-lifetime>
       </lifetime>
-      <crypto-algorithm xmlns:opt-auth=
-      "urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth">opt-auth:optimized-sha1-meticulous-keyed-isaac</crypto-algorithm>
+      <crypto-algorithm>bfd-mki:optimized-sha1-meticulous-keyed-isaac</crypto-algorithm>
       <key-string>
         <keystring>testvector</keystring>
       </key-string>
@@ -36,7 +37,8 @@
     xmlns="urn:ietf:params:xml:ns:yang:ietf-routing"
     xmlns:bfd-types="urn:ietf:params:xml:ns:yang:ietf-bfd-types"
     xmlns:iana-bfd-types="urn:ietf:params:xml:ns:yang:iana-bfd-types"
-    xmlns:opt-auth="urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth">
+    xmlns:opt-auth="urn:ietf:params:xml:ns:yang:ietf-bfd-opt-auth"
+    xmlns:bfd-mki="urn:ietf:params:xml:ns:yang:ietf-bfd-met-keyed-isaac">
   <control-plane-protocols>
     <control-plane-protocol>
       <type>bfd-types:bfdv1</type>
