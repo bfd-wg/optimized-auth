@@ -45,13 +45,6 @@ module ietf-bfd-opt-auth {
       Forwarding Detection (BFD).";
   }
 
-  import ietf-bfd-met-keyed-isaac {
-    prefix bfd-mki;
-    reference
-      "RFC YYYY: Meticulous Keyed ISAAC for BFD Optimized
-                 Authentication.";
-  }
-
   organization
     "IETF BFD Working Group";
 
