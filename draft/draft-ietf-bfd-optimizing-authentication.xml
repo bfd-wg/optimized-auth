@@ -840,7 +840,6 @@ reference:    RFC XXXX
       <?rfc include='reference.RFC.8177.xml'?>
       <?rfc include='reference.RFC.8349.xml'?>
       <?rfc include='reference.RFC.9314.xml'?>
-      <?rfc include='reference.I-D.ietf-bfd-secure-sequence-numbers.xml'?>
     </references>
 
     <references title="Informative References">
@@ -985,6 +984,7 @@ reference:    RFC XXXX
       <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.9000.xml'?>
       <?rfc include='reference.I-D.ietf-netmod-rfc8407bis.xml'?>
+      <?rfc include='reference.I-D.ietf-bfd-secure-sequence-numbers.xml'?>
     </references>
     <section anchor="examples" title="Examples">
       <t>
