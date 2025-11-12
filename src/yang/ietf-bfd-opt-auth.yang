@@ -108,12 +108,12 @@ module ietf-bfd-opt-auth {
       default "60";
       description
         "Interval of time after which more computationally intensive
-	 authentication should be utilized to prevent an
-	 on-path-attacker attack.
+         authentication should be utilized to prevent an
+         on-path-attacker attack.
 
          A value of zero means that we do not do periodic
          reauthentication using the more computationally intensive
-	 authentication method.
+         authentication method.
 
          This value SHOULD have jitter applied to it to avoid
          self-synchronization during expensive authentication
